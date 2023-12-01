@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->string('category_name');
-
+            $table->string('username')->unique();
+            $table->string('password');
             $table->timestamps();
         });
     }
@@ -23,7 +23,7 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {   
-        Schema::dropIfExists('category');
+    {
+        Schema::dropIfExists('admins');
     }
 };
