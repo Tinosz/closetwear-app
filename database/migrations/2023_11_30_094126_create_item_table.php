@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('item_description');
             $table->string('tokopedia_link');
             $table->string('shoppee_link');
+            $table->string('whatsapp_link');
+            $table->integer('available_stock');
         });
     }
 
