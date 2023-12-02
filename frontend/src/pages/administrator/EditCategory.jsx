@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../client/axios-client";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function EditCategory() {
     const { id } = useParams();
@@ -9,26 +9,32 @@ export default function EditCategory() {
         id: null,
         category_name: "",
     });
+    const [isLoading, setIsLoading] = useState(true);
+
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [errors, setErrors] = useState(null); 
+    const [errors, setErrors] = useState(null);
+
+    
 
     const onSubmit = (e) => {
         e.preventDefault();
-    
+
         const formData = new FormData();
         formData.append("category_name", category.category_name);
-    
-        console.log(formData);
-    
+
         if (id) {
+            formData.append("_method", "PUT");
+        }
+
+        if (id) {
+            console.log(formData);
             axiosClient
                 .post(`/categories/${category.id}`, formData, {
                     headers: { "Content-Type": "multipart/form-data" },
                 })
                 .then(() => {
                     navigate("/Admin/EditCategories");
-                    // Fetch updated categories after successful submission
                     getCategories();
                 })
                 .catch((err) => {
@@ -39,6 +45,7 @@ export default function EditCategory() {
                     }
                 });
         } else {
+            console.log(formData);
             axiosClient
                 .post("/categories", formData, {
                     headers: {
@@ -47,7 +54,6 @@ export default function EditCategory() {
                 })
                 .then(() => {
                     navigate("/Admin/EditCategories");
-                    // Fetch updated categories after successful submission
                     getCategories();
                 })
                 .catch((err) => {
@@ -61,25 +67,26 @@ export default function EditCategory() {
     };
 
     const onDeleteSelected = () => {
-        if (!window.confirm("Are you sure you want to delete the selected categories?")) {
+        if (
+            !window.confirm(
+                "Are you sure you want to delete the selected categories?"
+            )
+        ) {
             return;
         }
-    
+
         const deletePromises = selectedCategories.map((categoryId) => {
             return axiosClient.delete(`/categories/${categoryId}`);
         });
-    
+
         Promise.all(deletePromises)
             .then(() => {
-                // All delete requests were successful
                 getCategories();
             })
             .catch((err) => {
                 console.log(err);
-                // Handle errors, e.g., show an error message to the user
             });
     };
-    
 
     const toggleCategorySelection = (categoryId) => {
         setSelectedCategories((prevSelected) => {
@@ -99,25 +106,40 @@ export default function EditCategory() {
         }
     };
 
-    useEffect(() => {
-        getCategories();
-    }, []);
-
     const getCategories = () => {
         axiosClient
             .get("categories")
             .then((response) => {
+                console.log(response.data);
                 setCategories(response.data);
             })
             .catch(() => {
-                // handle loading or error
+                
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     };
+
+    useEffect(() => {
+        getCategories();
+    
+        if (id) {
+            axiosClient
+                .get(`/categories/${id}`)
+                .then(({ data }) => {
+                    setCategory(data);
+                    console.log(data);
+                })
+                .catch(() => {});
+        }
+
+    }, [id]);
 
     return (
         <>
             <form onSubmit={onSubmit}>
-                {errors && errors.category_name && (
+            <p>{isLoading ? "Loading..." : (id ? `Update: ${category.category_name}` : "")}</p>                {errors && errors.category_name && (
                     <p className="text-red-600">{errors.category_name}</p>
                 )}
                 <input
@@ -128,8 +150,11 @@ export default function EditCategory() {
                             category_name: e.target.value,
                         })
                     }
+                    value={category.category_name}
                 />
-                <button type="submit">Add Category</button>
+                <button type="submit">
+                    {id ? "Update Category" : "Add Category"}
+                </button>
             </form>
             <div>
                 <label>
@@ -139,25 +164,39 @@ export default function EditCategory() {
                     />
                     Check All
                 </label>
-                {categories.map((c) => (
-                    <div key={c.id}>
+                {categories.map((category) => (
+                    <div key={category.id}>
                         <label>
                             <input
                                 type="checkbox"
-                                checked={selectedCategories.includes(c.id)}
-                                onChange={() => toggleCategorySelection(c.id)}
+                                checked={selectedCategories.includes(
+                                    category.id
+                                )}
+                                onChange={() =>
+                                    toggleCategorySelection(category.id)
+                                }
                             />
-                            {c.category_name}
+                            {category.category_name}
                         </label>
+                        <Link
+                            to={"/Admin/EditCategories/" + category.id}
+                            className="ml-3 bg-blue-200"
+                        >
+                            Edit
+                        </Link>
                     </div>
                 ))}
-                    <button
-                        onClick={onDeleteSelected}
-                        disabled={selectedCategories.length === 0}
-                        className={`bg-red-500  ${selectedCategories.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        Delete Selected
-                    </button>
+                <button
+                    onClick={onDeleteSelected}
+                    disabled={selectedCategories.length === 0}
+                    className={`bg-red-500  ${
+                        selectedCategories.length === 0
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
+                    }`}
+                >
+                    Delete Selected
+                </button>
             </div>
         </>
     );
