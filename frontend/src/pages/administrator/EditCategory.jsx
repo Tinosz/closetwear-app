@@ -190,6 +190,7 @@ export default function EditCategory() {
                         </Link>
                     </div>
                 ))}
+                
                 <button
                     onClick={onDeleteSelected}
                     disabled={selectedCategories.length === 0}

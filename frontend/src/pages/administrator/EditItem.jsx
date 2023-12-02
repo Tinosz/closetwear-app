@@ -14,7 +14,7 @@ export default function EditItem() {
         tokopedia_link: "",
         shoppee_link: "",
         whatsapp_link: "",
-        available_stock: "",
+        available_stock: 1,
         item_image: [], 
         category_id: [],
     });
@@ -175,6 +175,28 @@ export default function EditItem() {
                         ))}
                     </div>
                 )}
+                <p>Available Stock:</p>
+                <label>
+                    <input
+                        type="radio"
+                        name="available_stock"
+                        value="1"
+                        checked={item.available_stock === 1}
+                        onChange={() => setItem({ ...item, available_stock: 1 })}
+                    />
+                    Yes
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        name="available_stock"
+                        value="0"
+                        checked={item.available_stock === 0}
+                        onChange={() => setItem({ ...item, available_stock: 0 })}
+                    />
+                    No
+                </label>
+                
         
                 {/* <input
                     type="file"
@@ -205,7 +227,9 @@ export default function EditItem() {
                         ))}
                     </div>
                 )} */}
-                <button type="submit">Add Item</button>
+                <div>
+                    <button type="submit" className="bg-blue-300">Add Item</button>
+                </div>
             </form>
         </>
     );
