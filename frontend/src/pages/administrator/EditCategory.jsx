@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../client/axios-client";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useStateContext } from "../../context/ContextProvider";
 
 export default function EditCategory() {
     const { id } = useParams();
@@ -15,7 +16,7 @@ export default function EditCategory() {
     const [categories, setCategories] = useState([]);
     const [errors, setErrors] = useState(null);
 
-    
+    const { setNotification, notification } = useStateContext();
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -34,6 +35,7 @@ export default function EditCategory() {
                     headers: { "Content-Type": "multipart/form-data" },
                 })
                 .then(() => {
+                    setNotification("Category was successfully updated.")
                     navigate("/Admin/EditCategories");
                     getCategories();
                 })
@@ -53,6 +55,7 @@ export default function EditCategory() {
                     },
                 })
                 .then(() => {
+                    setNotification("Category was successfully added.")
                     navigate("/Admin/EditCategories");
                     getCategories();
                 })
@@ -138,6 +141,7 @@ export default function EditCategory() {
 
     return (
         <>
+        {notification && <div>{notification}</div>}
             <form onSubmit={onSubmit}>
             <p>{isLoading ? "Loading..." : (id ? `Update: ${category.category_name}` : "")}</p>                {errors && errors.category_name && (
                     <p className="text-red-600">{errors.category_name}</p>

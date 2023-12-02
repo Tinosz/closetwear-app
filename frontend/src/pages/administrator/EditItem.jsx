@@ -1,11 +1,12 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {useDropzone} from 'react-dropzone'
+import axiosClient from "../../client/axios-client";
 
 
 
 export default function EditItem() {
-
-    const [item, setItem] = useState({
+    const [categories, setCategories] = useState([]);
+        const [item, setItem] = useState({
         id: null,
         item_name: "",
         item_price: "",
@@ -15,7 +16,7 @@ export default function EditItem() {
         whatsapp_link: "",
         available_stock: "",
         item_image: [], 
-        category_name: [],
+        category_id: [],
     });
 
     const onSubmit = (e) => {
@@ -26,17 +27,19 @@ export default function EditItem() {
         formData.append("item_name", item.item_name);
         formData.append("item_price", item.item_price);
         formData.append("item_description", item.item_description);
+        item.category_id.forEach((categoryId) => {
+            formData.append("category_id", categoryId);
+        });           
         formData.append("tokopedia_link", item.tokopedia_link);
         formData.append("shoppee_link", item.shoppee_link);
         formData.append("whatsapp_link", item.whatsapp_link);
         formData.append("available_stock", item.available_stock);
-    
-        for (let i = 0; i < item.item_image.length; i++) {
-            formData.append(`item_image_${i}`, item.item_image[i]);
-        }
-    
 
     
+        for (let i = 0; i < item.item_image.length; i++) {
+            formData.append(`item_image`, item.item_image[i]);
+        }
+
         console.log(formData);
     };
     
@@ -62,9 +65,25 @@ export default function EditItem() {
         }
     })
 
-    
+    const getCategories = () => {
+        axiosClient
+        .get("categories")
+        .then((response) => {
+            console.log(response.data);
+            setCategories(response.data);
+        })
+        .catch(() => {
+            
+        })
+        .finally(() => {
+            // setIsLoading(false);
+        });
+    }
 
-    const [files, setFiles] = useState([]);
+    useEffect(() => {
+        getCategories();
+    }, []);
+    // const [files, setFiles] = useState([]);
 
 
     return (
@@ -82,6 +101,27 @@ export default function EditItem() {
                         setItem({ ...item, item_description: e.target.value })
                     }
                 />
+                {categories.map((category) => (
+                        <label key={category.id}>
+                            <input
+                                type="checkbox"
+                                checked={item.category_id.includes(category.id)}
+                                onChange={() => {
+                                    setItem((prevItem) => {
+                                        const updatedCategoryId = prevItem.category_id.includes(category.id)
+                                            ? prevItem.category_id.filter((id) => id !== category.id)
+                                            : [...prevItem.category_id, category.id];
+
+                                        return {
+                                            ...prevItem,
+                                            category_id: updatedCategoryId,
+                                        };
+                                    });
+                                }}
+                            />
+                            {category.category_name}
+                        </label>
+                        ))}
                 <input
                     placeholder="Tokopedia Link"
                     onChange={(e) =>
