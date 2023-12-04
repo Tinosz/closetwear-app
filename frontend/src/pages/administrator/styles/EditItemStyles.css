@@ -1,0 +1,9 @@
+.image-row {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent wrapping to the next line */
+    overflow-x: auto;  /* Add horizontal scrollbar if images overflow */
+}
+
+.image-preview {
+    margin-right: 10px; /* Adjust the margin between images */
+}

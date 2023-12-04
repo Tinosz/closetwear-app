@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('item_name');
-            $table->integer('item_price');
+            $table->decimal('item_price');
             $table->string('item_description');
             $table->string('tokopedia_link');
             $table->string('shoppee_link');
             $table->string('whatsapp_link');
-            $table->integer('available_stock');
+            $table->string('available_stock');
+            $table->decimal('item_click')->default(0);
+            $table->decimal('item_link_click')->default(0);
+            $table->timestamps();
         });
     }
 

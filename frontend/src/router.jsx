@@ -5,6 +5,7 @@ import EditCategory from "./pages/administrator/EditCategory";
 import AdminLogin from "./pages/administrator/AdminLogin";
 import AccessableLayout from "./page-groups/AccessableLayout";
 import GuestLayout from "./page-groups/GuestLayout";
+import ItemList from "./pages/administrator/ItemList";
 
 const router = createBrowserRouter([
     {
@@ -32,7 +33,11 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/Admin/EditItem',
-                element: <EditItem />
+                element: <EditItem key="userCreate"/>
+            },
+            {
+                path: 'Admin/EditItem/:id',
+                element: <EditItem key="userUpdate"/>
             },
             {
                 path:'/Admin/EditCategories',
@@ -41,6 +46,10 @@ const router = createBrowserRouter([
             {
                 path:'/Admin/EditCategories/:id',
                 element: <EditCategory key="userUpdate"/>
+            },
+            {
+                path: '/Admin/ItemList',
+                element: <ItemList />
             }
         ]
     }

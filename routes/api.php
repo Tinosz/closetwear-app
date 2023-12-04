@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,8 +22,9 @@ Route::middleware('auth:sanctum')->group(function() {
         return $request->user();
 }); 
     Route::apiResource('/categories', CategoryController::class);
+    Route::apiResource('/items', ItemController::class);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/admin/user', [AuthController::class, 'getAdminUserData']);
 });
 Route::post('/adminLogin', [AuthController::class, 'adminLogin']);
-
+Route::get('/items', [ItemController::class, 'index']);
