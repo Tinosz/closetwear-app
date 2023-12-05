@@ -49,7 +49,7 @@ export default function ItemList() {
                                 <td>{item.item_price}</td>
                                 <td>
                                     <ul>
-                                        {item.categories.map(
+                                        {item.categories.filter(category => category.id !== 1).map(
                                             (category, catIndex) => (
                                                 <li key={catIndex}>
                                                     {category.category_name}

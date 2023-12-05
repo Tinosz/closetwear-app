@@ -168,28 +168,27 @@ export default function EditCategory() {
                     />
                     Check All
                 </label>
-                {categories.map((category) => (
-                    <div key={category.id}>
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked={selectedCategories.includes(
-                                    category.id
-                                )}
-                                onChange={() =>
-                                    toggleCategorySelection(category.id)
-                                }
-                            />
-                            {category.category_name}
-                        </label>
-                        <Link
-                            to={"/Admin/EditCategories/" + category.id}
-                            className="ml-3 bg-blue-200"
-                        >
-                            Edit
-                        </Link>
-                    </div>
-                ))}
+                {categories
+    .filter(category => category.id !== 1) // Exclude the default category with id 1
+    .map((category) => (
+        <div key={category.id}>
+            <label>
+                <input
+                    type="checkbox"
+                    checked={selectedCategories.includes(category.id)}
+                    onChange={() => toggleCategorySelection(category.id)}
+                />
+                {category.category_name}
+            </label>
+            <Link
+                to={"/Admin/EditCategories/" + category.id}
+                className="ml-3 bg-blue-200"
+            >
+                Edit
+            </Link>
+        </div>
+))}
+
                 
                 <button
                     onClick={onDeleteSelected}
