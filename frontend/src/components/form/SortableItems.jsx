@@ -15,6 +15,8 @@ export function SortableItem({ id, index, handleImageRemove, image }) {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+  
+  console.log(image)
 
   const onDeleteClick = (event) => {
     // Prevent click event from triggering drag
@@ -22,20 +24,28 @@ export function SortableItem({ id, index, handleImageRemove, image }) {
     handleImageRemove(index);
   };
 
+  const imageUrl =
+    typeof image === "object"
+      ? URL.createObjectURL(image)
+      : `${import.meta.env.VITE_API_BASE_URL}/storage/${image}`;
+
+  const imageName = typeof image === "object" ?
+  image.name : image.item_name
+
   return (
     <div ref={setNodeRef} style={style} >
         <span {...attributes} {...listeners} className="cursor-grab">
         <FontAwesomeIcon icon={faBars} />
         </span>
       <img
-        src={URL.createObjectURL(image)}
+        src={imageUrl}
         alt={`Preview ${index}`}
         className="w-40"
         onLoad={() => {
-          URL.revokeObjectURL(URL.createObjectURL(image));
+          URL.revokeObjectURL(imageUrl);
         }}
       />
-      <p>{image.name}</p>
+      <p>{imageName}</p>
       <button type="button" onClick={onDeleteClick}>
         Delete
       </button>

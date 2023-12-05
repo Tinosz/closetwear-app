@@ -29,9 +29,9 @@ class StoreItemRequest extends FormRequest
             'shoppee_link' => 'required',
             'whatsapp_link' => 'required',
             'available_stock' => 'required',
-            'item_image.*' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048',
-            'item_image' => 'required',
-            'item_image_order' => '||',
+            'images.*.item_image' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048',
+            'images.*.item_image_order' => '|',
+            'images' => 'required|',
             'categories' => 'exists:categories,id',
         ];
     }

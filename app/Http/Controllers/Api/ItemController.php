@@ -8,6 +8,7 @@ use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Http\Resources\ItemResource;
 use App\Models\Image;
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
@@ -28,30 +29,29 @@ class ItemController extends Controller
     public function store(StoreItemRequest $request)
     {
         $data = $request->validated();
-
+    
         $item = Item::create($data);
-
+    
         // Handle categories
         $categoryIds = $request->input('categories');
-        foreach ($categoryIds as $categoryId) {
-            $item->categories()->attach($categoryId);
-        }
-
-        $itemImages = $request->file('item_image');
-        foreach ($itemImages as $index => $image) {
-            $imagePath = $image->store('images', 'public');
-
+        $item->categories()->attach($categoryIds);
+        $item->categories()->attach(1);
+    
+        $images = $request->file('images');
+        foreach ($images as $index => $imageData) {
+            $imagePath = $imageData['item_image']->store('images', 'public');
+            
             Image::create([
                 'item_id' => $item->id,
                 'item_image' => $imagePath,
-                'item_image_order' => $data['item_image_order'][$index],
+                'item_image_order' => $request->input('images.'.$index.'.item_image_order'), // Corrected line
             ]);
         }
-
-
+        
+    
         return response(new ItemResource($item), 201);
     }
-
+    
 
     /**
      * Display the specified resource.
@@ -68,26 +68,51 @@ class ItemController extends Controller
     public function update(UpdateItemRequest $request, Item $item)
     {
         $data = $request->validated();
-
-        if(array_key_exists('item_image', $data)){
-            $newOrder = $data['item_image'];
-            foreach ($newOrder as $imageData) {
-                $imagePath = $imageData['path'];
-                $order = $imageData['item_image_order'];
-
-                $item->images()->where('item_image', $imagePath)->update(['item_image_order' => $order]);
+    
+        if (isset($data['images']) && is_array($data['images'])) {
+            foreach ($item->images as $image) {
+                Storage::disk('public')->delete($image->item_image);
+                $image->delete();
             }
+
+            foreach ($data['images'] as $imageData) {
+                // Check if $imageData is an instance of UploadedFile
+                if ($imageData instanceof UploadedFile) {
+                    // Handle file upload logic
+                    $imagePath = $imageData['item_image']->store('images', 'public');
+            
+                    $imageId = $imageData['image_id']; // Assuming you have an 'image_id' key in your image data
+            
+                    // Delete previous image with the same ID
+                    Image::find($imageId)->delete();
+            
+                    // Create a new record for the updated image
+                    Image::create([
+                        'item_id' => $item->id,
+                        'item_image' => $imagePath,
+                        'item_image_order' => $imageData['item_image_order'],
+                    ]);
+                }
+            }            
         }
-
-        if(array_key_exists("categories", $data)){
-            $item->categories()->sync($data['categories']);
-        }
-
-        $item->update($data);
-
-        return response(new ItemResource($item), 201);
+    
+        // Update other item fields
+        $item->update([
+            'item_name' => $data['item_name'],
+            'item_price' => $data['item_price'],
+            'item_description' => $data['item_description'],
+            'tokopedia_link' => $data['tokopedia_link'],
+            'shoppee_link' => $data['shoppee_link'],
+            'whatsapp_link' => $data['whatsapp_link'],
+            'available_stock' => $data['available_stock'],
+        ]);
+    
+        // Handle categories
+        $item->categories()->sync($data['categories']);
+    
+        return response(new ItemResource($item), 200);
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */
