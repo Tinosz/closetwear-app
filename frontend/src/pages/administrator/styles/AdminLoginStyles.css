@@ -2,10 +2,6 @@
     width: 100%;
     background: #fff;
     overflow: hidden;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
@@ -31,10 +27,6 @@
 }
 
 .wrap-input {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
@@ -59,9 +51,6 @@
   
 input.input {
     height: 100%;
-    -webkit-transition: all 0.4s;
-    -o-transition: all 0.4s;
-    -moz-transition: all 0.4s;
     transition: all 0.4s;
 }
 
@@ -122,16 +111,18 @@ input.input {
     transition: all 0.4s;
 }
 
+.input:focus + .focus-input + .label-input {
+    top: 14px;
+    font-size: 13px;
+}
+
+
 .signin-btn-container {
     width: 100%;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-  }
+}
 
 .signin-btn {
     display: -webkit-box;
@@ -174,7 +165,6 @@ input.input {
 }
   
 .signin-image::before {
-    content: "";
     display: block;
     position: absolute;
     z-index: -1;
@@ -184,3 +174,4 @@ input.input {
     left: 0;
     background: rgba(0,0,0,0.1);
 }
+

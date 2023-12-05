@@ -55,14 +55,14 @@ export default function AdminLogin(){
                 </span>
                 
                 <div className="wrap-input">
-                    <input className="input" ref={usernameRef}/>
+                    <input className="input has-val" ref={usernameRef} placeholder="Admin Username" />
                     <span className="focus-input"></span>
-                    <span className="label-input">Admin Username</span>
+                    {/* <span className="label-input">Admin Username</span> */}
                 </div>
                 <div className="wrap-input">
-                    <input className="input" type="password" ref={passwordRef}/>
+                    <input className="input has-val" type="password" ref={passwordRef} placeholder="Password" />
                     <span className="focus-input"></span>
-                    <span className="label-input">Password</span>
+                    {/* <span className="label-input">Password</span> */}
                 </div>
 
                 <div className="signin-btn-container">
