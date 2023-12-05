@@ -12,9 +12,7 @@ const router = createBrowserRouter([
         path: '/',
         element: <AccessableLayout />,
         children: [
-            {
-                
-            }
+            
         ]
     },
     {
