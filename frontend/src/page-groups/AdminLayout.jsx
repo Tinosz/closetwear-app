@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
+import NavigationBar from "../components/NavigationBar";
 
 export default function AdminLayout() {
     const {token} = useStateContext();
@@ -9,6 +10,7 @@ export default function AdminLayout() {
     
     return(
         <>
+        <NavigationBar />
         <Outlet />
         </>
     )
