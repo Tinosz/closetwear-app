@@ -36,11 +36,15 @@ export default function EditItem() {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        // Create a new order array based on the current order of item_image
-        const newOrder = Array.from(
-            { length: item.images.length },
-            (_, index) => index + 1
-        );
+        let newOrder = [];
+
+    // If it's an update, reset the order array
+        if (!id) {
+            newOrder = Array.from(
+                { length: item.images.length },
+                (_, index) => index + 1
+            );
+        }
 
         const formData = new FormData();
         formData.append("id", item.id);
@@ -60,7 +64,9 @@ export default function EditItem() {
 
         for (let i = 0; i < item.images.length; i++) {
             formData.append(`images[${i}][item_image]`, item.images[i].item_image);
-            formData.append(`images[${i}][item_image_order]`, newOrder[i]);
+            
+            // If it's an update, reset the order; otherwise, use the new order array
+            formData.append(`images[${i}][item_image_order]`, id ? i + 1 : newOrder[i]);
         }
 
         console.log(formData)
@@ -95,7 +101,7 @@ export default function EditItem() {
                     },
                 })
                 .then(() => {
-                    setNotification("Category was successfully added.");
+                    setNotification("Item was successfully added.");
                     navigate("/Admin/ItemList");
                 })
                 .catch((err) => {
@@ -171,12 +177,14 @@ export default function EditItem() {
             .get(`/items/${id}`)
             .then(({ data }) => {
               const categoryIds = data.categories.map(category => category.id);
-              
-              setItem(prevItem => ({
-                ...prevItem,
-                ...data,
-                categories: categoryIds,
-              }));
+              const sortedImages = data.images.slice().sort((a, b) => a.item_image_order - b.item_image_order);
+
+            setItem(prevItem => ({
+            ...prevItem,
+            ...data,
+            categories: categoryIds,
+            images: sortedImages, // Update the images in sorted order
+            }));
       
               console.log(data);
             })
@@ -324,20 +332,23 @@ export default function EditItem() {
                 items={item.images.map((image) => image.item_image_order)}
                 strategy={horizontalListSortingStrategy}
             >
-                {item.images.map((image, index) => (
-                    <SortableItem
-                        key={image.item_image_order}
-                        id={image.item_image_order}
-                        index={index}
-                        handleImageRemove={handleImageRemove}
-                        image={image.item_image}
-                        handle
-                    />
-                ))}
+                {/* Sort the images array by item_image_order */}
+                {item.images
+                    .map((image, index) => (
+                        <SortableItem
+                            key={image.item_image_order}
+                            id={image.item_image_order}
+                            index={index}
+                            handleImageRemove={handleImageRemove}
+                            image={image.item_image}
+                            handle
+                        />
+                    ))}
             </SortableContext>
         </div>
     )}
 </DndContext>
+
 
                 <p>Available Stock:</p>
                 <label>

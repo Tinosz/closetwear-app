@@ -29,20 +29,28 @@ class UpdateItemRequest extends FormRequest
             'shoppee_link' => 'required',
             'whatsapp_link' => 'required',
             'available_stock' => 'required',
-            'images.*.item_image_order' => '|',
+            'images.*.item_image_order' => '',
             'images' => 'required|array',
             'categories' => 'exists:categories,id',
         ];
-
+        
+        $order = 1;
+        
         // Conditionally apply image validation rules based on file type
         foreach ($this->input('images', []) as $key => $imageData) {
-            if ($this->isFile('images.'.$imageData['item_image_order'].'.item_image')) {
-                $rules["images.{$key}.item_image"] = 'required|image|mimes:jpeg,png,jpg,svg|max:2048';
+            if ($this->file("images.{$order}.item_image")) {
+                $rules["images.{$order}.item_image"] = "required|image|mimes:jpeg,png,jpg,svg|max:2048";
             }
+        
+            // Manually set the error message for the specified rule
+            $customMessages["images.{$order}.item_image.max"] = "The images.{$order}.item_image field must not be greater than 2048 kilobytes.";
+        
+            $order++;
         }
         
-    
         return $rules;
+        
+        
     }
 
     /**
@@ -51,8 +59,5 @@ class UpdateItemRequest extends FormRequest
      * @param mixed $input
      * @return bool
      */
-    protected function isFile($input): bool
-    {
-        return is_array($input) && array_key_exists('file', $input) && $input['file'] instanceof \Illuminate\Http\UploadedFile;
-    }
+
 }

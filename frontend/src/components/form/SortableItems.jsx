@@ -15,8 +15,6 @@ export function SortableItem({ id, index, handleImageRemove, image }) {
     transform: CSS.Transform.toString(transform),
     transition,
   };
-  
-  console.log(image)
 
   const onDeleteClick = (event) => {
     // Prevent click event from triggering drag

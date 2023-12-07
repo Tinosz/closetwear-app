@@ -18,14 +18,27 @@ export default function ItemList() {
         getItems();
     }, []);
 
+    const onDelete = (item) => {
+        if (
+            !window.confirm("Are you sure you want to delete this item?")
+        ){
+            return;
+        }
+
+        axiosClient.delete(`/items/${item.id}`).then(() => {
+            getItems();
+        })
+    }
+
     return (
         <>
+        {notification && <div>{notification}</div>}
             <h2>Item List:</h2>
             <table>
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>Product Name</th>
+                        <th>Item Name</th>
                         <th>Images</th>
                         <th>Price</th>
                         <th>Categories</th>
@@ -40,7 +53,7 @@ export default function ItemList() {
                                 <td>{index + 1}</td>
                                 <td>{item.item_name}</td>
                                 <td>
-                                    {item.images.map((image, imgIndex) => (
+                                    {item.images.sort((a, b) => a.item_image_order - b.item_image_order).map((image, imgIndex) => (
                                         <span key={imgIndex}>
                                             <img className="w-20" src={`${import.meta.env.VITE_API_BASE_URL}/storage/${image.item_image}`} alt={`Image ${imgIndex + 1}`} />
                                         </span>
@@ -64,7 +77,7 @@ export default function ItemList() {
                                     </Link>
                                 </td>
                                 <td>
-                                    <button>Delete</button>
+                                    <button onClick={(e) => onDelete(item)}>Delete</button>
                                 </td>
                             </tr>
                         ))
