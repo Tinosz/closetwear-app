@@ -6,8 +6,8 @@ import AdminLogin from "./pages/administrator/AdminLogin";
 import AccessableLayout from "./page-groups/AccessableLayout";
 import GuestLayout from "./page-groups/GuestLayout";
 import ItemList from "./pages/administrator/ItemList";
-import Home from "./pages/administrator/accessable/home";
-import ProductDetails from "./pages/administrator/accessable/ProductDetails";
+import Home from "./pages/accessable/home";
+import ProductDetails from "./pages/accessable/ProductDetails";
 
 const router = createBrowserRouter([
     {
