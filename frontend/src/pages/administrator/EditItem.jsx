@@ -310,7 +310,7 @@ export default function EditItem() {
                     value={item.whatsapp_link}
                 />
 
-                <div {...getRootProps()}>
+                <div {...getRootProps()} className="border-4 h-[250px] w-[500px] rounded-md p-10 m-10 border-red-500 flex items-center justify-center">
                     <input {...getInputProps()} />
                     {isDragActive ? (
                         <p>Drop your images here ...</p>
