@@ -13,6 +13,7 @@ export default function AdminLayout() {
     <>
       <SideBar />
       <div className="main-content">
+
         <Outlet />
       </div>
     </>

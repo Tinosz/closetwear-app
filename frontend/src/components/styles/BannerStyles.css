@@ -1,0 +1,86 @@
+/*
+    #0C0C0C
+    #D71313
+    #696969
+    #EEEDED
+    #FFFFFF
+*/
+
+.swiper {
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+
+.banner-wrap {
+    height: 100vh;
+}
+
+.banner-text-wrap {
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.8);
+    height: 100%;
+    padding-right: 15%;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.banner-text-wrap h1{
+    margin-left: 40px;
+}
+
+.swiper-slide {
+    font-size: 18px;
+    color: #fff;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 40px 60px;
+}
+  
+.parallax-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 130%;
+    height: 100vh;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-position: center;
+}
+  
+
+
+.swiper-slide .banner-title {
+    font-size: 41px;
+    font-weight: 300;
+}
+  
+.swiper-slide .banner-subtitle {
+    font-size: 21px;
+}
+  
+.swiper-slide .banner-desc {
+    font-size: 14px;
+    max-width: 400px;
+    line-height: 1.3;
+}
+
+.mobile {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    .swiper-slide .banner-img {
+        height: 100%;
+        background-size: cover;
+    }
+
+    .mobile {
+        display: block;
+    }
+}
