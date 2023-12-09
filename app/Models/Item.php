@@ -31,4 +31,9 @@ class Item extends Model
         return $this->hasMany(Image::class, 'item_id');
     }
 
+    public function banners()
+    {
+        return $this->belongsToMany(Banner::class, 'item_banner', 'item_id', 'banner_id');
+    }
+
 }

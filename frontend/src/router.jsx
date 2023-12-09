@@ -6,6 +6,8 @@ import AdminLogin from "./pages/administrator/AdminLogin";
 import AccessableLayout from "./page-groups/AccessableLayout";
 import GuestLayout from "./page-groups/GuestLayout";
 import ItemList from "./pages/administrator/ItemList";
+import BannerList from "./pages/administrator/BannerList";
+import EditBanner from "./pages/administrator/EditBanner";
 
 const router = createBrowserRouter([
     {
@@ -48,7 +50,20 @@ const router = createBrowserRouter([
             {
                 path: '/Admin/ItemList',
                 element: <ItemList />
+            },
+            {
+                path: 'Admin/BannerList',
+                element: <BannerList />
+            },
+            {
+                path: 'Admin/EditBanner',
+                element:<EditBanner key="userCreate"/>
+            },
+            {
+                path: 'Admin/EditBanner/:id',
+                element: <EditBanner key="userUpdate"/>
             }
+
         ]
     }
 ]);
