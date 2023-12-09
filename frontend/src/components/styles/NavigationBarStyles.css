@@ -51,6 +51,7 @@ a:hover {
     color: white;
     background-color: rgba(0, 0, 0, .7);
     position: fixed;
+    top: 0;
     left: 0;
     width: 100%;
     height: 80px;
@@ -91,7 +92,6 @@ a:hover {
     color: #0C0C0C;
     font-size: 1.5rem;
     cursor: pointer;
-    display: none;
 }
 
 .action-btn {

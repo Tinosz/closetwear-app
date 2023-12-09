@@ -10,7 +10,7 @@ export default function AdminLayout() {
     
     return(
         <>
-        <NavigationBar />
+        {/* <NavigationBar /> */}
         <Outlet />
         </>
     )

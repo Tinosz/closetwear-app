@@ -17,12 +17,12 @@ export default function Home() {
           slidesToSlide: 3 // optional, default to 1.
         },
         tablet: {
-          breakpoint: { max: 800, min: 464 },
+          breakpoint: { max: 800, min: 624 },
           items: 2,
           slidesToSlide: 2 // optional, default to 1.
         },
         mobile: {
-          breakpoint: { max: 464, min: 0 },
+          breakpoint: { max: 624, min: 0 },
           items: 1,
           slidesToSlide: 1 // optional, default to 1.
         }
@@ -36,9 +36,11 @@ export default function Home() {
                     <h2 className='new-release-product'>{props.name}</h2>
                     <p className='new-release-price'>{props.price}</p>
                     <p className='new-release-desc'>{props.desc}</p>
-                <p className='new-release-btn'>
-                    <button>See Product</button>
-                </p>
+                    <a href={`/products/${props.id}`} className='new-release-btn'>
+                        See Product
+                    </a>
+
+
                 </div>
             </div>
         )
@@ -105,6 +107,7 @@ export default function Home() {
 
       const newlyReleased = newReleasedData.map(item => (
         <NewReleased 
+            id={item.id}
             name={item.name} 
             url={item.imageUrl} 
             price={item.price} 
