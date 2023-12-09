@@ -69,14 +69,14 @@ export default function EditItem() {
             formData.append(`images[${i}][item_image_order]`, id ? i + 1 : newOrder[i]);
         }
 
-        console.log(formData)
+        // console.log(formData)
         
         if (id) {
             formData.append("_method", "PUT");
         }
 
         if (id) {
-            console.log(formData);
+            // console.log(formData);
             axiosClient
                 .post(`/items/${item.id}`, formData, {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -93,7 +93,7 @@ export default function EditItem() {
                     }
                 });
         } else {
-            console.log(formData);
+            // console.log(formData);
             axiosClient
                 .post("/items", formData, {
                     headers: {
@@ -105,7 +105,7 @@ export default function EditItem() {
                     navigate("/Admin/ItemList");
                 })
                 .catch((err) => {
-                    console.log(err);
+                    // console.log(err);
                     const response = err.response;
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
@@ -160,7 +160,7 @@ export default function EditItem() {
         axiosClient
             .get("categories")
             .then((response) => {
-                console.log(response.data);
+                // console.log(response.data);
                 setCategories(response.data);
             })
             .catch(() => {})
@@ -186,7 +186,7 @@ export default function EditItem() {
             images: sortedImages, // Update the images in sorted order
             }));
       
-              console.log(data);
+            //   console.log(data);
             })
             .catch(() => {});
         }
@@ -218,7 +218,8 @@ export default function EditItem() {
             });
         }
     }
-    
+
+
     return (
         <>
             {errors && (
@@ -253,7 +254,7 @@ export default function EditItem() {
                     }
                     value={item.item_description}
                 />
-                {categories.length > 0 ? (
+                {categories.length > 1 ? (
                     
                     categories.filter(category => category.id !== 1).map((category) => (
                         <label key={category.id}>
