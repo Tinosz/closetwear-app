@@ -1,17 +1,20 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
-import NavigationBar from "../components/NavigationBar";
+import SideBar from "../components/SideBar";
+import "./styles/AdminLayout.css";
 
 export default function AdminLayout() {
-    const {token} = useStateContext();
+    const { token } = useStateContext();
     if (!token) {
-        return <Navigate to="/" />
+      return <Navigate to="/" />;
     }
-    
-    return(
-        <>
-        <NavigationBar />
+
+  return (
+    <>
+      <SideBar />
+      <div className="main-content">
         <Outlet />
-        </>
-    )
+      </div>
+    </>
+  );
 }
