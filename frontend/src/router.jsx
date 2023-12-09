@@ -9,6 +9,11 @@ import ItemList from "./pages/administrator/ItemList";
 import Home from "./pages/accessable/home";
 import ProductDetails from "./pages/accessable/ProductDetails";
 
+
+import BannerList from "./pages/administrator/BannerList";
+import EditBanner from "./pages/administrator/EditBanner";
+
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -57,7 +62,20 @@ const router = createBrowserRouter([
             {
                 path: '/Admin/ItemList',
                 element: <ItemList />
+            },
+            {
+                path: 'Admin/BannerList',
+                element: <BannerList />
+            },
+            {
+                path: 'Admin/EditBanner',
+                element:<EditBanner key="userCreate"/>
+            },
+            {
+                path: 'Admin/EditBanner/:id',
+                element: <EditBanner key="userUpdate"/>
             }
+
         ]
     }
 ]);
