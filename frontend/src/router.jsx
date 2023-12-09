@@ -6,13 +6,17 @@ import AdminLogin from "./pages/administrator/AdminLogin";
 import AccessableLayout from "./page-groups/AccessableLayout";
 import GuestLayout from "./page-groups/GuestLayout";
 import ItemList from "./pages/administrator/ItemList";
+import Home from "./pages/administrator/accessable/home";
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <AccessableLayout />,
         children: [
-            
+            {
+                path: '/',
+                element: <Home />
+            },
         ]
     },
     {
