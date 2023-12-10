@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -34,3 +35,4 @@ Route::post('/adminLogin', [AuthController::class, 'adminLogin']);
 Route::get('/items', [ItemController::class, 'index']);
 Route::post('/items/{item}/increment-click', [ItemController::class, 'incrementItemClick']);
 Route::get('/banners', [BannerController::class, 'index']);
+Route::get('/adminSearch', [ItemController::class, "itemSearch"]);
