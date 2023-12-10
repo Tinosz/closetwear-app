@@ -159,11 +159,13 @@ class ItemController extends Controller
     public function itemSearch(Request $request)
     {
         $query = $request->input('query');
-
-        $results = Item::where('item_name', 'LIKE', "%$query%")
+    
+        $results = Item::with('images') // Eager load the 'images' relationship
+            ->where('item_name', 'LIKE', "%$query%")
             ->get();
-
+    
         return response()->json(['results' => $results]);
     }
+
 
 }

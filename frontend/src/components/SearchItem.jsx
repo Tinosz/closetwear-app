@@ -4,22 +4,23 @@ import './SearchItem.css';
 
 const SearchItem = () => {
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const handleSearch = async () => {
+    const handleSearch = async (searchQuery) => {
         setError(null);
-        setResults([]);
-    
-        if (!query.trim()) {
+        setLoading(true);
+
+        if (!searchQuery.trim()) {
+            setSuggestions([]);
+            setLoading(false);
             return;
         }
-    
+
         try {
-            setLoading(true);
-            const response = await axiosClient.get(`/adminSearch?query=${query}`);
-            setResults(response.data.results);
+            const response = await axiosClient.get(`/adminSearch?query=${searchQuery}`);
+            setSuggestions(response.data.results);
         } catch (error) {
             console.error('Error fetching search results:', error);
             setError('Error fetching search results. Please try again.');
@@ -27,40 +28,40 @@ const SearchItem = () => {
             setLoading(false);
         }
     };
-    
+
+    const handleInputChange = (e) => {
+        const newQuery = e.target.value;
+        setQuery(newQuery);
+        handleSearch(newQuery);
+    };
 
     return (
         <div className="search-container">
             <input
                 type="search"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={handleInputChange}
                 placeholder="Search for items..."
             />
-            <button onClick={handleSearch} disabled={loading}>
-                {loading ? 'Searching...' : 'Search'}
+            <button disabled={loading}>
+                {loading ? "Searching..." : "Search"}
             </button>
-
-            {error && <p className="error-message">{error}</p>}
-
-            {(results.length > 0 || loading) && (
-                <ul className="results-list">
-                    {results.map((result) => (
-                        <li key={result.id} className="result-item">
-                            <div className="thumbnail">
-                                <img src={result.thumbnailUrl} alt={`Thumbnail for ${result.item_name}`} />
-                            </div>
+            {query.trim() && !loading && suggestions.length === 0 && (
+                <p>No results found</p>
+            )}
+            {suggestions.length > 0 && (
+                <ul className="suggestions-list">
+                    {suggestions.map((suggestion) => (
+                        <li key={suggestion.id} className="suggestion-item">
                             <div className="details">
-                                <h3>{result.item_name}</h3>
+                                <h3>{suggestion.item_name}</h3>
                             </div>
                         </li>
                     ))}
                 </ul>
             )}
 
-            {results.length === 0 && !loading && query.trim() && (
-                <p className="no-results">No results found</p>
-            )}
+            {error && <p className="error-message">{error}</p>}
         </div>
     );
 };
