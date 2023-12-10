@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import axiosClient from "../../client/axios-client";
 import { useStateContext } from "../../context/ContextProvider";
 import { Link, useParams } from "react-router-dom";
-
-import SearchItem from "../../components/SearchItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
