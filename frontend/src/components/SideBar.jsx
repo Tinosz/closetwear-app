@@ -42,7 +42,7 @@ export default function SideBar() {
       >
         <div>
           {/* Tambahkan tautan ke halaman EditCategory */}
-          <Link to="/Admin/EditCategories">Edit Categories</Link>
+          <Link to="/Admin/EditCategories">Category List</Link>
           <br />
 
           {/* Tambahkan tautan ke halaman ItemList */}

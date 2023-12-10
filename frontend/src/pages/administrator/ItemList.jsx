@@ -23,7 +23,7 @@ export default function ItemList() {
         }
     };
     const getItems = (page = 1) => {
-        axiosClient.get(`items?page=${page}`).then((response) => {
+        axiosClient.get(`itemsPaginated?page=${page}`).then((response) => {
             console.log(response.data);
             setItems(response.data.data);
             setPagination(response.data);

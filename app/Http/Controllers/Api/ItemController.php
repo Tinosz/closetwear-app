@@ -17,7 +17,13 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
+    {
+        $items = Item::with('categories', 'images')->get();
+        return $items;
+    }
+
+    public function indexPaginated(Request $request)
     {
         $perPage = $request->input('per_page', 10); // Number of items per page, default is 10        
         $items = Item::with('categories', 'images')->paginate($perPage);
@@ -175,6 +181,5 @@ class ItemController extends Controller
 
         return response()->json($items);
     }
-
 
 }
