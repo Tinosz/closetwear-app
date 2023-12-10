@@ -37,3 +37,7 @@ Route::post('/items/{item}/increment-click', [ItemController::class, 'incrementI
 Route::get('/banners', [BannerController::class, 'index']);
 
 Route::get('/search', [ItemController::class, 'search']);
+
+
+Route::get('/categories', [CategoryController::class, 'index']);
+
