@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ReactDOM } from "react";
-import { Accordion, Card, Button } from 'react-bootstrap';
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -236,7 +235,7 @@ const ProductDetails = () => {
       </div>
 
       <div className="recommended-wrap">
-        <h1 className="rec-title" data-aos="fade-up">Recommendation for You</h1>
+        <h1 className="rec-title">Recommendation for You</h1>
         <ImageGallery />
       </div>
     </div>
