@@ -8,7 +8,7 @@ use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Http\Resources\ItemResource;
 use App\Models\Image;
-use GuzzleHttp\Psr7\UploadedFile;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
@@ -16,11 +16,11 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = Item::with('categories', 'images')->get();
-
-        return response()->json($items);
+        $perPage = $request->input('per_page', 10); // Number of items per page, default is 10        
+        $items = Item::with('categories', 'images')->paginate($perPage);
+        return $items;
     }
 
     /**
@@ -115,14 +115,44 @@ class ItemController extends Controller
         // Check if there are images associated with the item
         if ($item->images->isNotEmpty()) {
             foreach ($item->images as $image) {
-                Storage::delete($image->item_image);
+                Storage::delete('public/' . $image->item_image);
             }
-
             $item->images()->delete();
         }
 
 
         // Delete the item
         $item->delete();
+    }
+
+    public function incrementItemClick(Item $item)
+    {
+        $item->increment('item_click');
+
+        return response()->json(['message' => 'item click count incremented successfully']);
+    }
+
+    public function multipleDelete(Request $request)
+    {
+        $itemIds = $request->input('itemIds');
+    
+        // Fetch items to delete
+        $itemsToDelete = Item::with('images')->whereIn('id', $itemIds)->get();
+    
+        foreach ($itemsToDelete as $item) {
+            // Check if there are images associated with the item
+            if ($item->images->isNotEmpty()) {
+                foreach ($item->images as $image) {
+                    Storage::delete('public/' . $image->item_image);
+                }
+    
+                $item->images()->delete();
+            }
+    
+            // Delete the item
+            $item->delete();
+        }
+    
+        return response("Selected items successfully deleted", 204);
     }
 }

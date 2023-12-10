@@ -27,7 +27,7 @@ const commonSwiperOptions = {
       clickable: true,
     },
     autoplay: {
-      delay: 300000,
+      delay: 6000,
       disableOnInteraction: false,
     },
     modules: [Parallax, Autoplay, EffectFade, Pagination],
