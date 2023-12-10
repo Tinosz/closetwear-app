@@ -7,11 +7,10 @@ import AccessableLayout from "./page-groups/AccessableLayout";
 import GuestLayout from "./page-groups/GuestLayout";
 import ItemList from "./pages/administrator/ItemList";
 import Home from "./pages/accessable/home";
-import ProductDetails from "./pages/accessable/ProductDetails";
-
 
 import BannerList from "./pages/administrator/BannerList";
 import EditBanner from "./pages/administrator/EditBanner";
+import ProductDetail from "./pages/accessable/ProductDetails";
 
 
 const router = createBrowserRouter([
@@ -25,7 +24,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/Product',
-                element: <ProductDetails />
+                element: <ProductDetail />
             },
         ]
     },
