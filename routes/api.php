@@ -38,7 +38,7 @@ Route::get('/items', [ItemController::class, 'index']);
 Route::get('/itemsPaginated', [ItemController::class, 'indexPaginated']);
 Route::post('/items/{item}/increment-click', [ItemController::class, 'incrementItemClick']);
 Route::get('/banners', [BannerController::class, 'index']);
-Route::get('/adminSearch', [ItemController::class, "itemSearch"]);
+Route::get('/search', [ItemController::class, 'search']);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/items/search-by-category/{categoryId}', [ItemController::class, 'searchByCategory']);
 

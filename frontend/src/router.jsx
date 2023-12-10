@@ -12,6 +12,7 @@ import ProductDetails from "./pages/accessable/ProductDetails";
 
 import BannerList from "./pages/administrator/BannerList";
 import EditBanner from "./pages/administrator/EditBanner";
+import SearchPage from "./page-groups/SearchPage";
 import Catalog from "./pages/accessable/Catalog";
 
 
@@ -35,7 +36,12 @@ const router = createBrowserRouter([
             {
                 path: '/Catalog/:id',
                 element: <Catalog key="CategoryPreview"/>
-            }
+            },
+            {
+                path: "/Search",
+                element: <SearchPage />,
+            },
+
         ]
     },
     {
