@@ -6,7 +6,7 @@ import AdminLogin from "./pages/administrator/AdminLogin";
 import AccessableLayout from "./page-groups/AccessableLayout";
 import GuestLayout from "./page-groups/GuestLayout";
 import ItemList from "./pages/administrator/ItemList";
-import Home from "./pages/accessable/home";
+import Home from "./pages/accessable/Home";
 
 import BannerList from "./pages/administrator/BannerList";
 import EditBanner from "./pages/administrator/EditBanner";

@@ -133,16 +133,16 @@ export default function Home() {
         );
     }
 
-    function LatestRelease() {
+    function SectionContent() {
         return(
             <section className='home-latest'>
                 <div className='grid-container'>
                     
-                    <div className='category-wrap'>
-                            <h2>
-                                <a className='category-text' href="">Woman's Sweater</a>
-                            </h2>
-                            <a className='category-link' href="">View</a>
+                    <div className='category-wrap desktop'>
+                        <h2>
+                            <a className='category-text' href="">Woman's Sweater</a>
+                        </h2>
+                        <a className='category-link' href="">View</a>
                     </div>
                     <div className='category-img-wrap'>
                         <div className='relative'>
@@ -155,12 +155,15 @@ export default function Home() {
                             <span className='category-layer' style={{ backgroundImage: `url(//hatshop.com/cdn/shop/files/texture_indigo-worth-and-worth.jpg?v=1614347676)` }}></span>
                         </div>
                     </div>
-                    
+                    <div className='category-wrap-mobile'>
+                        <h2>
+                            <a className='category-text' href="">Woman's Sweater</a>
+                        </h2>
+                        <a className='category-link' href="">View</a>
+                    </div>
                 </div>
                 
                 <div className='grid-container2'>
-                    
-                    
                     <div className='category-img-wrap'>
                         <div className='relative'>
                             <a className="category-img" href=''>
@@ -173,11 +176,11 @@ export default function Home() {
                             </a>
                         </div>
                     </div>
-                    <div className='category-wrap2'>
-                            <h2>
-                                <a className='category-text' href="">Men's Sweater</a>
-                            </h2>
-                            <a className='category-link' href="">View</a>
+                    <div className='category-wrap'>
+                        <h2>
+                            <a className='category-text' href="">Men's Sweater</a>
+                        </h2>
+                        <a className='category-link' href="">View</a>
                     </div>
                 </div>
             </section>
@@ -186,9 +189,11 @@ export default function Home() {
 
       return(
         <>
+        <div className='home-wrap'>
             <Banner />
-            <LatestRelease />
+            <SectionContent />
             <NewReleases />
+        </div>
         </>
       )
 }

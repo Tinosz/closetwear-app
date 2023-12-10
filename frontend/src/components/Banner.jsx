@@ -103,9 +103,9 @@ const commonSwiperOptions = {
   
   const App = () => (
     <>
-      
-      <BannerSection items={bannerSlide} />
-      {/* Add more sections with different sets of items if needed */}
+      <div className='banner-wrap'>
+        <BannerSection items={bannerSlide} />
+      </div>
     </>
   );
   
