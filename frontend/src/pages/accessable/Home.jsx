@@ -1,25 +1,28 @@
-import react from 'react';
-import "./styles/HomeStyles.css"
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import Banner from '../../components/Banner';
+import react, { useEffect, useState } from "react";
+import "./styles/HomeStyles.css";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import Banner from "../../components/Banner";
+import axiosClient from "../../client/axios-client";
 
 export default function Home() {
+    const getItems = () => {};
+
     const responsive = {
         largeDesktop: {
-          breakpoint: { max: 3000, min: 1024 },
-          items: 5,
-          slidesToSlide: 2 // optional, default to 1.
+            breakpoint: { max: 3000, min: 1024 },
+            items: 5,
+            slidesToSlide: 2, // optional, default to 1.
         },
         desktop: {
-          breakpoint: { max: 1024, min: 800 },
-          items: 3,
-          slidesToSlide: 3 // optional, default to 1.
+            breakpoint: { max: 1024, min: 800 },
+            items: 3,
+            slidesToSlide: 3, // optional, default to 1.
         },
         tablet: {
-          breakpoint: { max: 800, min: 624 },
-          items: 2,
-          slidesToSlide: 2 // optional, default to 1.
+            breakpoint: { max: 800, min: 624 },
+            items: 2,
+            slidesToSlide: 2, // optional, default to 1.
         },
         mobile: {
           breakpoint: { max: 624, min: 0 },
@@ -187,7 +190,7 @@ export default function Home() {
         )
     }
 
-      return(
+    return (
         <>
         <div className='home-wrap'>
             <Banner />
@@ -195,5 +198,5 @@ export default function Home() {
             <NewReleases />
         </div>
         </>
-      )
+    );
 }

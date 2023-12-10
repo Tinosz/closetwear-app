@@ -18,6 +18,7 @@ class CategoryResource extends JsonResource
         return[
             'id' => $this->id,
             'category_name' => $this->category_name,
+            'featured' => $this->featured,
         ];
     }
 }

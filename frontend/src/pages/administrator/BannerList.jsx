@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import axiosClient from "../../client/axios-client";
 import { useStateContext } from "../../context/ContextProvider";
 import { Link } from "react-router-dom";
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import {
+    SortableContext,
+    arrayMove,
+    verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import SortableBanner from "../../components/form/SortableBanner";
 
 export default function BannerList() {
     const { notification } = useStateContext();
@@ -10,8 +17,8 @@ export default function BannerList() {
 
     const getBanners = () => {
         axiosClient.get("banners").then((response) => {
-            console.log(response.data);
             setBanners(response.data);
+            console.log(response.data);
         });
     };
 
@@ -46,8 +53,6 @@ export default function BannerList() {
             return;
         }
 
-        console.log("Selected Banners:", selectedBanners);
-
         axiosClient
             .delete("/banners/delete-multiple", {
                 data: { bannerIds: selectedBanners },
@@ -58,138 +63,115 @@ export default function BannerList() {
             });
     };
 
+    function handleDragEnd(event) {
+        const { active, over } = event;
+
+        if (active.id !== over.id) {
+            const oldIndex = banners.findIndex(
+                (banner) => banner.id === active.id
+            );
+            const newIndex = banners.findIndex(
+                (banner) => banner.id === over.id
+            );
+
+            const reorderedBanners = arrayMove(banners, oldIndex, newIndex);
+
+            // Update the state with the new order
+            setBanners(reorderedBanners);
+
+            // Prepare the data to be sent to the server
+            const updatedBannerOrders = reorderedBanners.map(
+                (banner, index) => ({
+                    id: banner.id,
+                    banner_order: index + 1, // Assuming banner_order starts from 1
+                })
+            );
+
+            console.log(updatedBannerOrders);
+
+            const formData = new FormData();
+
+            // Append each banner data
+            updatedBannerOrders.forEach((banner) => {
+                formData.append("id[]", banner.id);
+                formData.append("banner_order[]", banner.banner_order);
+            });
+
+            console.log(formData);
+
+            axiosClient
+                .post("banners/update-order", formData)
+                .then(() => {
+                    console.log("Banner order updated successfully");
+                })
+                .catch((err) => {
+                    console.error("Error updating banner order:", err);
+                });
+        }
+    }
+
     return (
         <>
+            {notification && <div>{notification}</div>}
+            <Link to="/Admin/EditBanner">Add Banner</Link>
             <div>
-                <button onClick={onMultipleDelete}>Delete Selected</button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Banner Image</th>
-                            <th>Related Items</th>
-                            <th>Related Categories</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                            <th>Select</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {banners.length > 0 ? (
-                            banners.map((banner, index) => (
-                                <tr key={banner.id}>
-                                    <td>{index + 1}</td>
-                                    <td>
-                                        <img
-                                            className="w-40"
-                                            src={`${
-                                                import.meta.env
-                                                    .VITE_API_BASE_URL
-                                            }/storage/${banner.banner_image}`}
-                                            alt={`Banner Image` + index + 1}
-                                        />
-                                    </td>
-                                    <td>
-                                        {banner.items.length > 0 ? (
-                                            banner.items.map((item) => {
-                                                // Find the image with the lowest item_image_order
-                                                const lowestOrderImage =
-                                                    item.images.reduce(
-                                                        (lowest, current) => {
-                                                            return current.item_image_order <
-                                                                lowest.item_image_order
-                                                                ? current
-                                                                : lowest;
-                                                        },
-                                                        item.images[0]
-                                                    );
-
-                                                return (
-                                                    <li key={item.id}>
-                                                        {item.item_name}
-                                                        {lowestOrderImage && (
-                                                            <img
-                                                                className="w-20"
-                                                                src={`${
-                                                                    import.meta
-                                                                        .env
-                                                                        .VITE_API_BASE_URL
-                                                                }/storage/${
-                                                                    lowestOrderImage.item_image
-                                                                }`}
-                                                                alt={`Image`}
-                                                            />
-                                                        )}
-                                                    </li>
-                                                );
-                                            })
-                                        ) : (
-                                            <li>No Items Related</li>
-                                        )}
-                                    </td>
-                                    <td>
-                                        <ul>
-                                            {banner.categories.length > 0 ? (
-                                                banner.categories
-                                                    .filter(
-                                                        (category) =>
-                                                            category.id !== 1
-                                                    )
-                                                    .map(
-                                                        (
-                                                            category,
-                                                            catIndex
-                                                        ) => (
-                                                            <li key={catIndex}>
-                                                                {
-                                                                    category.category_name
-                                                                }
-                                                            </li>
-                                                        )
-                                                    )
-                                            ) : (
-                                                <li>No Categories Related</li>
-                                            )}
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <Link
-                                            to={
-                                                `/Admin/EditBanner/` + banner.id
-                                            }
-                                        >
-                                            Edit
-                                        </Link>
-                                    </td>
-                                    <td>
-                                        <button
-                                            onClick={(e) => onDelete(banner)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedBanners.includes(
-                                                banner.id
-                                            )}
-                                            onChange={() =>
-                                                toggleBannerSelection(banner.id)
-                                            }
-                                        />
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
+                <button
+                    onClick={onMultipleDelete}
+                    disabled={selectedBanners.length === 0}
+                    style={{ opacity: selectedBanners.length === 0 ? 0.5 : 1 }}
+                >
+                    Delete Selected
+                </button>{" "}
+                <DndContext
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                >
+                    <table>
+                        <thead>
                             <tr>
-                                <td colSpan="4">
-                                    No Banners currently present
-                                </td>
+                                <th>No.</th>
+                                <th>Banner Image</th>
+                                <th>Banner Title</th>
+                                <th>Banner Subtitle</th>
+                                <th>Banner Description</th>
+                                <th>Related Items</th>
+                                <th>Related Categories</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                                <th>Select</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <SortableContext
+                                items={banners.map((banner) => banner.id)}
+                                strategy={verticalListSortingStrategy}
+                            >
+                                {banners.length > 0 ? (
+                                    banners.map((banner, index) => (
+                                        <SortableBanner
+                                            key={banner.id}
+                                            id={banner.id}
+                                            index={index}
+                                            banner={banner}
+                                            onDelete={onDelete}
+                                            toggleBannerSelection={
+                                                toggleBannerSelection
+                                            }
+                                            selectedBanners={selectedBanners}
+                                            handle
+                                        />
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="7">
+                                            No Banners currently present
+                                        </td>
+                                    </tr>
+                                )}
+                            </SortableContext>
+                        </tbody>
+                    </table>
+                </DndContext>
             </div>
         </>
     );

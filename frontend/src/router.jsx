@@ -10,6 +10,9 @@ import Home from "./pages/accessable/Home";
 
 import BannerList from "./pages/administrator/BannerList";
 import EditBanner from "./pages/administrator/EditBanner";
+import SearchPage from "./page-groups/SearchPage";
+import Catalog from "./pages/accessable/Catalog";
+
 import ProductDetail from "./pages/accessable/ProductDetails";
 
 
@@ -26,6 +29,19 @@ const router = createBrowserRouter([
                 path: '/Product',
                 element: <ProductDetail />
             },
+            {
+                path: '/Catalog',
+                element: <Catalog key="AllPreview"/>
+            },
+            {
+                path: '/Catalog/:id',
+                element: <Catalog key="CategoryPreview"/>
+            },
+            {
+                path: "/Search",
+                element: <SearchPage />,
+            },
+
         ]
     },
     {
