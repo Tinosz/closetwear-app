@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300&display=swap');
+
+.sidebar-wrap {
+  font-family: 'quicksand', serif;
+}
+
+.sidebar {
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.sidebar-open {
+  transform: translateX(0);
+}
+
+.link-wrap a{
+  font-size: 32px;
+  font-weight: bold;
+}
