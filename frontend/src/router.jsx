@@ -12,6 +12,7 @@ import ProductDetails from "./pages/accessable/ProductDetails";
 
 import BannerList from "./pages/administrator/BannerList";
 import EditBanner from "./pages/administrator/EditBanner";
+import Catalog from "./pages/accessable/Catalog";
 
 
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
                 path: '/Product',
                 element: <ProductDetails />
             },
+            {
+                path: '/Catalog',
+                element: <Catalog />
+            }
         ]
     },
     {

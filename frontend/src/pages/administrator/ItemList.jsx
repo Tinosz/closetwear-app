@@ -68,6 +68,23 @@ export default function ItemList() {
             });
     };
 
+    const onPageChange = (label) => {
+        let page;
+        switch (label) {
+            case 'Next &raquo;':
+                page = pagination.current_page + 1;
+                break;
+            case '&laquo; Previous':
+                page = pagination.current_page - 1;
+                break;
+            default:
+                page = parseInt(label);
+                break;
+        }
+        getItems(page);
+    };
+    
+
     return (
         <>
             {notification && <div>{notification}</div>}
@@ -178,6 +195,28 @@ export default function ItemList() {
                     )}
                 </tbody>
             </table>
+            <div>
+                {pagination.links && (
+                    <ul className="pagination">
+                        {pagination.links.map((link, index) => (
+                            <li
+                                key={index}
+                                className={`page-item ${
+                                    link.active ? 'active' : ''
+                                }`}
+                            >
+                                <button
+                                    className="page-link"
+                                    onClick={() => onPageChange(link.label)}
+                                >
+                                    {link.label}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+
         </>
     );
 }

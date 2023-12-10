@@ -34,3 +34,4 @@ Route::post('/adminLogin', [AuthController::class, 'adminLogin']);
 Route::get('/items', [ItemController::class, 'index']);
 Route::post('/items/{item}/increment-click', [ItemController::class, 'incrementItemClick']);
 Route::get('/banners', [BannerController::class, 'index']);
+Route::get('/categories', [CategoryController::class, 'index']);
