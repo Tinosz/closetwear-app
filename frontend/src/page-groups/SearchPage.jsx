@@ -4,7 +4,7 @@ import axiosClient from "../client/axios-client";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import SearchBar from "../components/SearchBar"; // Import the SearchBar component
+import SearchBar from "../components/SearchBar";
 import useSearch from "./useSearch";
 import { useStateContext } from "../context/ContextProvider";
 
