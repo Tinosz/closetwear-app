@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Http\Resources\ItemResource;
+use App\Models\Category;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -165,6 +166,14 @@ class ItemController extends Controller
             ->get();
     
         return response()->json(['results' => $results]);
+    }
+
+    public function searchByCategory (Request $request, $categoryId)
+    {
+        $category = Category::findorFail($categoryId);
+        $items = $category->items;
+
+        return response()->json($items);
     }
 
 

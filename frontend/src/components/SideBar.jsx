@@ -44,11 +44,11 @@ export default function SideBar() {
           {/* Tambahkan tautan ke halaman EditCategory */}
           <Link to="/Admin/EditCategories">Edit Categories</Link>
           <br />
-          {/* Tambahkan tautan ke halaman EditItem */}
-          <Link to="/Admin/EditItem">Edit Item</Link>
-          <br />
+
           {/* Tambahkan tautan ke halaman ItemList */}
           <Link to="/Admin/ItemList">Item List</Link>
+          <br />
+          <Link to="/Admin/BannerList">Banner List</Link>
         </div>
 
       </div>

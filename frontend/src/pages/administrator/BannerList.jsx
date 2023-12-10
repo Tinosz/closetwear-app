@@ -60,6 +60,7 @@ export default function BannerList() {
 
     return (
         <>
+        <Link to="/Admin/EditBanner">Add Banner</Link>
             <div>
                 <button onClick={onMultipleDelete}>Delete Selected</button>
                 <table>

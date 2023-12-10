@@ -13,12 +13,16 @@ import { SortableItem } from "../../components/form/SortableItems";
 
 import "./styles/EditItemStyles.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export default function EditItem() {
     const { id } = useParams();
     const { setNotification } = useStateContext();
     const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
+    const [featuredCategories, setFeaturedCategories] = useState([]);
+    const [nonFeaturedCategories, setNonFeaturedCategories] = useState([]);
     const [errors, setErrors] = useState(null);
     const [item, setItem] = useState({
         id: null,
@@ -38,7 +42,7 @@ export default function EditItem() {
 
         let newOrder = [];
 
-    // If it's an update, reset the order array
+        // If it's an update, reset the order array
         if (!id) {
             newOrder = Array.from(
                 { length: item.images.length },
@@ -55,7 +59,6 @@ export default function EditItem() {
         item.categories.forEach((category) => {
             formData.append("categories[]", category);
         });
-        
 
         formData.append("tokopedia_link", item.tokopedia_link);
         formData.append("shoppee_link", item.shoppee_link);
@@ -63,14 +66,20 @@ export default function EditItem() {
         formData.append("available_stock", item.available_stock);
 
         for (let i = 0; i < item.images.length; i++) {
-            formData.append(`images[${i}][item_image]`, item.images[i].item_image);
-            
+            formData.append(
+                `images[${i}][item_image]`,
+                item.images[i].item_image
+            );
+
             // If it's an update, reset the order; otherwise, use the new order array
-            formData.append(`images[${i}][item_image_order]`, id ? i + 1 : newOrder[i]);
+            formData.append(
+                `images[${i}][item_image_order]`,
+                id ? i + 1 : newOrder[i]
+            );
         }
 
         // console.log(formData)
-        
+
         if (id) {
             formData.append("_method", "PUT");
         }
@@ -121,7 +130,7 @@ export default function EditItem() {
                 { length: acceptedFiles.length },
                 (_, index) => numUploadedImages + index + 1
             );
-    
+
             return {
                 ...prevItem,
                 images: [
@@ -134,20 +143,19 @@ export default function EditItem() {
             };
         });
     }, []);
-    
+
     const handleImageRemove = (indexToRemove) => {
         setItem((prevItem) => {
             const updatedImages = prevItem.images.filter(
                 (_, index) => index !== indexToRemove
             );
-    
+
             return {
                 ...prevItem,
                 images: updatedImages,
             };
         });
     };
-    
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -160,8 +168,18 @@ export default function EditItem() {
         axiosClient
             .get("categories")
             .then((response) => {
-                // console.log(response.data);
-                setCategories(response.data);
+                const allCategories = response.data;
+
+                const featured = allCategories.filter(
+                    (category) => category.featured === 1
+                );
+                const nonFeatured = allCategories.filter(
+                    (category) => category.featured === 0
+                );
+
+                setCategories(allCategories);
+                setFeaturedCategories(featured);
+                setNonFeaturedCategories(nonFeatured);
             })
             .catch(() => {})
             .finally(() => {
@@ -171,27 +189,32 @@ export default function EditItem() {
 
     useEffect(() => {
         getCategories();
-      
-        if (id) {
-          axiosClient
-            .get(`/items/${id}`)
-            .then(({ data }) => {
-              const categoryIds = data.categories.map(category => category.id);
-              const sortedImages = data.images.slice().sort((a, b) => a.item_image_order - b.item_image_order);
 
-            setItem(prevItem => ({
-            ...prevItem,
-            ...data,
-            categories: categoryIds,
-            images: sortedImages, // Update the images in sorted order
-            }));
-      
-            //   console.log(data);
-            })
-            .catch(() => {});
+        if (id) {
+            axiosClient
+                .get(`/items/${id}`)
+                .then(({ data }) => {
+                    const categoryIds = data.categories.map(
+                        (category) => category.id
+                    );
+                    const sortedImages = data.images
+                        .slice()
+                        .sort(
+                            (a, b) => a.item_image_order - b.item_image_order
+                        );
+
+                    setItem((prevItem) => ({
+                        ...prevItem,
+                        ...data,
+                        categories: categoryIds,
+                        images: sortedImages, // Update the images in sorted order
+                    }));
+
+                    //   console.log(data);
+                })
+                .catch(() => {});
         }
-      }, [id]);
-      
+    }, [id]);
 
     function handleDragEnd(event) {
         const { active, over } = event;
@@ -200,17 +223,17 @@ export default function EditItem() {
                 const activeIndex = prevItem.images.findIndex(
                     (image) => image.item_image_order === active.id
                 );
-    
+
                 const overIndex = prevItem.images.findIndex(
                     (image) => image.item_image_order === over.id
                 );
-    
+
                 const reorderedImages = arrayMove(
                     prevItem.images,
                     activeIndex,
                     overIndex
                 );
-    
+
                 return {
                     ...prevItem,
                     images: reorderedImages,
@@ -218,7 +241,6 @@ export default function EditItem() {
             });
         }
     }
-
 
     return (
         <>
@@ -254,39 +276,80 @@ export default function EditItem() {
                     }
                     value={item.item_description}
                 />
-                {categories.length > 1 ? (
-                    
-                    categories.filter(category => category.id !== 1).map((category) => (
-                        <label key={category.id}>
-                            <input
-                                type="checkbox"
-                                checked={item.categories.includes(category.id)}
-                                onChange={() => {
-                                    setItem((prevItem) => {
-                                        const updatedCategoryId =
-                                            prevItem.categories.includes(
-                                                category.id
-                                            )
-                                                ? prevItem.categories.filter(
-                                                      (id) => id !== category.id
-                                                  )
-                                                : [
-                                                      ...prevItem.categories,
-                                                      category.id,
-                                                  ];
+                {featuredCategories.length > 0 && (
+                    <div>
+                        <h3>Featured Categories:</h3>
+                        {featuredCategories.map((category) => (
+                            <label key={category.id}>
+                                <input
+                                    type="checkbox"
+                                    checked={item.categories.includes(
+                                        category.id
+                                    )}
+                                    onChange={() => {
+                                        setItem((prevItem) => {
+                                            const updatedCategoryId =
+                                                prevItem.categories.includes(
+                                                    category.id
+                                                )
+                                                    ? prevItem.categories.filter(
+                                                          (id) =>
+                                                              id !== category.id
+                                                      )
+                                                    : [
+                                                          ...prevItem.categories,
+                                                          category.id,
+                                                      ];
 
-                                        return {
-                                            ...prevItem,
-                                            categories: updatedCategoryId,
-                                        };
-                                    });
-                                }}
-                            />
-                            {category.category_name}
-                        </label>
-                    ))
-                ) : (
-                    <p>No categories available.</p>
+                                            return {
+                                                ...prevItem,
+                                                categories: updatedCategoryId,
+                                            };
+                                        });
+                                    }}
+                                />
+                                {category.category_name} <FontAwesomeIcon icon={faStar} />
+                            </label>
+                        ))}
+                    </div>
+                )}
+
+                {nonFeaturedCategories.length > 0 && (
+                    <div>
+                        <h3>Non-Featured Categories:</h3>
+                        {nonFeaturedCategories.filter((category) => category.id !== 1).map((category) => (
+                            <label key={category.id}>
+                                <input
+                                    type="checkbox"
+                                    checked={item.categories.includes(
+                                        category.id
+                                    )}
+                                    onChange={() => {
+                                        setItem((prevItem) => {
+                                            const updatedCategoryId =
+                                                prevItem.categories.includes(
+                                                    category.id
+                                                )
+                                                    ? prevItem.categories.filter(
+                                                          (id) =>
+                                                              id !== category.id
+                                                      )
+                                                    : [
+                                                          ...prevItem.categories,
+                                                          category.id,
+                                                      ];
+
+                                            return {
+                                                ...prevItem,
+                                                categories: updatedCategoryId,
+                                            };
+                                        });
+                                    }}
+                                />
+                                {category.category_name}
+                            </label>
+                        ))}
+                    </div>
                 )}
 
                 <input
@@ -311,7 +374,10 @@ export default function EditItem() {
                     value={item.whatsapp_link}
                 />
 
-                <div {...getRootProps()} className="border-4 h-[250px] w-[500px] rounded-md p-10 m-10 border-red-500 flex items-center justify-center">
+                <div
+                    {...getRootProps()}
+                    className="border-4 h-[250px] w-[500px] rounded-md p-10 m-10 border-red-500 flex items-center justify-center"
+                >
                     <input {...getInputProps()} />
                     {isDragActive ? (
                         <p>Drop your images here ...</p>
@@ -323,58 +389,48 @@ export default function EditItem() {
                     )}
                 </div>
                 <DndContext
-    collisionDetection={closestCenter}
-    onDragEnd={handleDragEnd}
->
-    {item.images.length > 0 && (
-        <div>
-            <h3>Selected Images:</h3>
-            <SortableContext
-                items={item.images.map((image) => image.item_image_order)}
-                strategy={horizontalListSortingStrategy}
-            >
-                {/* Sort the images array by item_image_order */}
-                {item.images
-                    .map((image, index) => (
-                        <SortableItem
-                            key={image.item_image_order}
-                            id={image.item_image_order}
-                            index={index}
-                            handleImageRemove={handleImageRemove}
-                            image={image.item_image}
-                            handle
-                        />
-                    ))}
-            </SortableContext>
-        </div>
-    )}
-</DndContext>
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                >
+                    {item.images.length > 0 && (
+                        <div>
+                            <h3>Selected Images:</h3>
+                            <SortableContext
+                                items={item.images.map(
+                                    (image) => image.item_image_order
+                                )}
+                                strategy={horizontalListSortingStrategy}
+                            >
+                                {/* Sort the images array by item_image_order */}
+                                {item.images.map((image, index) => (
+                                    <SortableItem
+                                        key={image.item_image_order}
+                                        id={image.item_image_order}
+                                        index={index}
+                                        handleImageRemove={handleImageRemove}
+                                        image={image.item_image}
+                                        handle
+                                    />
+                                ))}
+                            </SortableContext>
+                        </div>
+                    )}
+                </DndContext>
 
-
-                <p>Available Stock:</p>
+                <p>Available Stock?</p>
                 <label>
                     <input
-                        type="radio"
-                        name="available_stock"
-                        value="1"
+                        type="checkbox"
                         checked={Number(item.available_stock) === 1}
                         onChange={() =>
-                            setItem({ ...item, available_stock: 1 })
+                            setItem({
+                                ...item,
+                                available_stock:
+                                    item.available_stock === 1 ? 0 : 1,
+                            })
                         }
                     />
-                    Yes
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="available_stock"
-                        value="0"
-                        checked={Number(item.available_stock) === 0}
-                        onChange={() =>
-                            setItem({ ...item, available_stock: 0 })
-                        }
-                    />
-                    No
+                    Available Stock
                 </label>
                 <div>
                     <button type="submit" className="bg-blue-300">

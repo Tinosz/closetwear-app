@@ -3,6 +3,8 @@ import axiosClient from "../../client/axios-client";
 import { useStateContext } from "../../context/ContextProvider";
 import { Link, useParams } from "react-router-dom";
 import SearchItem from "../../components/SearchItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export default function ItemList() {
     const { notification } = useStateContext();
@@ -72,10 +74,10 @@ export default function ItemList() {
     const onPageChange = (label) => {
         let page;
         switch (label) {
-            case 'Next &raquo;':
+            case "Next &raquo;":
                 page = pagination.current_page + 1;
                 break;
-            case '&laquo; Previous':
+            case "&laquo; Previous":
                 page = pagination.current_page - 1;
                 break;
             default:
@@ -84,11 +86,9 @@ export default function ItemList() {
         }
         getItems(page);
     };
-    
 
     return (
         <>
-        
             {notification && <div>{notification}</div>}
             <div>
                 <button
@@ -103,17 +103,17 @@ export default function ItemList() {
                 <a href="/Admin/EditItem">Add Item</a>
             </div>
             <h2>Item List:</h2>
-            <SearchItem/>
+            <SearchItem />
             <br />
             <table>
                 <thead>
                     <tr>
-                    
                         <th>No.</th>
                         <th>Item Name</th>
                         <th>Images</th>
                         <th>Price</th>
                         <th>Categories</th>
+                        <th>Available Stock?</th>
                         <th>Item Clicks</th>
                         <th>Item Link Clicks</th>
                         <th>Edit</th>
@@ -123,76 +123,106 @@ export default function ItemList() {
                 </thead>
                 <tbody>
                     {items.length > 0 ? (
-                        items.map((item, index) => (
-                            <tr key={item.id}>
-                                <td>{index + 1}</td>
-                                <td>{item.item_name}</td>
-                                <td>
-                                    {item.images
-                                        .sort(
-                                            (a, b) =>
-                                                a.item_image_order -
-                                                b.item_image_order
-                                        )
-                                        .map((image, imgIndex) => (
-                                            <span key={imgIndex}>
-                                                <img
-                                                    className="w-20"
-                                                    src={`${
-                                                        import.meta.env
-                                                            .VITE_API_BASE_URL
-                                                    }/storage/${
-                                                        image.item_image
-                                                    }`}
-                                                    alt={`Image ${
-                                                        imgIndex + 1
-                                                    }`}
-                                                />
-                                            </span>
-                                        ))}
-                                </td>
-                                <td>{item.item_price}</td>
-                                <td>
+                        items.map((item, index) => {
+                            const featuredCategories = [];
+                            const nonFeaturedCategories = [];
+
+                            item.categories.forEach((category) => {
+                                if (category.featured === 1) {
+                                    featuredCategories.push(category);
+                                } else {
+                                    nonFeaturedCategories.push(category);
+                                }
+                            });
+
+                            const allCategories = featuredCategories.concat(
+                                nonFeaturedCategories
+                            );
+
+                            return (
+                                <tr key={item.id}>
+                                    <td>{index + 1}</td>
+                                    <td>{item.item_name}</td>
+                                    <td>
+                                        {item.images
+                                            .sort(
+                                                (a, b) =>
+                                                    a.item_image_order -
+                                                    b.item_image_order
+                                            )
+                                            .map((image, imgIndex) => (
+                                                <span key={imgIndex}>
+                                                    <img
+                                                        className="w-20"
+                                                        src={`${
+                                                            import.meta.env
+                                                                .VITE_API_BASE_URL
+                                                        }/storage/${
+                                                            image.item_image
+                                                        }`}
+                                                        alt={`Image ${
+                                                            imgIndex + 1
+                                                        }`}
+                                                    />
+                                                </span>
+                                            ))}
+                                    </td>
+                                    <td>{item.item_price}</td>
+                                    <td>
                                     <ul>
-                                        {item.categories
+                                        {allCategories
                                             .filter(
-                                                (category) => category.id !== 1
+                                                (category) =>
+                                                    category.id !== 1
                                             )
                                             .map((category, catIndex) => (
                                                 <li key={catIndex}>
                                                     {category.category_name}
+                                                    {category.featured === 1 && (
+                                                        <FontAwesomeIcon
+                                                            icon={faStar}
+                                                        />
+                                                    )}
                                                 </li>
                                             ))}
                                     </ul>
                                 </td>
-                                <td>{item.item_click}</td>
-                                <td>{item.item_link_click}</td>
-                                <td>
-                                    <Link
-                                        to="#"
-                                        onClick={() => handleEditClick(item)}
-                                    >
-                                        Edit
-                                    </Link>
-                                </td>
-                                <td>
-                                    <button onClick={(e) => onDelete(item)}>
-                                        Delete
-                                    </button>
-                                </td>
-                                <td>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedItems.includes(
-                                            item.id
-                                        )}
-                                        onChange={() =>
-                                            toggleItemSelection(item.id)
-                                        }
-                                    />
-                                </td>
-                            </tr>
-                        ))
+                                    <td>
+                                        {parseInt(item.available_stock) === 1
+                                            ? "Yes"
+                                            : "No"}
+                                    </td>
+                                    <td>{item.item_click}</td>
+                                    <td>{item.item_link_click}</td>
+                                    <td>
+                                        <Link
+                                            to="#"
+                                            onClick={() =>
+                                                handleEditClick(item)
+                                            }
+                                        >
+                                            Edit
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <button onClick={(e) => onDelete(item)}>
+                                            Delete
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedItems.includes(
+                                                item.id
+                                            )}
+                                            onChange={() =>
+                                                toggleItemSelection(item.id)
+                                            }
+                                        />
+                                    </td>
+                                </tr>
+                            );
+                        })
                     ) : (
                         <tr>
                             <td colSpan="7">No Items available</td>
@@ -207,7 +237,7 @@ export default function ItemList() {
                             <li
                                 key={index}
                                 className={`page-item ${
-                                    link.active ? 'active' : ''
+                                    link.active ? "active" : ""
                                 }`}
                             >
                                 <button
@@ -221,7 +251,6 @@ export default function ItemList() {
                     </ul>
                 )}
             </div>
-
         </>
     );
 }
