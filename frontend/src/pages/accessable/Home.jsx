@@ -137,22 +137,47 @@ export default function Home() {
         return(
             <section className='home-latest'>
                 <div className='grid-container'>
+                    
                     <div className='category-wrap'>
-                        <div className='category-text-wrap'>
+                            <h2>
+                                <a className='category-text' href="">Woman's Sweater</a>
+                            </h2>
+                            <a className='category-link' href="">View</a>
+                    </div>
+                    <div className='category-img-wrap'>
+                        <div className='relative'>
+                            <a className="category-img" href=''>
+                                <div className='img-wrap'
+                                style={{backgroundImage: `url(https://www.ledr.com/colours/white.jpg)`}}>
+                                    <img src="https://plus.unsplash.com/premium_photo-1664542157778-4dcccb04169e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+                                </div>
+                            </a>
+                            <span className='category-layer' style={{ backgroundImage: `url(//hatshop.com/cdn/shop/files/texture_indigo-worth-and-worth.jpg?v=1614347676)` }}></span>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div className='grid-container2'>
+                    
+                    
+                    <div className='category-img-wrap'>
+                        <div className='relative'>
+                            <a className="category-img" href=''>
+                                <div className='img-wrap'
+                                style={{backgroundImage: `url(https://www.ledr.com/colours/white.jpg)`}}
+                                >
+                                    <img src="https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+                                </div>
+                            <span className='category-layer2' style={{ backgroundImage: `url(//hatshop.com/cdn/shop/files/texture_indigo-worth-and-worth.jpg?v=1614347676)` }}></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div className='category-wrap2'>
                             <h2>
                                 <a className='category-text' href="">Men's Sweater</a>
                             </h2>
                             <a className='category-link' href="">View</a>
-                        </div>
-                    </div>
-
-                    <div className='category-img-wrap'>
-                        <div className='relative'>
-                            <a href="category-img">
-                                <img src="https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
-                            </a>
-                            <span className='category-layer' style={{ backgroundImage: `url(https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)` }}></span>
-                        </div>
                     </div>
                 </div>
             </section>
