@@ -1,6 +1,5 @@
-// SideBar.js
-
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom"; // Import Link
 import "./SideBar.css";
 
 export default function SideBar() {
@@ -39,12 +38,19 @@ export default function SideBar() {
       </button>
       <div
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white p-4 sidebar${isSidebarOpen ? ' sidebar-open' : ''}`}
+        className={`fixed top-0 left-0 h-full w-64 bg-black text-white p-4 sidebar${isSidebarOpen ? ' sidebar-open' : ''}`}
       >
         <div>
-          
+          {/* Tambahkan tautan ke halaman EditCategory */}
+          <Link to="/Admin/EditCategories">Category List</Link>
+          <br />
+
+          {/* Tambahkan tautan ke halaman ItemList */}
+          <Link to="/Admin/ItemList">Item List</Link>
+          <br />
+          <Link to="/Admin/BannerList">Banner List</Link>
         </div>
-        <p>This is your sidebar content</p>
+
       </div>
     </>
   );

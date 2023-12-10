@@ -23,10 +23,12 @@ body {
     padding-bottom: 10px;
 }
 
+
+/* a:hover {
 .links li a:hover {
     border-bottom: 3px solid #D71313;
     transition: 200ms ease-in-out;
-}
+} */
 
 /* 
     HEADER 

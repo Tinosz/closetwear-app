@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axiosClient from "../../client/axios-client";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useStateContext } from "../../context/ContextProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export default function EditCategory() {
     const { id } = useParams();
@@ -9,6 +11,7 @@ export default function EditCategory() {
     const [category, setCategory] = useState({
         id: null,
         category_name: "",
+        featured: 0,
     });
     const [isLoading, setIsLoading] = useState(true);
 
@@ -23,13 +26,13 @@ export default function EditCategory() {
 
         const formData = new FormData();
         formData.append("category_name", category.category_name);
+        formData.append("featured", category.featured);
 
         if (id) {
             formData.append("_method", "PUT");
         }
 
         if (id) {
-            console.log(formData);
             axiosClient
                 .post(`/categories/${category.id}`, formData, {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -38,6 +41,13 @@ export default function EditCategory() {
                     setNotification("Category was successfully updated.")
                     navigate("/Admin/EditCategories");
                     getCategories();
+                    // Reset the category state after a successful submission
+                    setCategory((prevCategory) => ({
+                        ...prevCategory,
+                        id: null,
+                        category_name: "",
+                        featured: 0,
+                    }));
                 })
                 .catch((err) => {
                     console.log(err);
@@ -47,7 +57,6 @@ export default function EditCategory() {
                     }
                 });
         } else {
-            console.log(formData);
             axiosClient
                 .post("/categories", formData, {
                     headers: {
@@ -58,6 +67,12 @@ export default function EditCategory() {
                     setNotification("Category was successfully added.")
                     navigate("/Admin/EditCategories");
                     getCategories();
+                    // Reset the category state after a successful submission
+                    setCategory({
+                        id: null,
+                        category_name: "",
+                        featured: 0,
+                    });
                 })
                 .catch((err) => {
                     console.log(err);
@@ -116,9 +131,7 @@ export default function EditCategory() {
                 console.log(response.data);
                 setCategories(response.data);
             })
-            .catch(() => {
-                
-            })
+            .catch(() => {})
             .finally(() => {
                 setIsLoading(false);
             });
@@ -126,7 +139,7 @@ export default function EditCategory() {
 
     useEffect(() => {
         getCategories();
-    
+
         if (id) {
             axiosClient
                 .get(`/categories/${id}`)
@@ -136,14 +149,18 @@ export default function EditCategory() {
                 })
                 .catch(() => {});
         }
-
     }, [id]);
+
+    // Separate categories into featured and non-featured arrays
+    const featuredCategories = categories.filter((cat) => cat.featured === 1);
+    const nonFeaturedCategories = categories.filter((cat) => cat.featured === 0);
 
     return (
         <>
-        {notification && <div>{notification}</div>}
+            {notification && <div>{notification}</div>}
             <form onSubmit={onSubmit}>
-            <p>{isLoading ? "Loading..." : (id ? `Update: ${category.category_name}` : "")}</p>                {errors && errors.category_name && (
+                <p>{isLoading ? "Loading..." : (id ? `Update: ${category.category_name}` : "")}</p>
+                {errors && errors.category_name && (
                     <p className="text-red-600">{errors.category_name}</p>
                 )}
                 <input
@@ -156,6 +173,17 @@ export default function EditCategory() {
                     }
                     value={category.category_name}
                 />
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={Number(category.featured) === 1}
+                        onChange={() => setCategory({
+                            ...category,
+                            featured: category.featured === 1 ? 0 : 1
+                        })}
+                    />
+                    Featured?
+                </label>
                 <button type="submit">
                     {id ? "Update Category" : "Add Category"}
                 </button>
@@ -168,28 +196,48 @@ export default function EditCategory() {
                     />
                     Check All
                 </label>
-                {categories
-    .filter(category => category.id !== 1) // Exclude the default category with id 1
-    .map((category) => (
-        <div key={category.id}>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={selectedCategories.includes(category.id)}
-                    onChange={() => toggleCategorySelection(category.id)}
-                />
-                {category.category_name}
-            </label>
-            <Link
-                to={"/Admin/EditCategories/" + category.id}
-                className="ml-3 bg-blue-200"
-            >
-                Edit
-            </Link>
-        </div>
-))}
-
-                
+                <div>
+                    <h2>Featured Categories:</h2>
+                    {featuredCategories.map((category) => (
+                        <div key={category.id}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={selectedCategories.includes(category.id)}
+                                    onChange={() => toggleCategorySelection(category.id)}
+                                />
+                                {category.category_name} <FontAwesomeIcon icon={faStar} />
+                            </label>
+                            <Link
+                                to={"/Admin/EditCategories/" + category.id}
+                                className="ml-3 bg-blue-200"
+                            >
+                                Edit
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+                <div>
+                    <h2>Non-Featured Categories:</h2>
+                    {nonFeaturedCategories.filter((category) => category.id !== 1).map((category) => (
+                        <div key={category.id}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={selectedCategories.includes(category.id)}
+                                    onChange={() => toggleCategorySelection(category.id)}
+                                />
+                                {category.category_name} 
+                            </label>
+                            <Link
+                                to={"/Admin/EditCategories/" + category.id}
+                                className="ml-3 bg-blue-200"
+                            >
+                                Edit
+                            </Link>
+                        </div>
+                    ))}
+                </div>
                 <button
                     onClick={onDeleteSelected}
                     disabled={selectedCategories.length === 0}
