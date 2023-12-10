@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../../client/axios-client";
 import { useStateContext } from "../../context/ContextProvider";
 import { Link, useParams } from "react-router-dom";
+import SearchItem from "../../components/SearchItem";
 
 export default function ItemList() {
     const { notification } = useStateContext();
@@ -87,6 +88,7 @@ export default function ItemList() {
 
     return (
         <>
+        
             {notification && <div>{notification}</div>}
             <div>
                 <button
@@ -101,9 +103,12 @@ export default function ItemList() {
                 <a href="/Admin/EditItem">Add Item</a>
             </div>
             <h2>Item List:</h2>
+            <SearchItem/>
+            <br />
             <table>
                 <thead>
                     <tr>
+                    
                         <th>No.</th>
                         <th>Item Name</th>
                         <th>Images</th>

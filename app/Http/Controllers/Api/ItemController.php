@@ -155,4 +155,17 @@ class ItemController extends Controller
     
         return response("Selected items successfully deleted", 204);
     }
+
+    public function itemSearch(Request $request)
+    {
+        $query = $request->input('query');
+    
+        $results = Item::with('images') // Eager load the 'images' relationship
+            ->where('item_name', 'LIKE', "%$query%")
+            ->get();
+    
+        return response()->json(['results' => $results]);
+    }
+
+
 }
