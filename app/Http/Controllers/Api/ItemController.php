@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Http\Resources\ItemResource;
+use App\Models\Category;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -25,7 +26,13 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
+    {
+        $items = Item::with('categories', 'images')->get();
+        return $items;
+    }
+
+    public function indexPaginated(Request $request)
     {
         $perPage = $request->input('per_page', 10); // Number of items per page, default is 10        
         $items = Item::with('categories', 'images')->paginate($perPage);
@@ -166,5 +173,14 @@ class ItemController extends Controller
     }
 
     
+
+    public function searchByCategory (Request $request, $categoryId)
+    {
+        $category = Category::findorFail($categoryId);
+        $items = $category->items;
+
+        return response()->json($items);
+    }
+
 
 }

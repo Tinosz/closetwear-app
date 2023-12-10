@@ -31,12 +31,17 @@ const router = createBrowserRouter([
             },
             {
                 path: '/Catalog',
-                element: <Catalog />
+                element: <Catalog key="AllPreview"/>
+            },
+            {
+                path: '/Catalog/:id',
+                element: <Catalog key="CategoryPreview"/>
             },
             {
                 path: "/Search",
                 element: <SearchPage />,
             },
+
         ]
     },
     {

@@ -10,7 +10,11 @@ class Banner extends Model
     use HasFactory;
 
     protected $fillable = [
-        'banner_image'
+        'banner_image',
+        'banner_title',
+        'banner_subtitle',
+        'banner_description',
+        'banner_order'
     ];
 
     public function items()

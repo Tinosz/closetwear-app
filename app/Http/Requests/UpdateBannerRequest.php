@@ -24,6 +24,10 @@ class UpdateBannerRequest extends FormRequest
         $rules = [
             'items' => 'exists:items,id',
             'categories' => 'exists:categories,id',
+            'banner_title' => '||',
+            'banner_subtitle' => '||',
+            'banner_description' => '||',
+            'banner_order' => '||',
         ];
 
         if($this->hasFile('banner_image')){

@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('banners', function (Blueprint $table) {
-            $table->id();
+            $table->id()->onDelete('cascade');
             $table->string('banner_image');
+            $table->string('banner_title')->nullable();
+            $table->string('banner_subtitle')->nullable();
+            $table->string('banner_description')->nullable();
+            $table->integer('banner_order')->default(0);
             $table->timestamps();
         });
     }
