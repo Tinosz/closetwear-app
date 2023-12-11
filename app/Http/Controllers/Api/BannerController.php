@@ -61,6 +61,7 @@ class BannerController extends Controller
         return response(new BannerResource($banner), 201);
     }
     
+    
 
     /**
      * Display the specified resource.
@@ -176,7 +177,29 @@ class BannerController extends Controller
         return response()->json(['message' => 'Banner order updated successfully']);
     }
     
-    
+    public function getRelatedItems($bannerId)
+    {
+        $banner = Banner::with(['items.categories'])->find($bannerId);
+
+        if (!$banner) {
+            return response()->json(['message' => 'Banner not found'], 404);
+        }
+
+        $relatedItems = collect();
+
+        foreach ($banner->items as $item) {
+            $relatedItems->push($item);
+
+            foreach ($item->categories as $category) {
+                $relatedItems->push($category->items);
+            }
+        }
+
+        // Flatten the collection to remove nested arrays
+        $relatedItems = $relatedItems->flatten();
+
+        return response()->json(['related_items' => $relatedItems]);
+    }
     
     
 }

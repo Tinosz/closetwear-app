@@ -177,13 +177,19 @@ class ItemController extends Controller
 
     
 
-    public function searchByCategory (Request $request, $categoryId)
+    public function searchByCategory(Request $request, $categoryId)
     {
-        $category = Category::findorFail($categoryId);
-        $items = $category->items;
-
+        $perPage = $request->get('per_page', 10); // Number of items per page, default is 10
+    
+        $category = Category::findOrFail($categoryId);
+        $items = $category->items()
+            ->with('categories', 'images') // Eager load relationships
+            ->paginate($perPage);
+    
         return response()->json($items);
     }
+    
+    
 
 
 }

@@ -12,6 +12,7 @@ import BannerList from "./pages/administrator/BannerList";
 import EditBanner from "./pages/administrator/EditBanner";
 import SearchPage from "./page-groups/SearchPage";
 import Catalog from "./pages/accessable/Catalog";
+import ProductDetail from "./pages/accessable/ProductDetails";
 
 import ProductDetail from "./pages/accessable/ProductDetails";
 
@@ -38,10 +39,13 @@ const router = createBrowserRouter([
                 element: <Catalog key="CategoryPreview"/>
             },
             {
+                path: '/Catalog/Banner/:bannerId',
+                element: <Catalog key="BannerPreview" />
+            },
+            {
                 path: "/Search",
                 element: <SearchPage />,
             },
-
         ]
     },
     {
