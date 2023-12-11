@@ -14,25 +14,61 @@ import shopee from "../page-assets/shopee.png";
 import whatsapp from "../page-assets/whatsapp.png";
 import tokopedia from "../page-assets/tokopedia.png";
 import { useParams } from "react-router-dom";
+import axiosClient from "../../client/axios-client";
+import ProductDetailGallery from "../../components/ProductDetailGallery";
 
 const ProductDetails = () => {
-  const [images, setImages] = useState({
-    img1: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img2: "https://plus.unsplash.com/premium_photo-1664542157778-4dcccb04169e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img3: "https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img4: "https://swiperjs.com/demos/images/nature-4.jpg",
-    img5: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img6: "https://plus.unsplash.com/premium_photo-1664542157778-4dcccb04169e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img7: "https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img8: "https://swiperjs.com/demos/images/nature-4.jpg",
-  });
+  const [images, setImages] = useState({});
 
-  const [items, setItems] = useState([]);
+  const [item, setItem] = useState([]);
   const { id } = useParams({});
 
   const getItem = () => {
-    
-  }
+    axiosClient
+      .get(`items/${id}`)
+      .then((response) => {
+        console.log(response.data);
+        setItem(response.data);
+  
+        // Sort the images based on item_image_order
+        const sortedImages = response.data.images.sort((a, b) => a.item_image_order - b.item_image_order);
+  
+        // Dynamically set the images state
+        const imagesObject = {};
+        sortedImages.forEach((image, index) => {
+          imagesObject[`img${index + 1}`] = `${import.meta.env.VITE_API_BASE_URL}/storage/${image.item_image}`;
+        });
+        setImages(imagesObject);
+      })
+      .catch(() => {})
+      .finally(() => {    console.log(item.images);
+});
+  };
+
+  const fetchItemsByCategory = async (categoryId = 1) => {
+    try {
+      const response = await axiosClient.get(`/api/items/by-category/${categoryId}`);
+      setItems(response.data);
+    } catch (error) {
+      console.error('Error fetching items:', error);
+    }
+  };
+  
+
+  useEffect(()=> {
+    getItem();
+    fetchItemsByCategory();
+  }, [])
+
+  const handleLinkClick = async (link) => {
+    try {
+      await axiosClient.post(`/items/${id}/increment-link-click`);
+
+      window.open(link, '_blank');
+    } catch (error) {
+      console.error("Error incrementing click count:", error);
+    }
+  };
 
   const [activeImg, setActiveImg] = useState(images.img1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -173,7 +209,6 @@ const ProductDetails = () => {
     <>
       <div className="pd-wrap">
         <div className="product-wrap gap-12">
-          
           <div className="cover-wrap">
             <div className="cover-wrap2 gap-2">
               <button className="np-button prev" onClick={handlePrev}>
@@ -203,33 +238,34 @@ const ProductDetails = () => {
               </div>
             </div>
           </div>
+          {/* <ProductDetailGallery images={item.images} /> */}
 
           <div className="product-desc-wrap">
-            <div className="product-title">Product Name</div>
+            <div className="product-title">{item.item_name}</div>
             <div className="price-size">
               <div className="product-price">
                   <div className="price-cur">Rp</div>
-                  <div className="price-qty">200000</div>
+                  <div className="price-qty">{item.item_price}</div>
               </div>
             </div>
             <hr /><br />
-            <div className="product-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero dignissimos repellat dicta itaque similique at eligendi delectus, repudiandae nemo nesciunt doloremque asperiores molestias possimus maxime illum placeat atque totam voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident magni ea totam explicabo libero fuga fugiat quidem rem magnam, deleniti suscipit nemo est consequatur recusandae et! Eaque asperiores vitae facere. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem, explicabo soluta quasi veniam eius porro ut temporibus? Dicta incidunt, veniam ut impedit ipsam enim, ab nulla hic eligendi rerum natus. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste odio tempore voluptatum dolor facere quae exercitationem, possimus reprehenderit architecto enim numquam modi laborum esse repellendus ratione provident accusamus laudantium ipsam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero dignissimos repellat dicta itaque similique at eligendi delectus, repudiandae nemo nesciunt doloremque asperiores molestias possimus maxime illum placeat atque totam voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident magni ea totam explicabo libero fuga fugiat quidem rem magnam, deleniti suscipit nemo est consequatur recusandae et! Eaque asperiores vitae facere. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem, explicabo soluta quasi veniam eius porro ut temporibus? Dicta incidunt, veniam ut impedit ipsam enim, ab nulla hic eligendi rerum natus. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste odio tempore voluptatum dolor facere quae exercitationem, possimus reprehenderit architecto enim numquam modi laborum esse repellendus ratione provident accusamus laudantium ipsam?</div>
+            <div className="product-desc">{item.item_description}</div>
 
             <ul className="product-link">
             <li>
-              <a href="https://tokopedia.link/LPLsy8xrpFb" className="product-tooltip" target="_blank" rel="noopener noreferrer">
+              <a onClick={() => handleLinkClick(item.tokopedia_link)} className="product-tooltip cursor-pointer" target="_blank" rel="noopener noreferrer">
                 <img src={tokopedia} alt="" className="tokopedia" />
                 <span className="tooltip-text">Tokopedia</span>
               </a>
             </li>
             <li>
-              <a href="https://shopee.co.id/closetwear" className="product-tooltip" target="_blank" rel="noopener noreferrer">
+              <a onClick={() => handleLinkClick(item.shoppee_link)} className="product-tooltip cursor-pointer" target="_blank" rel="noopener noreferrer">
                 <img src={shopee} alt="" className="shopee" />
                 <span className="tooltip-text">Shopee</span>
               </a>
             </li>
             <li>
-              <a href="https://wa.me/yourphonenumber" className="product-tooltip" target="_blank" rel="noopener noreferrer">
+              <a onClick={() => handleLinkClick(item.whatsapp_link)} className="product-tooltip cursor-pointer" target="_blank" rel="noopener noreferrer">
                 <img src={whatsapp} alt="" className="whatsapp" />
                 <span className="tooltip-text">WhatsApp</span>
               </a>

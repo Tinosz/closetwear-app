@@ -38,6 +38,10 @@ export default function ItemList() {
             console.log(response.data);
             setItems(response.data.data);
             setPagination(response.data);
+        }).catch(() => {
+
+        }).then(() => {
+            
         });
     };
 
@@ -115,6 +119,7 @@ export default function ItemList() {
     return (
         <>
             <div className="list-wrap">
+            <SearchBar />
                 <div className="parallax-bg"></div>
                 <SearchBar
                     placeholder="Search items.."

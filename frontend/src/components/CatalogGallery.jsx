@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../client/axios-client";
 
 import "./styles/Catalog.css";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import useSearch from "../page-groups/useSearch";
 import SearchBar from "./SearchBarSuggest";
@@ -112,19 +112,21 @@ export default function CatalogGallery() {
   const ImageGallery = () => (
     <div className="image-gallery">
       {filteredData.map((item) => (
-        <div className="image-card">
-          <ImageCard
-            key={item.id}
-            imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${
-              item.images[0].item_image
-            }`}
-            title={item.item_name}
-            tags={item.categories
-              .filter((category) => category.id !== 1)
-              .slice(0, 3)
-              .map((category) => category.category_name)}
-          />
-        </div>
+        <Link to={`/product/${item.id}`}>
+            <div className="image-card">
+            <ImageCard
+                key={item.id}
+                imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${
+                item.images[0].item_image
+                }`}
+                title={item.item_name}
+                tags={item.categories
+                .filter((category) => category.id !== 1)
+                .slice(0, 3)
+                .map((category) => category.category_name)}
+            />
+            </div>
+        </Link>
       ))}
     </div>
   );
