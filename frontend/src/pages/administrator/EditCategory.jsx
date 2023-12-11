@@ -159,109 +159,128 @@ export default function EditCategory() {
 
     return (
         <>
-        <div className="container">
-            {notification && 
-            <div className="notification">{notification}</div>}
-            <form className="max-w-sm mx-auto" onSubmit={onSubmit}>
-                <div className="mb-5">
-                    <p className="loading-text">{isLoading ? "Loading..." : (id ? `Update: ${category.category_name}` : "")}</p>
+        <div className="category-container">
+            <div className="content-wrap">
+                {notification && 
+                <div className="notification">{notification}</div>}
+                <form className="form-wrap" onSubmit={onSubmit}>
+                    <div className="mb-5">
+                        <p className="loading-text">{isLoading ? "Loading..." : (id ? `Update: ${category.category_name}` : "")}</p>
 
-                    
-                    {errors && errors.category_name && (
-                        <p className="text-red-600">{errors.category_name}</p>
-                    )}
-                    <input
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Category Name"
-                        onChange={(e) =>
-                            setCategory({
-                                ...category,
-                                category_name: e.target.value,
-                            })
-                        }
-                        value={category.category_name}
-                    />
-                    
-                    <div className="flex items-start mb-5">
-                        <div className="flex items-center h-5">
+                        
+                        {errors && errors.category_name && (
+                            <p className="text-red-600">{errors.category_name}</p>
+                        )}
+                        <div className="field field_v3">
                             <input
-                                type="checkbox"
-                                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                                checked={Number(category.featured) === 1}
-                                onChange={() => setCategory({
-                                    ...category,
-                                    featured: category.featured === 1 ? 0 : 1
-                                })}
+                                className="field__input"
+                                placeholder="e.g Men's Jacket, Sport Sweaters"
+                                onChange={(e) =>
+                                    setCategory({
+                                        ...category,
+                                        category_name: e.target.value,
+                                    })
+                                }
+                                value={category.category_name}
                             />
+                            <span class="field__label-wrap" aria-hidden="true">
+                                <span class="field__label">Category</span>
+                            </span>
                         </div>
-                        <label for="terms" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" class="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a></label>
-                    </div>
-                    <div className="action-button" onClick={onSubmit}>
+                        
+                        <div className="flex items-start mb-5">
+                            <div className="flex items-center h-5">
+                                <label for="terms" class="featured-check ms-2 text-sm font-medium text-black-900 dark:text-black-300">
+                                <input
+                                    type="checkbox"
+                                    className="category-input w-4 h-4 border border-black-300 rounded bg-black-50 focus:ring-3 focus:ring-blue-300 dark:bg-black-700 dark:border-black-600 dark:focus:ring-blue-600 dark:ring-offset-black-800 dark:focus:ring-offset-black-800"
+                                    checked={Number(category.featured) === 1}
+                                    onChange={() => setCategory({
+                                        ...category,
+                                        featured: category.featured === 1 ? 0 : 1
+                                    })}
+                                />
+                            Featured?
+                            </label>
+                            </div>
+                        </div>
+                        <button
+                        className="action-button"
+                        onClick={onSubmit}
+                        >
                         {id ? "Update Category" : "Add Category"}
+                        </button>
                     </div>
-                </div>
-            </form>
-            <div>
-                <label>
+                </form>
+                <form>
+
+                </form>
+                <div className="checkbox-wrap checkbox-wrapper-24">
                     <input
                         type="checkbox"
+                        id="check-all"
+                        className="form-check-input"
                         onChange={(e) => onCheckAll(e.target.checked)}
                     />
-                    Check All
-                </label>
-                <div>
-                    <h2>Featured Categories:</h2>
-                    {featuredCategories.map((category) => (
-                        <div key={category.id}>
-                            <label>
+                    <label class="form-check-label" for="check-all">
+                        <span></span>Check All
+                    </label>
+                    <div>
+                        <h2>Featured Categories:</h2>
+                        {featuredCategories.map((category) => (
+                            <div className="checkbox-wrapper-24" key={category.id}>
                                 <input
                                     type="checkbox"
+                                    id={category.id} 
                                     checked={selectedCategories.includes(category.id)}
                                     onChange={() => toggleCategorySelection(category.id)}
                                 />
-                                {category.category_name} <FontAwesomeIcon icon={faStar} />
-                            </label>
-                            <Link
-                                to={"/Admin/EditCategories/" + category.id}
-                                className="ml-3 bg-blue-200"
-                            >
-                                Edit
-                            </Link>
-                        </div>
-                    ))}
+                                <label for={category.id}>
+                                    <span></span>
+                                    {category.category_name} <FontAwesomeIcon icon={faStar} />
+                                </label>
+                                <Link
+                                    to={"/Admin/EditCategories/" + category.id}
+                                    className="ml-3 bg-blue-200"
+                                >
+                                    Edit
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                    <div>
+                        <h2>Non-Featured Categories:</h2>
+                        {nonFeaturedCategories.filter((category) => category.id !== 1).map((category) => (
+                            <div key={category.id}>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedCategories.includes(category.id)}
+                                        onChange={() => toggleCategorySelection(category.id)}
+                                    />
+                                    {category.category_name} 
+                                </label>
+                                <Link
+                                    to={"/Admin/EditCategories/" + category.id}
+                                    className="ml-3 bg-blue-200"
+                                >
+                                    Edit
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                    <button
+                        onClick={onDeleteSelected}
+                        disabled={selectedCategories.length === 0}
+                        className={`action-button  ${
+                            selectedCategories.length === 0
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
+                        }`}
+                    >
+                        Delete Selected
+                    </button>
                 </div>
-                <div>
-                    <h2>Non-Featured Categories:</h2>
-                    {nonFeaturedCategories.filter((category) => category.id !== 1).map((category) => (
-                        <div key={category.id}>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedCategories.includes(category.id)}
-                                    onChange={() => toggleCategorySelection(category.id)}
-                                />
-                                {category.category_name} 
-                            </label>
-                            <Link
-                                to={"/Admin/EditCategories/" + category.id}
-                                className="ml-3 bg-blue-200"
-                            >
-                                Edit
-                            </Link>
-                        </div>
-                    ))}
-                </div>
-                <button
-                    onClick={onDeleteSelected}
-                    disabled={selectedCategories.length === 0}
-                    className={`bg-red-500  ${
-                        selectedCategories.length === 0
-                            ? "opacity-50 cursor-not-allowed"
-                            : ""
-                    }`}
-                >
-                    Delete Selected
-                </button>
             </div>
         </div>
         </>
