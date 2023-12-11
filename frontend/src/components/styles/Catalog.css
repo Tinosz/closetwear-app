@@ -1,48 +1,118 @@
-.catalog-wrap {
-    margin: 100px;
+/* Catalog.css */
+
+.catalog-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
-.img-gallery-wrap {
-    overflow: auto;
-    display: flex;
-    align-items: start;
+.searchbar {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
 }
 
-.side-category-wrap {
-    top: 0;
-    bottom: 0;
+.gallery-container {
+  width: 100%;
 }
 
-.small-screen-category {
-    display: none;
+.image-gallery {
+  display: grid;
+  gap: 20px;
 }
 
-.sidebar-category{
-    z-index: 100;
-    margin-top: 80px;
+/* For screens larger than 600px */
+@media (min-width: 600px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .image-card {
+    flex: 0 1 calc(25% - 20px);
+  }
 }
 
-@media (max-width: 767px) {
-    .big-screen-category {
-        display: none;
-    }
+/* For screens smaller than 600px */
+@media (max-width: 600px) {
+  .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+  }
 
-    .small-screen-category {
-        display: block;
-    }
-
-    .sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-    }
-
-    .sidebar-open {
-        transform: translateX(0);
-    }
-
-    .catalog-wrap{
-        margin: 0%;
-        margin-top: 100px;
-    }
+  .image-card {
+    flex: 0 1 calc(45% - 20px);
+  }
 }
 
+.image-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.image-card:hover {
+  transform: scale(1.05);
+}
+
+.image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.content {
+  padding: 10px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.price {
+  font-size: 14px;
+  color: #888;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.tag {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 3px 6px;
+  margin: 2px;
+}
+
+.pagination-container {
+  margin-top: 20px;
+}
+
+.pagination-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.page-item {
+  margin: 0 5px;
+}
+
+.page-link {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.page-link:hover {
+  background-color: #0056b3;
+}
