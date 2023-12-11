@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Kanit:wght@100;200;300;400;500;600;700;800;900&family=Quicksand:wght@300&display=swap');
 
 
 /*
@@ -10,7 +10,7 @@
 */
 
 .home-wrap {
-    font-family: 'proxima-nova', serif;
+    font-family: 'kanit', sans-serif;
 }
 
 #new-release {
@@ -20,7 +20,7 @@
 }
 
 .new-release-title {
-    font-size: 2rem;
+    font-size: 3rem;
 }
 
 .new-release-card {
@@ -46,18 +46,20 @@
 
 .new-release-product {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 400;
     margin: 10px 0 0;
 }
   
 .new-release-price {
     font-size: 1rem;
+    font-weight: 300;
     color: #a3acb6;
     margin-bottom: 8px ;
 }
   
 .new-release-desc {
     font-size: 1rem;
+    font-weight: 300;
     color: #555;
     margin-bottom: 10px;
 }
@@ -124,7 +126,7 @@
 }
   
 .category-text {
-    font-family: miller-display, serif;
+    font-family: 'kanit', sans-serif;
     font-weight: 100;
     font-size: 38px;
     color: #0C0C0C;
@@ -151,7 +153,7 @@
     padding-bottom: 4px;
     display: inline-block;
     text-transform: uppercase;
-    font-family: proxima-nova, sans-serif;
+    font-family: 'kanit', sans-serif;
     font-weight: 400;
     font-size: 16px;
     letter-spacing: 2px;

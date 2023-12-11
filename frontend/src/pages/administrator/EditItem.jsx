@@ -242,8 +242,18 @@ export default function EditItem() {
         }
     }
 
+    const parallaxBg = document.querySelector('.parallax-bg');
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
+    });
+
     return (
         <>
+        <div className="edit-wrap">
+        <div className="parallax-bg"></div>
+        <div className="edit-item">
             {errors && (
                 <div className="bg-red-500 text-white p-2 mb-4">
                     <ul>
@@ -253,36 +263,65 @@ export default function EditItem() {
                     </ul>
                 </div>
             )}
-            <form onSubmit={onSubmit}>
-                <input
-                    placeholder="Item Name"
-                    onChange={(e) =>
-                        setItem({ ...item, item_name: e.target.value })
-                    }
-                    value={item.item_name}
-                />
-                <input
-                    type="number"
-                    placeholder="Price"
-                    onChange={(e) =>
-                        setItem({ ...item, item_price: e.target.value })
-                    }
-                    value={item.item_price}
-                />
-                <textarea
-                    placeholder="Item Description"
-                    onChange={(e) =>
-                        setItem({ ...item, item_description: e.target.value })
-                    }
-                    value={item.item_description}
-                />
+            <form className="form-wrap" onSubmit={onSubmit}>
+                <div className="field field_v3">
+                    <label for="item-name" className="ha-screen-reader">Item Name</label>
+                    <input
+                        placeholder="Item Name"
+                        id="item-name"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, item_name: e.target.value })
+                        }
+                        value={item.item_name}
+                    />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Item Name</span>
+                    </span>
+                </div>
+
+                <div className="field field_v3">
+                    <label for="item-price" className="ha-screen-reader">Item Price</label>
+                        <input
+                        type="number"
+                        id="item-price"
+                        className="field__input"
+                        placeholder="Price"
+                        onChange={(e) =>
+                            setItem({ ...item, item_price: e.target.value })
+                        }
+                        value={item.item_price}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Item Price</span>
+                    </span>
+                </div>
+
+                <div className="field field_v3">
+                    <label for="item-desc" className="ha-screen-reader">Item Description</label>
+                        <textarea
+                        placeholder="Item Description"
+                        id="item-desc"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, item_description: e.target.value })
+                        }
+                        value={item.item_description}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Item Description</span>
+                    </span>
+                </div>
+                
+                
                 {featuredCategories.length > 0 && (
                     <div>
                         <h3>Featured Categories:</h3>
                         {featuredCategories.map((category) => (
-                            <label key={category.id}>
+                            <div className="checkbox-wrapper-24">
                                 <input
                                     type="checkbox"
+                                    id={category.id}
                                     checked={item.categories.includes(
                                         category.id
                                     )}
@@ -300,7 +339,7 @@ export default function EditItem() {
                                                           ...prevItem.categories,
                                                           category.id,
                                                       ];
-
+        
                                             return {
                                                 ...prevItem,
                                                 categories: updatedCategoryId,
@@ -308,8 +347,10 @@ export default function EditItem() {
                                         });
                                     }}
                                 />
-                                {category.category_name} <FontAwesomeIcon icon={faStar} />
+                            <label for={category.id} key={category.id}>
+                                <span></span>{category.category_name} <FontAwesomeIcon icon={faStar} />
                             </label>
+                            </div>
                         ))}
                     </div>
                 )}
@@ -318,9 +359,10 @@ export default function EditItem() {
                     <div>
                         <h3>Non-Featured Categories:</h3>
                         {nonFeaturedCategories.filter((category) => category.id !== 1).map((category) => (
-                            <label key={category.id}>
+                            <div className="checkbox-wrapper-24">
                                 <input
                                     type="checkbox"
+                                    id={category.id}
                                     checked={item.categories.includes(
                                         category.id
                                     )}
@@ -346,33 +388,60 @@ export default function EditItem() {
                                         });
                                     }}
                                 />
-                                {category.category_name}
+                            <label for={category.id} key={category.id}>
+                                <span></span>{category.category_name}
                             </label>
+                            </div>
                         ))}
                     </div>
                 )}
+                <div className="field field_v3">
+                    <label for="tokopedia" className="ha-screen-reader">Tokopedia  Link </label>
+                        <input
+                        placeholder="Tokopedia Link"
+                        id="tokopedia"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, tokopedia_link: e.target.value })
+                        }
+                        value={item.tokopedia_link}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Tokopedia Link</span>
+                    </span>
+                </div>
 
-                <input
-                    placeholder="Tokopedia Link"
-                    onChange={(e) =>
-                        setItem({ ...item, tokopedia_link: e.target.value })
-                    }
-                    value={item.tokopedia_link}
-                />
-                <input
-                    placeholder="Shoppee Link"
-                    onChange={(e) =>
-                        setItem({ ...item, shoppee_link: e.target.value })
-                    }
-                    value={item.shoppee_link}
-                />
-                <input
-                    placeholder="Whatsapp Link"
-                    onChange={(e) =>
-                        setItem({ ...item, whatsapp_link: e.target.value })
-                    }
-                    value={item.whatsapp_link}
-                />
+                <div className="field field_v3">
+                    <label for="shopee" className="ha-screen-reader">Shopee Link </label>
+                        <input
+                        placeholder="Shoppee Link"
+                        id="shopee"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, shoppee_link: e.target.value })
+                        }
+                        value={item.shoppee_link}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Shopee Link</span>
+                    </span>
+                </div>
+
+                <div className="field field_v3">
+                    <label for="whatsapp" className="ha-screen-reader">WhatsApp  Link </label>
+                        <input
+                        placeholder="Whatsapp Link"
+                        id="whatsapp"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, whatsapp_link: e.target.value })
+                        }
+                        value={item.whatsapp_link}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">WhatsApp Link</span>
+                    </span>
+                </div>
 
                 <div
                     {...getRootProps()}
@@ -388,20 +457,22 @@ export default function EditItem() {
                         </p>
                     )}
                 </div>
+
+                <div className="drag-img-wrap">
                 <DndContext
                     collisionDetection={closestCenter}
                     onDragEnd={handleDragEnd}
                 >
                     {item.images.length > 0 && (
-                        <div>
+                        <div >
                             <h3>Selected Images:</h3>
                             <SortableContext
                                 items={item.images.map(
                                     (image) => image.item_image_order
                                 )}
+                                
                                 strategy={horizontalListSortingStrategy}
                             >
-                                {/* Sort the images array by item_image_order */}
                                 {item.images.map((image, index) => (
                                     <SortableItem
                                         key={image.item_image_order}
@@ -416,11 +487,13 @@ export default function EditItem() {
                         </div>
                     )}
                 </DndContext>
+                </div>
 
                 <p>Available Stock?</p>
-                <label>
+                <div className="checkbox-wrapper-24">
                     <input
                         type="checkbox"
+                        id="available"
                         checked={Number(item.available_stock) === 1}
                         onChange={() =>
                             setItem({
@@ -430,14 +503,16 @@ export default function EditItem() {
                             })
                         }
                     />
-                    Available Stock
-                </label>
+                <label for="available"><span></span>Available</label>
+                </div>
                 <div>
                     <button type="submit" className="bg-blue-300">
                         Add Item
                     </button>
                 </div>
             </form>
+        </div>
+        </div>
         </>
     );
 }

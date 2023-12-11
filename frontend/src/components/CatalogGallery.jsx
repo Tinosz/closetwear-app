@@ -19,17 +19,21 @@ export default function CatalogGallery() {
     handleFilter(searchWord);
   }, [searchWord, handleFilter]);
 
-  const { id } = useParams();
-  const [pagination, setPagination] = useState({});
-  const [items, setItems] = useState([]);
 
-  const getItems = (page = 1) => {
-    axiosClient.get(`itemsPaginated?page=${page}`).then((response) => {
-      console.log(response.data);
-      setItems(response.data.data);
-      setPagination(response.data);
-    });
-  };
+    const { id, bannerId } = useParams();
+    const [pagination, setPagination] = useState({});
+    const [items, setItems] = useState([]); // Add this line to define the 'items' state
+    const getItems = (page = 1) => {
+        axiosClient.get(`itemsPaginated?page=${page}`).then((response) => {
+            console.log(response.data);
+            setItems(response.data.data);
+            setPagination(response.data);
+        }).catch(() => {
+
+        }).finally(()=> {
+
+        });
+    };
 
   const getCategoryItems = (page = 1) => {
     axiosClient
@@ -44,13 +48,29 @@ export default function CatalogGallery() {
       });
   };
 
-  useEffect(() => {
-    if (id) {
-      getCategoryItems();
-    } else {
-      getItems();
-    }
-  }, [id]);
+    const getRelatedBanners = (page = 1) => {
+        axiosClient
+            .get(`/banners/${bannerId}/related-items?page=${page}`)
+            .then((response) => {
+                setItems(response.data.data);
+                console.log(response.data);
+                setPagination(response.data)
+            })
+            .catch(() => {})
+            .finally(() => {
+                //
+            });
+    };
+
+    useEffect(() => {
+        if (id) {
+            getCategoryItems();
+        } else if(bannerId){
+            getRelatedBanners();
+        } else {
+            getItems();
+        }
+    }, [id]); // Include 'id' as a dependency here
 
   const onPageChange = (label) => {
     let page;
@@ -131,6 +151,7 @@ export default function CatalogGallery() {
                   <div className="result-item-content">
                     <span>{value.item_name}</span>
                   </div>
+
                 </div>
               );
             })}

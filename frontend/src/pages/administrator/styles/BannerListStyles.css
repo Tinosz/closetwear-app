@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Kanit:wght@100;200;300;400;500;600;700;800;900&family=Quicksand:wght@300&display=swap');
+
+.bl-wrap {
+    width: 100%;
+    font-family: 'kanit', sans-serif;
+}
+
+.bl-container {
+    width: 95%;
+    margin: 100px auto;
+    overflow-x: scroll;
+}
+
+.bl-container::-webkit-scrollbar {
+    height: 1em;
+}
+
+.bl-container::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.bl-form-container {
+    width: 100%;
+    padding: 10px auto;
+    background-color: white;
+}
+
+.bl-form-container th {
+    color: black;
+}
+
+.edit-banner-button {
+    --c: #59a0ec; /* the color */
+  
+    box-shadow: 0 0 0 0.1em inset var(--c);
+    --_g: linear-gradient(var(--c) 0 0) no-repeat;
+    background:
+      var(--_g) calc(var(--_p, 0%) - 100%) 0%,
+      var(--_g) calc(200% - var(--_p, 0%)) 0%,
+      var(--_g) calc(var(--_p, 0%) - 100%) 100%,
+      var(--_g) calc(200% - var(--_p, 0%)) 100%;
+    background-size: 50.5% calc(var(--_p, 0%)/2 + 0.5%);
+    transition: background-size 0.4s, background-position 0s 0.4s;
+  }
+  
+  .edit-banner-button:hover {
+    --_p: 100%;
+    transition: background-position 0.4s, background-size 0s;
+  }
+  
+  .edit-banner-button {
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.1em 0.6em;
+    font-weight: bold;
+    border: none;
+    border-radius: 0;
+  }
