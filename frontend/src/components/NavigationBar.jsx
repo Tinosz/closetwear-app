@@ -83,7 +83,7 @@ export default function NavigationBar() {
             <li><a href="/AboutBrand">About Brand</a></li>
             {token ? (
                 <a href="/" className="action-btn" onClick={Logout}>
-                Logout
+                <button className="logout-button">Logout</button>
                 </a>
             ) : (
                 <>
