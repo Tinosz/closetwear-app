@@ -6,13 +6,14 @@ import AdminLogin from "./pages/administrator/AdminLogin";
 import AccessableLayout from "./page-groups/AccessableLayout";
 import GuestLayout from "./page-groups/GuestLayout";
 import ItemList from "./pages/administrator/ItemList";
-import Home from "./pages/accessable/home";
+import Home from "./pages/accessable/Home";
 
 import BannerList from "./pages/administrator/BannerList";
 import EditBanner from "./pages/administrator/EditBanner";
 import SearchPage from "./page-groups/SearchPage";
 import Catalog from "./pages/accessable/Catalog";
 import ProductDetail from "./pages/accessable/ProductDetails";
+import AboutBrand from "./pages/accessable/AboutBrand";
 
 
 const router = createBrowserRouter([
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
             {
                 path: "/Search",
                 element: <SearchPage />,
+            },
+            {
+                path: "/AboutBrand",
+                element: <AboutBrand/>
             },
 
         ]
