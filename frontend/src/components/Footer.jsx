@@ -68,7 +68,7 @@ export default function Footer() {
                     <div className="footer-icons">
                     <ul>
                         <li>
-                            <a href="#">
+                            <a  href="#">
                                 <i className="fab fa-instagram instagram"></i>
                             </a>
                         </li>

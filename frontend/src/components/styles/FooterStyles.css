@@ -1,5 +1,5 @@
 .footer-distributed{
-    background: #ffffff;
+    background: #00000047;
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
     box-sizing: border-box;
     width: 100%;
@@ -156,24 +156,24 @@
     margin-bottom: 5px;
   }
 
-  ul {
+.footer-icons  ul {
     position: relative;
     display: flex;
 }
-ul li {
+.footer-icons ul li {
     position: relative;
     list-style: none;
     margin: 0 20px;
     cursor: pointer;
 }
-ul li a {
+.footer-icons ul li a {
     text-decoration: none;
 }
-ul li a .fa-brands {
+.footer-icons ul li a .fa-brands {
     font-size: 6em;
     color: #222;
 }
-ul li a::before {
+.footer-icons ul li a::before {
     font-family: "FontAwesome";
     position: absolute;
     top: 0;
@@ -184,7 +184,7 @@ ul li a::before {
     transition: 0.5s ease-in-out;
 }
 
-ul li:nth-child(1) a::before {
+.footer-icons ul li:nth-child(1) a::before {
     content: "\f16d";
     background-image: linear-gradient(45deg, 
       #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,
@@ -193,17 +193,17 @@ ul li:nth-child(1) a::before {
      -webkit-text-fill-color: transparent;
     border-bottom: 4px solid #dc2743;
 }
-ul li:nth-child(2) a::before {
+.footer-icons ul li:nth-child(2) a::before {
     content: "\f232";
     color: #25D366;
     border-bottom: 4px solid #25D366;
 }
-ul li:nth-child(3) a::before {
+.footer-icons ul li:nth-child(3) a::before {
     content: "\f099";
     color: #1DA1F2;
     border-bottom: 4px solid #1DA1F2;
 }
-ul li:hover a::before {
+.footer-icons ul li:hover a::before {
     height: 100%;
 }
   
