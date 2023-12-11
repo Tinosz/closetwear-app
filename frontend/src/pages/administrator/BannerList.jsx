@@ -10,6 +10,8 @@ import {
 } from "@dnd-kit/sortable";
 import SortableBanner from "../../components/form/SortableBanner";
 
+import "./styles/BannerListStyles.css"
+
 export default function BannerList() {
     const { notification } = useStateContext();
     const [banners, setBanners] = useState([]);
@@ -110,13 +112,26 @@ export default function BannerList() {
         }
     }
 
+    const parallaxBg = document.querySelector('.parallax-bg');
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
+    });
+    
     return (
         <>
+        <div className="bl-wrap">
+        <div className="parallax-bg"></div>
+        <div className="bl-container">
             {notification && <div>{notification}</div>}
-            <Link to="/Admin/EditBanner">Add Banner</Link>
+            <Link to="/Admin/EditBanner"><a>
+            <button className="edit-banner-button">Add New Banner</button>
+            </a></Link>
             <div>
                 <button
                     onClick={onMultipleDelete}
+                    className="action-button"
                     disabled={selectedBanners.length === 0}
                     style={{ opacity: selectedBanners.length === 0 ? 0.5 : 1 }}
                 >
@@ -126,19 +141,20 @@ export default function BannerList() {
                     collisionDetection={closestCenter}
                     onDragEnd={handleDragEnd}
                 >
-                    <table>
+                    <div className="">
+                    <table className="bl-form-container text-center" >
                         <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Banner Image</th>
-                                <th>Banner Title</th>
-                                <th>Banner Subtitle</th>
-                                <th>Banner Description</th>
-                                <th>Related Items</th>
-                                <th>Related Categories</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                                <th>Select</th>
+                        <tr>
+                                <th style={{ width: '3%' }}>No.</th>
+                                <th style={{ width: '10%' }}>Banner Image</th>
+                                <th style={{ width: '15%' }}>Banner Title</th>
+                                <th style={{ width: '10%' }}>Banner Subtitle</th>
+                                <th style={{ width: '20%' }}>Banner Description</th>
+                                <th style={{ width: '10%' }}>Related Items</th>
+                                <th style={{ width: '15%' }}>Related Categories</th>
+                                <th style={{ width: '5%' }}>Edit</th>
+                                <th style={{ width: '5%' }}>Delete</th>
+                                <th style={{ width: '5%' }}>Select</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -171,8 +187,11 @@ export default function BannerList() {
                             </SortableContext>
                         </tbody>
                     </table>
+                    </div>
                 </DndContext>
             </div>
+        </div>
+        </div>
         </>
     );
 }

@@ -16,6 +16,7 @@ import ProductDetail from "./pages/accessable/ProductDetails";
 import AboutBrand from "./pages/accessable/AboutBrand";
 
 
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -30,12 +31,20 @@ const router = createBrowserRouter([
                 element: <ProductDetail />
             },
             {
+                path: '/Product/:id',
+                element: <ProductDetail />
+            },
+            {
                 path: '/Catalog',
                 element: <Catalog key="AllPreview"/>
             },
             {
                 path: '/Catalog/:id',
                 element: <Catalog key="CategoryPreview"/>
+            },
+            {
+                path: '/Catalog/Banner/:bannerId',
+                element: <Catalog key="BannerPreview" />
             },
             {
                 path: "/Search",

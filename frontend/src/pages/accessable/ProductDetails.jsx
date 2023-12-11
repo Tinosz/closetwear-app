@@ -13,6 +13,7 @@ import "./styles/ProductDetailsStyles.css";
 import shopee from "../page-assets/shopee.png";
 import whatsapp from "../page-assets/whatsapp.png";
 import tokopedia from "../page-assets/tokopedia.png";
+import { useParams } from "react-router-dom";
 
 const ProductDetails = () => {
   const [images, setImages] = useState({
@@ -25,6 +26,13 @@ const ProductDetails = () => {
     img7: "https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     img8: "https://swiperjs.com/demos/images/nature-4.jpg",
   });
+
+  const [items, setItems] = useState([]);
+  const { id } = useParams({});
+
+  const getItem = () => {
+    
+  }
 
   const [activeImg, setActiveImg] = useState(images.img1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -159,8 +167,7 @@ const ProductDetails = () => {
     </div>
   );
 
-///// RETURN 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
   return (
     <>
