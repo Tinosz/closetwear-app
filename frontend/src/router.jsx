@@ -14,7 +14,6 @@ import SearchPage from "./page-groups/SearchPage";
 import Catalog from "./pages/accessable/Catalog";
 import ProductDetail from "./pages/accessable/ProductDetails";
 
-import ProductDetail from "./pages/accessable/ProductDetails";
 
 
 const router = createBrowserRouter([
@@ -28,6 +27,10 @@ const router = createBrowserRouter([
             },
             {
                 path: '/Product',
+                element: <ProductDetail />
+            },
+            {
+                path: '/Product/:id',
                 element: <ProductDetail />
             },
             {

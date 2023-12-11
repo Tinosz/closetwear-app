@@ -19,6 +19,7 @@ class Item extends Model
         'available_stock',
         'item_click',
         'item_link_click',
+        'created_at'
     ];
 
     public function categories()
