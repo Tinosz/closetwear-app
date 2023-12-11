@@ -105,6 +105,11 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
+    // Set default image index to 1 after fetching the item data
+    setActiveImg(images.img1);
+  }, [images]);
+  
+  useEffect(() => {
     // Adjust visible range based on the active image index
     const keys = Object.keys(images);
     const currentIndex = keys.findIndex((key) => images[key] === activeImg);

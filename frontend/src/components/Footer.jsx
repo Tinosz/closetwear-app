@@ -59,7 +59,7 @@ export default function Footer() {
                     <div className="footer-icons">
                         <ul>
                             <li>
-                                <a href="">
+                                <a href="https://www.instagram.com/closetwear.id/?utm_source=ig_web_button_share_sheet&igshid=OGQ5ZDc2ODk2ZA==">
                                     <i class="fa-brands fa-instagram instagram"></i>
                                 </a>
                             </li>
