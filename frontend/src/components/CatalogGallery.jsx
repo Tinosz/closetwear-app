@@ -6,7 +6,18 @@ import axiosClient from "../client/axios-client";
 import "./styles/Catalog.css";
 import { useParams } from "react-router-dom";
 
+import useSearch from "../page-groups/useSearch";
+import SearchBar from "./SearchBarSuggest";
+
+
 export default function CatalogGallery() {
+    const { filteredData, handleFilter } = useSearch();
+    const [searchWord, setSearchWord] = useState("");
+
+    useEffect(() => {
+        handleFilter(searchWord);
+    }, [searchWord, handleFilter]);
+
     const { id } = useParams();
     const [pagination, setPagination] = useState({});
     const [items, setItems] = useState([]); // Add this line to define the 'items' state
@@ -18,21 +29,18 @@ export default function CatalogGallery() {
         });
     };
 
-    const getCategoryItems = (page = 1) => {
-        axiosClient
-            .get(`/items/search-by-category/${id}?page=${page}`)
-            .then((response) => {
-                setItems(response.data.data);
-                console.log(response.data);
-                setPagination(response.data);
-            })
-            .catch(() => {
-                // Handle error
-            })
-            .finally(() => {
-                // This block will be executed regardless of success or failure
-            });
-    };
+  const getCategoryItems = (page = 1) => {
+    axiosClient
+      .get(`/items/search-by-category/${id}?page=${page}`)
+      .then((response) => {
+        setItems(response.data.data);
+        setPagination(response.data);
+        applyAOS(); // Apply AOS after setting the items
+      })
+      .catch(() => {
+        // Handle error
+      });
+  };
 
     useEffect(() => {
         if (id) {
@@ -65,7 +73,7 @@ export default function CatalogGallery() {
     const ImageCard = ({ imageSrc, title, description, tags }) => (
         <div
             className="rounded overflow-hidden shadow-lg w-96   "
-            data-aos="fade-up"
+            // data-aos="fade-up"
         >
             <img
                 className="w-full h-64 object-cover"
@@ -91,7 +99,7 @@ export default function CatalogGallery() {
 
     const ImageGallery = () => (
         <div className="w-full sm:p-10 grid grid-cols-2 gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-5">
-            {items.map((item) => (
+            {filteredData.map((item) => (
                 <ImageCard
                     key={item.id}
                     imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${
@@ -106,9 +114,38 @@ export default function CatalogGallery() {
             ))}
         </div>
     );
-
+    
+    const handleResultItemClick = (itemName) => {
+        setSearchWord(itemName);
+      };
+      
     return (
         <div className="top-0 bottom-0 overflow-auto">
+            <div>
+            <SearchBar
+                placeholder="Search by item name"
+                value={searchWord}
+                onInputChange={(value) => setSearchWord(value)}
+            />
+            {filteredData.length !== 0 && searchWord !== "" && (
+                <div className="dataResult">
+                {filteredData.slice(0, 15).map((value, index) => {
+                    return (
+                    <div
+                        className="resultItem"
+                        key={index}
+                        onClick={() => handleResultItemClick(value.item_name)}
+                    >
+                        <div className="">
+                        <span>{value.item_name}</span>
+                        </div>
+                    </div>
+                    );
+                })}
+                </div>
+            )}
+            </div>
+
             <div className="sm:ml-auto w-full sm:w-3/4">
                 <ImageGallery />
             </div>

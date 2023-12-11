@@ -1,4 +1,3 @@
-//useSearch.js
 import { useState, useEffect } from "react";
 import axiosClient from "../client/axios-client";
 
@@ -8,30 +7,34 @@ function useSearch() {
   const [wordEntered, setWordEntered] = useState("");
 
   useEffect(() => {
-    // Fetch data from the Laravel API endpoint
-    axiosClient
-      .get("/search")
-      .then((response) => {
-        // Assuming your data structure is { result: [...] }
+    const fetchData = async () => {
+      try {
+        const response = await axiosClient.get("/search");
         setOriginalData(response.data.result);
         setFilteredData(response.data.result);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to fetch data only once
+
+  useEffect(() => {
+    const handleFilter = () => {
+      const newFilter = originalData.filter((value) => {
+        const itemName = value.item_name || ''; // Ensure item_name is a string
+        const lowerCaseItemName = itemName.toString().toLowerCase();
+        return lowerCaseItemName.includes(wordEntered.toString().toLowerCase());
       });
-  }, []);
+      setFilteredData(newFilter);
+    };
+  
+    handleFilter();
+  }, [wordEntered, originalData]);
+    
 
-  const handleFilter = (searchWord) => {
-    setWordEntered(searchWord);
-
-    const newFilter = originalData.filter((value) => {
-      return value.item_name.toLowerCase().includes(searchWord.toLowerCase());
-    });
-
-    setFilteredData(newFilter);
-  };
-
-  return { filteredData, handleFilter };
+  return { filteredData, handleFilter: setWordEntered };
 }
 
 export default useSearch;
