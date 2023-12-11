@@ -41,6 +41,9 @@ export default function Catalog() {
         };
     }, []);
 
+
+    
+
     const getRelatedBanners = () => {
         axiosClient
             .get(`/banners/${bannerId}/related-items`)

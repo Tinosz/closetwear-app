@@ -81,65 +81,6 @@ export default function Home() {
       }
       
 
-    const newReleasedData = [
-    {
-        id: 1,
-        imageUrl: "https://plus.unsplash.com/premium_photo-1675186049409-f9f8f60ebb5e?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Sweater",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 2,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Shoes",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 3,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Socks",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 4,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Hats",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 5,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Bags",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 6,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Shirts",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 7,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Trousers",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 8,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Gloves",
-        price: "$30",
-        desc: "Some description"
-    },
-    ]
-
     const newlyReleased = items.map(item => (
         <NewReleased
             key={item.id}
@@ -231,7 +172,6 @@ export default function Home() {
             <Banner />
             <SectionContent />
             <NewReleases />
- 
             <Footer />
 
         </div>

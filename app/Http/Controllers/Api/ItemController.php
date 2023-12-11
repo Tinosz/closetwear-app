@@ -48,6 +48,17 @@ class ItemController extends Controller
         return $items;
     }
 
+    public function showItem($id)
+    {
+        try {
+            $item = Item::with('categories', 'images')->findOrFail($id);
+            return $item;
+        } catch (\Exception $e) {
+            // Handle the exception, for example, return an error response
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -157,6 +168,13 @@ class ItemController extends Controller
         return response()->json(['message' => 'item click count incremented successfully']);
     }
 
+    public function incrementItemLinkClick(Item $item)
+    {
+        $item->increment('item_link_click');
+
+        return response()->json(['message' => 'item link click count incremented successfully']);
+    }
+
     public function multipleDelete(Request $request)
     {
         $itemIds = $request->input('itemIds');
@@ -191,6 +209,17 @@ class ItemController extends Controller
         $items = $category->items()
             ->with('categories', 'images') // Eager load relationships
             ->paginate($perPage);
+    
+        return response()->json($items);
+    }
+
+    public function recommendedSearch($categoryId = 1){
+
+        // If $categoryId is not provided or is not found, use category ID 1 as the last resort
+        $category = Category::find($categoryId) ?? Category::find(1);
+    
+        $items = $category->items()
+            ->with('categories', 'images');
     
         return response()->json($items);
     }
