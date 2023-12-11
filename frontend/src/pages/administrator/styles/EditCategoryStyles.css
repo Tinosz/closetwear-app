@@ -26,7 +26,7 @@
 
 .category-container {
   width: 60%;
-  background-color: rgba(255, 255, 255, .8);
+  background-color: rgba(255, 255, 255, .95);
   border: 2px solid #D71313;
   font-family: 'kanit', sans-serif;
   display: flex;
@@ -95,7 +95,6 @@
 }
 
 .action-button {
-  font-family: system-ui, sans-serif;
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0.1em 0.6em;
