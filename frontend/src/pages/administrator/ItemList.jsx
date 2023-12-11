@@ -220,7 +220,7 @@ export default function ItemList() {
                                         <div className="checkbox-wrapper-24">
                                             <input
                                                 type="checkbox"
-                                                id="multiple"
+                                                id={item.id}
                                                 className="field__input"
                                                 checked={selectedItems.includes(
                                                     item.id
@@ -229,7 +229,7 @@ export default function ItemList() {
                                                     toggleItemSelection(item.id)
                                                 }
                                             />
-                                            <label for="multiple"><span></span></label>
+                                            <label for={item.id}><span></span></label>
                                         </div>
                                     </td>
                                 </tr>
