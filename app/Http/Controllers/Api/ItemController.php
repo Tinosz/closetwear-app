@@ -7,19 +7,44 @@ use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Http\Resources\ItemResource;
+use App\Models\Category;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
+
+    public function search()
+    {
+        // Eager load the 'images' and 'categories' relationships
+        $data = Item::with('images', 'categories')->get();
+    
+        return response()->json([
+            'result' => $data
+        ], 200);
+    }
+    
+
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $perPage = $request->input('per_page', 10); // Number of items per page, default is 10        
+        $items = Item::with('categories', 'images')->get();
+        return $items;
+    }
+
+    public function indexPaginated(Request $request)
+    {
+        $perPage = $request->input('per_page', 40); // Number of items per page, default is 10        
         $items = Item::with('categories', 'images')->paginate($perPage);
+        return $items;
+    }
+
+    public function newlyReleasedItems()
+    {
+        $items = Item::with('categories', 'images')->orderBy('created_at', 'desc')->get();
         return $items;
     }
 
@@ -155,4 +180,21 @@ class ItemController extends Controller
     
         return response("Selected items successfully deleted", 204);
     }
+
+    
+
+    public function searchByCategory(Request $request, $categoryId)
+    {
+        $perPage = $request->get('per_page', 40); // Number of items per page, default is 10
+    
+        $category = Category::findOrFail($categoryId);
+        $items = $category->items()
+            ->with('categories', 'images') // Eager load relationships
+            ->paginate($perPage);
+    
+        return response()->json($items);
+    }
+    
+
+
 }

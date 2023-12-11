@@ -53,8 +53,8 @@ export default function NavigationBar() {
           <div className="logo"><a href="/">ClosetWear</a></div>
           <ul className="links">
             <li><a href="/">Home</a></li>
-            <li><a href="/">Catalog</a></li>
-            <li><a href="/">About Brand</a></li>
+            <li><a href="/Catalog">Catalog</a></li>
+            <li><a href="/AboutBrand">About Brand</a></li>
             <li><a href="/">Contact</a></li>
           </ul>
           {token ? (

@@ -25,6 +25,10 @@ class StoreBannerRequest extends FormRequest
             'banner_image' => 'required|image|mimes:png,jpg, jpeg, svg|max:2048',
             'items' => 'exists:items,id',
             'categories' => 'exists:categories,id',
+            'banner_title' => '||',
+            'banner_subtitle' => '||',
+            'banner_description' => '||',
+            'banner_order' => '||',
         ];
     }
 }
