@@ -14,14 +14,17 @@ use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
+
     public function search()
     {
-        $data = Item::all();
-
+        // Eager load the 'images' and 'categories' relationships
+        $data = Item::with('images', 'categories')->get();
+    
         return response()->json([
             'result' => $data
-        ],200);
+        ], 200);
     }
+    
 
     /**
      * Display a listing of the resource.

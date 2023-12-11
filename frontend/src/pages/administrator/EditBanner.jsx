@@ -4,6 +4,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useStateContext } from "../../context/ContextProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import useSearch from "../../page-groups/useSearch";
+import SearchBar from "../../components/SearchBar";
 
 export default function EditBanner() {
     const { id } = useParams();
@@ -13,6 +15,8 @@ export default function EditBanner() {
     const [featuredCategories, setFeaturedCategories] = useState([]);
     const [nonFeaturedCategories, setNonFeaturedCategories] = useState([]);
     const { setNotification } = useStateContext();
+    const { filteredData, handleFilter } = useSearch();
+
     const [banner, setBanner] = useState({
         id: null,
         banner_image: null,
@@ -72,6 +76,19 @@ export default function EditBanner() {
                 // setIsLoading(false);
             });
     };
+
+    useEffect(() => {
+        // Fetch data from the Laravel API endpoint
+        axiosClient
+          .get("/search")
+          .then((response) => {
+            // Assuming your data structure is { result: [...] }
+
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+      }, []);
 
     useEffect(() => {
         getItems();
@@ -212,6 +229,7 @@ export default function EditBanner() {
                 setBanner({...banner, banner_description:e.target.value})
                 }/>
                 <h2>Featured Categories:</h2>
+                
                 {featuredCategories.length > 0 ? (
                     featuredCategories.map((category) => (
                         <label key={category.id}>
@@ -282,19 +300,21 @@ export default function EditBanner() {
                     <p>No Non-Featured Categories Available</p>
                 )}
                 <h2>Item List:</h2>
+                
+                <SearchBar placeholder="Search items..." onFilter={handleFilter} />
                 <table>
                     <thead>
-                        <tr>
-                            <th>Checkbox</th>
-                            <th>No.</th>
-                            <th>Item Name</th>
-                            <th>Images</th>
-                        </tr>
+                    <tr>
+                        <th>Checkbox</th>
+                        <th>No.</th>
+                        <th>Item Name</th>
+                        <th>Images</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {items.length > 0 ? (
-                            items.map((item, index) => (
-                                <tr key={item.id}>
+                    {filteredData.length > 0 ? (
+                        filteredData.map((item, index) => (
+                        <tr key={item.id}>
                                     <td>
                                         <input
                                             type="checkbox"
