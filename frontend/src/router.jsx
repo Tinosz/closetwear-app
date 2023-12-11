@@ -13,6 +13,7 @@ import EditBanner from "./pages/administrator/EditBanner";
 import SearchPage from "./page-groups/SearchPage";
 import Catalog from "./pages/accessable/Catalog";
 import ProductDetail from "./pages/accessable/ProductDetails";
+import AboutBrand from "./pages/accessable/AboutBrand";
 
 
 
@@ -49,6 +50,11 @@ const router = createBrowserRouter([
                 path: "/Search",
                 element: <SearchPage />,
             },
+            {
+                path: "/AboutBrand",
+                element: <AboutBrand/>
+            },
+
         ]
     },
     {
