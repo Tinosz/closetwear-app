@@ -108,6 +108,7 @@ export default function ItemList() {
         <>
             <div className="list-wrap">
                 <div className="parallax-bg"></div>
+                <SearchBar placeholder="Search items..." onFilter={handleFilter} />
                 <div className="list-content-wrap">
                     {notification && <div>{notification}</div>}
 
@@ -146,7 +147,7 @@ export default function ItemList() {
                                         return (
                                             <tr className="odd:bg-white odd:light:bg-black-900 even:bg-black-50 even:dark:bg-black-800 border-b dark:border-black-700" key={item.id}>
                                                 <td className="px-6 py-4 border border-2 border-black">{index + 1}</td>
-                                                <th scope="row" className="px-6 py-4 border border-2 border-black font-medium text-black-900 whitespace-nowrap dark:text-white">{item.item_name}</th>
+                                                <th scope="row" className="px-6 py-4 border border-2 border-black font-medium text-black-900 whitespace-nowrap dark:text-white" style={{color: 'black'}}>{item.item_name}</th>
                                                 <td className="px-6 py-4 border border-2 border-black">
                                                     {item.images
                                                         .sort(

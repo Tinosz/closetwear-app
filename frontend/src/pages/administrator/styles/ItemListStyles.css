@@ -56,7 +56,7 @@
     background-color: rgba(255, 255, 255, .9);
 }
 
-thead tr th {
+.il-table tr th {
     font-size: 18px;
     font-weight: bold;
     color: white;
