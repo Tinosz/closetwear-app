@@ -79,9 +79,8 @@ export default function NavigationBar() {
             </div>
             <div className="logo"><a href="/">ClosetWear</a></div>
             <li><a href="/">Home</a></li>
-            <li><a href="/">Catalog</a></li>
-            <li><a href="/">About Brand</a></li>
-            <li><a href="/">Contact</a></li>
+            <li><a href="/Catalog">Catalog</a></li>
+            <li><a href="/AboutBrand">About Brand</a></li>
             {token ? (
                 <a href="/" className="action-btn" onClick={Logout}>
                 Logout
