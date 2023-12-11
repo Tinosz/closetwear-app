@@ -61,6 +61,7 @@ class BannerController extends Controller
         return response(new BannerResource($banner), 201);
     }
     
+    
 
     /**
      * Display the specified resource.
@@ -175,6 +176,63 @@ class BannerController extends Controller
     
         return response()->json(['message' => 'Banner order updated successfully']);
     }
+    
+    public function getRelatedItems($bannerId)
+    {
+        $banner = Banner::with(['items', 'categories'])->find($bannerId);
+    
+        if (!$banner) {
+            return response()->json(['message' => 'Banner not found'], 404);
+        }
+    
+        $relatedItems = collect();
+        $addedItemIds = [];
+    
+        // Process items related to the banner
+        foreach ($banner->items as $item) {
+            // Check if the item ID is already added
+            if (!in_array($item->id, $addedItemIds)) {
+                // Eager load the categories and images relationships
+                $item->load('categories', 'images');
+    
+                $relatedItems->push($item);
+                $addedItemIds[] = $item->id; // Add the item ID to the list
+            }
+        }
+    
+        foreach ($banner->categories as $category) {
+            // Fetch items related to the current category
+            $categoryItems = $category->items;
+        
+            foreach ($categoryItems as $relatedItem) {
+                // Check if the related item ID is already added
+                if (!in_array($relatedItem->id, $addedItemIds)) {
+                    // Eager load the categories and images relationships
+                    $relatedItem->load('categories', 'images');
+        
+                    $relatedItems->push($relatedItem);
+                    $addedItemIds[] = $relatedItem->id; // Add the related item ID to the list
+                }
+            }
+        }
+    
+        // Flatten the collection to remove nested arrays
+        $relatedItems = $relatedItems->flatten();
+    
+        // Paginate the results
+        $perPage = 40; // You can adjust this based on your requirements
+        $currentPage = request('page', 1); // Get the current page from the request
+    
+        $pagedResults = $relatedItems->forPage($currentPage, $perPage);
+    
+        return response()->json(['data' => $pagedResults->values(), 'pagination' => [
+            'total' => $relatedItems->count(),
+            'per_page' => $perPage,
+            'current_page' => $currentPage,
+            'last_page' => ceil($relatedItems->count() / $perPage),
+        ]]);
+    }
+    
     
     
     

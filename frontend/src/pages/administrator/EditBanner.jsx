@@ -4,6 +4,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useStateContext } from "../../context/ContextProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import useSearch from "../../page-groups/useSearch";
+import SearchBar from "../../components/SearchBar";
 
 import "./styles/EditBannerStyles.css";
 
@@ -15,6 +17,8 @@ export default function EditBanner() {
     const [featuredCategories, setFeaturedCategories] = useState([]);
     const [nonFeaturedCategories, setNonFeaturedCategories] = useState([]);
     const { setNotification } = useStateContext();
+    const { filteredData, handleFilter } = useSearch();
+
     const [banner, setBanner] = useState({
         id: null,
         banner_image: null,
@@ -74,6 +78,19 @@ export default function EditBanner() {
                 // setIsLoading(false);
             });
     };
+
+    useEffect(() => {
+        // Fetch data from the Laravel API endpoint
+        axiosClient
+          .get("/search")
+          .then((response) => {
+            // Assuming your data structure is { result: [...] }
+
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+      }, []);
 
     useEffect(() => {
         getItems();
@@ -243,6 +260,7 @@ export default function EditBanner() {
                 </div>
 
                 <h2>Featured Categories:</h2>
+                
                 {featuredCategories.length > 0 ? (
                     featuredCategories.map((category) => (
                         <div className="checkbox-wrapper-24">
@@ -324,6 +342,80 @@ export default function EditBanner() {
                 <div className="">
                     <table className="bl-form-container text-center align-self-center">
                         <thead>
+                
+                <SearchBar placeholder="Search items..." onFilter={handleFilter} />
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Checkbox</th>
+                        <th>No.</th>
+                        <th>Item Name</th>
+                        <th>Images</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {filteredData.length > 0 ? (
+                        filteredData.map((item, index) => (
+                        <tr key={item.id}>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            checked={banner.items.includes(
+                                                item.id
+                                            )}
+                                            onChange={() => {
+                                                setBanner((prevBanner) => {
+                                                    const updatedItemIds =
+                                                        prevBanner.items.includes(
+                                                            item.id
+                                                        )
+                                                            ? prevBanner.items.filter(
+                                                                  (id) =>
+                                                                      id !==
+                                                                      item.id
+                                                              )
+                                                            : [
+                                                                  ...prevBanner.items,
+                                                                  item.id,
+                                                              ];
+
+                                                    return {
+                                                        ...prevBanner,
+                                                        items: updatedItemIds,
+                                                    };
+                                                });
+                                            }}
+                                        />
+                                    </td>
+                                    <td>{index + 1}</td>
+                                    <td>{item.item_name}</td>
+                                    <td>
+                                        {item.images
+                                            .sort(
+                                                (a, b) =>
+                                                    a.item_image_order -
+                                                    b.item_image_order
+                                            )
+                                            .map((image, imgIndex) => (
+                                                <span key={imgIndex}>
+                                                    <img
+                                                        className="w-20"
+                                                        src={`${
+                                                            import.meta.env
+                                                                .VITE_API_BASE_URL
+                                                        }/storage/${
+                                                            image.item_image
+                                                        }`}
+                                                        alt={`Image ${
+                                                            imgIndex + 1
+                                                        }`}
+                                                    />
+                                                </span>
+                                            ))}
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
                             <tr>
                                 <th style={{ width: '10%' }}>Checkbox</th>
                                 <th style={{ width: '10%' }}>No.</th>

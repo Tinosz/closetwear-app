@@ -220,7 +220,7 @@
     right: -33px;
     top: -53px;
 }
-  
+
 .category-wrap-mobile {
     display: flex;
     flex-direction: column;
@@ -252,3 +252,4 @@
         width: 100%;
     }
 }
+
