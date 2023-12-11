@@ -60,7 +60,6 @@ export function SortableItem({ id, index, handleImageRemove, image }) {
           URL.revokeObjectURL(imageUrl);
         }}
       />
-      <p>{imageName}</p>
       <button type="button" onClick={onDeleteClick}>
         Delete
       </button>

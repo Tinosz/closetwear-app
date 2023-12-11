@@ -103,17 +103,24 @@ function SortableBanner({
                 </ul>
             </td>
             <td>
-                <Link to={`/Admin/EditBanner/${banner.id}`}>Edit</Link>
+                <Link to={`/Admin/EditBanner/${banner.id}`}>
+                    <button className="edit-banner-button">Edit</button>
+                </Link>
             </td>
             <td>
-                <button onClick={() => onDelete(banner)}>Delete</button>
+                <button className="action-button" onClick={() => onDelete(banner)}>Delete</button>
             </td>
             <td>
-                <input
-                    type="checkbox"
-                    checked={selectedBanners.includes(banner.id)}
-                    onChange={() => toggleBannerSelection(banner.id)}
-                />
+                <div className="checkbox-wrapper-24">
+                    <input
+                        type="checkbox"
+                        id={banner.id}
+                        className="field__input"
+                        checked={selectedBanners.includes(banner.id)}
+                        onChange={() => toggleBannerSelection(banner.id)}
+                    />
+                    <label for={banner.id}><span></span></label>
+                </div>
             </td>
         </tr>
     );
