@@ -1,9 +1,12 @@
+
+  import Footer from '../../components/Footer';
 import react, { useEffect, useState } from "react";
 import "./styles/HomeStyles.css";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Banner from "../../components/Banner";
 import axiosClient from "../../client/axios-client";
+
 
 export default function Home() {
     const [items, setItems] = useState([]);
@@ -228,6 +231,9 @@ export default function Home() {
             <Banner />
             <SectionContent />
             <NewReleases />
+ 
+            <Footer />
+
         </div>
         </>
     );
