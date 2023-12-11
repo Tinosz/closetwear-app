@@ -157,8 +157,17 @@ export default function EditCategory() {
     const featuredCategories = categories.filter((cat) => cat.featured === 1);
     const nonFeaturedCategories = categories.filter((cat) => cat.featured === 0);
 
+    const parallaxBg = document.querySelector('.parallax-bg');
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
+    });
+
     return (
         <>
+        <div className="category-bg">
+        <div className="parallax-bg"></div>
         <div className="category-container">
             <div className="content-wrap">
                 {notification && 
@@ -189,19 +198,20 @@ export default function EditCategory() {
                         </div>
                         
                         <div className="flex items-start mb-5">
-                            <div className="flex items-center h-5">
-                                <label for="terms" class="featured-check ms-2 text-sm font-medium text-black-900 dark:text-black-300">
+                            <div className="featured-check flex items-center h-5">
                                 <input
                                     type="checkbox"
                                     className="category-input w-4 h-4 border border-black-300 rounded bg-black-50 focus:ring-3 focus:ring-blue-300 dark:bg-black-700 dark:border-black-600 dark:focus:ring-blue-600 dark:ring-offset-black-800 dark:focus:ring-offset-black-800"
+                                    id="featured"
                                     checked={Number(category.featured) === 1}
                                     onChange={() => setCategory({
                                         ...category,
                                         featured: category.featured === 1 ? 0 : 1
                                     })}
                                 />
-                            Featured?
-                            </label>
+                                <label for="featured" class="ms-2 text-sm font-medium text-black-900 dark:text-black-300">
+                                Featured?
+                                </label>
                             </div>
                         </div>
                         <button
@@ -241,7 +251,7 @@ export default function EditCategory() {
                                 </label>
                                 <Link
                                     to={"/Admin/EditCategories/" + category.id}
-                                    className="ml-3 bg-blue-200"
+                                    className="edit-button"
                                 >
                                     Edit
                                 </Link>
@@ -251,18 +261,19 @@ export default function EditCategory() {
                     <div>
                         <h2>Non-Featured Categories:</h2>
                         {nonFeaturedCategories.filter((category) => category.id !== 1).map((category) => (
-                            <div key={category.id}>
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedCategories.includes(category.id)}
-                                        onChange={() => toggleCategorySelection(category.id)}
-                                    />
-                                    {category.category_name} 
+                            <div className="checkbox-wrapper-24" key={category.id}>
+                                <input
+                                    type="checkbox"
+                                    id={category.id}
+                                    checked={selectedCategories.includes(category.id)}
+                                    onChange={() => toggleCategorySelection(category.id)}
+                                />
+                                <label for={category.id}>
+                                    <span></span>{category.category_name} 
                                 </label>
                                 <Link
                                     to={"/Admin/EditCategories/" + category.id}
-                                    className="ml-3 bg-blue-200"
+                                    className="edit-button"
                                 >
                                     Edit
                                 </Link>
@@ -280,8 +291,10 @@ export default function EditCategory() {
                     >
                         Delete Selected
                     </button>
+                    
                 </div>
             </div>
+        </div>
         </div>
         </>
     );

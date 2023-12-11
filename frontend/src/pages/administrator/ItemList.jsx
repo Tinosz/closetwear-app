@@ -5,6 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
+import "./styles/ItemListStyles.css";
+
 export default function ItemList() {
     const { notification } = useStateContext();
     const [items, setItems] = useState([]);
@@ -86,38 +88,39 @@ export default function ItemList() {
         getItems(page);
     };
 
+    const parallaxBg = document.querySelector('.parallax-bg');
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
+    });
+
     return (
         <>
+           <div className="list-wrap">
+            <div className="parallax-bg"></div>
+            <div className="list-content-wrap">
             {notification && <div>{notification}</div>}
-            <div>
-                <button
-                    onClick={onMultipleDelete}
-                    disabled={selectedItems.length === 0}
-                    style={{ opacity: selectedItems.length === 0 ? 0.5 : 1 }}
-                >
-                    Delete Selected
-                </button>
-            </div>
-            <div>
-                <a href="/Admin/EditItem">Add Item</a>
-            </div>
-            <h2>Item List:</h2>
+            
+            <h2 style={{fontSize: '32px', fontWeight: 'bold'}}>Item List:</h2>
 
             <br />
-            <table>
-                <thead>
+            
+            <div className="form-container relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table className="w-full text-sm text-center rtl:text-right text-white-500 dark:text-white-400 border border-black">
+                <thead className="text-xs text-white-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-white-400">
                     <tr>
-                        <th>No.</th>
-                        <th>Item Name</th>
-                        <th>Images</th>
-                        <th>Price</th>
-                        <th>Categories</th>
-                        <th>Available Stock?</th>
-                        <th>Item Clicks</th>
-                        <th>Item Link Clicks</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                        <th>Multiple Deletion</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">No.</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Item Name</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Images</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Price</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Categories</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Available Stock?</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Item Clicks</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Item Link Clicks</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Edit</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Delete</th>
+                        <th scope="col" class="px-6 py-3 border border-2 border-black">Multiple Deletion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -139,10 +142,10 @@ export default function ItemList() {
                             );
 
                             return (
-                                <tr key={item.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.item_name}</td>
-                                    <td>
+                                <tr className="odd:bg-white odd:light:bg-black-900 even:bg-black-50 even:dark:bg-black-800 border-b dark:border-black-700" key={item.id}>
+                                    <td classname="px-6 py-4 border border-2 border-black">{index + 1}</td>
+                                    <th scope="row" classname="px-6 py-4 border border-2 border-black font-medium text-black-900 whitespace-nowrap dark:text-white">{item.item_name}</th>
+                                    <td classname="px-6 py-4 border border-2 border-black">
                                         {item.images
                                             .sort(
                                                 (a, b) =>
@@ -166,8 +169,8 @@ export default function ItemList() {
                                                 </span>
                                             ))}
                                     </td>
-                                    <td>{item.item_price}</td>
-                                    <td>
+                                    <td classname="px-6 py-4 border border-2 border-black">{item.item_price}</td>
+                                    <td classname="px-6 py-4 border border-2 border-black">
                                     <ul>
                                         {allCategories
                                             .filter(
@@ -186,70 +189,104 @@ export default function ItemList() {
                                             ))}
                                     </ul>
                                 </td>
-                                    <td>
+                                    <td classname="px-6 py-4 border border-2 border-black">
                                         {parseInt(item.available_stock) === 1
                                             ? "Yes"
                                             : "No"}
                                     </td>
-                                    <td>{item.item_click}</td>
-                                    <td>{item.item_link_click}</td>
-                                    <td>
-                                        <Link
-                                            to="#"
-                                            onClick={() =>
-                                                handleEditClick(item)
-                                            }
-                                        >
-                                            Edit
-                                        </Link>
+                                    <td classname="px-6 py-4 border border-2 border-black">{item.item_click}</td>
+                                    <td classname="px-6 py-4 border border-2 border-black">{item.item_link_click}</td>
+                                    <td classname="px-6 py-4 border border-2 border-black">
+
+                                    <Link
+                                        to="#"
+                                        onClick={() =>
+                                            handleEditClick(item)
+                                        }
+                                    >
+                                    <button className="ed-button">
+                                        Edit
+                                    </button>
+                                    </Link>
+
                                     </td>
-                                    <td>
-                                        <button onClick={(e) => onDelete(item)}>
+                                    <td classname="px-6 py-4 border border-2 border-black">
+                                        <button className="ed-button" onClick={(e) => onDelete(item)}>
                                             Delete
                                         </button>
                                     </td>
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedItems.includes(
-                                                item.id
-                                            )}
-                                            onChange={() =>
-                                                toggleItemSelection(item.id)
-                                            }
-                                        />
+                                    <td classname="px-6 py-4 border border-2 border-black">
+                                        <div className="checkbox-wrapper-24">
+                                            <input
+                                                type="checkbox"
+                                                id="multiple"
+                                                className="field__input"
+                                                checked={selectedItems.includes(
+                                                    item.id
+                                                )}
+                                                onChange={() =>
+                                                    toggleItemSelection(item.id)
+                                                }
+                                            />
+                                            <label for="multiple"><span></span></label>
+                                        </div>
                                     </td>
                                 </tr>
                             );
                         })
                     ) : (
                         <tr>
-                            <td colSpan="7">No Items available</td>
+                            <td classname="px-6 py-4 border border-2 border-black" colSpan="7">No Items available</td>
                         </tr>
                     )}
                 </tbody>
             </table>
-            <div>
-                {pagination.links && (
-                    <ul className="pagination">
-                        {pagination.links.map((link, index) => (
-                            <li
-                                key={index}
-                                className={`page-item ${
-                                    link.active ? "active" : ""
-                                }`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => onPageChange(link.label)}
-                                >
-                                    {link.label}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
             </div>
+
+            <div className="edit-list-button-wrap grid grid-cols-3">
+            <div className="edit-list-button">
+                <button
+                    onClick={onMultipleDelete}
+                    className="bot-button"
+                    disabled={selectedItems.length === 0}
+                    style={{ opacity: selectedItems.length === 0 ? 0.5 : 1 }}
+                >
+                    Delete Selected
+                </button>
+            </div>
+
+                <div className="edit-list-button">
+                    <a href="/Admin/EditItem">
+                        <button className="bot-button">Add Item</button>
+                    </a>
+                </div>
+
+                <div className="edit-list-np">
+                    {pagination.links && (
+                        <ul className="pagination">
+                            {pagination.links.map((link, index) => (
+                                <li
+                                    key={index}
+                                    className={`page-item ${
+                                        link.active ? "active" : ""
+                                    }`}
+                                >
+                                    <button
+                                        className="page-link bot-button"
+                                        onClick={() => onPageChange(link.label)}
+                                    >
+                                        {link.label}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+                
+            </div>
+            </div>
+            
+           </div>
         </>
     );
 }

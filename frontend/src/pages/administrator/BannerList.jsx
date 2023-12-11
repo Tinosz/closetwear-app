@@ -10,6 +10,8 @@ import {
 } from "@dnd-kit/sortable";
 import SortableBanner from "../../components/form/SortableBanner";
 
+import "./styles/BannerListStyles.css"
+
 export default function BannerList() {
     const { notification } = useStateContext();
     const [banners, setBanners] = useState([]);
