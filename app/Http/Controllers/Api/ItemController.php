@@ -37,8 +37,14 @@ class ItemController extends Controller
 
     public function indexPaginated(Request $request)
     {
-        $perPage = $request->input('per_page', 10); // Number of items per page, default is 10        
+        $perPage = $request->input('per_page', 40); // Number of items per page, default is 10        
         $items = Item::with('categories', 'images')->paginate($perPage);
+        return $items;
+    }
+
+    public function newlyReleasedItems()
+    {
+        $items = Item::with('categories', 'images')->orderBy('created_at', 'desc')->get();
         return $items;
     }
 
@@ -179,7 +185,7 @@ class ItemController extends Controller
 
     public function searchByCategory(Request $request, $categoryId)
     {
-        $perPage = $request->get('per_page', 10); // Number of items per page, default is 10
+        $perPage = $request->get('per_page', 40); // Number of items per page, default is 10
     
         $category = Category::findOrFail($categoryId);
         $items = $category->items()
@@ -188,7 +194,6 @@ class ItemController extends Controller
     
         return response()->json($items);
     }
-    
     
 
 

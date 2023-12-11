@@ -3,6 +3,8 @@ body {
   overflow-x: hidden; 
 }
 
+
+
 .main-content {
   transition: margin-left 0.3s ease;
 }

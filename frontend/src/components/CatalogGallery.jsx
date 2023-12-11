@@ -18,7 +18,7 @@ export default function CatalogGallery() {
         handleFilter(searchWord);
     }, [searchWord, handleFilter]);
 
-    const { id } = useParams();
+    const { id, bannerId } = useParams();
     const [pagination, setPagination] = useState({});
     const [items, setItems] = useState([]); // Add this line to define the 'items' state
     const getItems = (page = 1) => {
@@ -26,6 +26,10 @@ export default function CatalogGallery() {
             console.log(response.data);
             setItems(response.data.data);
             setPagination(response.data);
+        }).catch(() => {
+
+        }).finally(()=> {
+
         });
     };
 
@@ -42,9 +46,25 @@ export default function CatalogGallery() {
       });
   };
 
+    const getRelatedBanners = (page = 1) => {
+        axiosClient
+            .get(`/banners/${bannerId}/related-items?page=${page}`)
+            .then((response) => {
+                setItems(response.data.data);
+                console.log(response.data);
+                setPagination(response.data)
+            })
+            .catch(() => {})
+            .finally(() => {
+                //
+            });
+    };
+
     useEffect(() => {
         if (id) {
             getCategoryItems();
+        } else if(bannerId){
+            getRelatedBanners();
         } else {
             getItems();
         }
@@ -70,7 +90,7 @@ export default function CatalogGallery() {
         AOS.init();
     }, []);
 
-    const ImageCard = ({ imageSrc, title, description, tags }) => (
+    const ImageCard = ({ imageSrc, title, price, tags }) => (
         <div
             className="rounded overflow-hidden shadow-lg w-96   "
             // data-aos="fade-up"
@@ -82,7 +102,7 @@ export default function CatalogGallery() {
             />
             <div className="px-6 py-4">
                 <div className="font-bold text-2xl mb-2">{title}</div>
-                <div className="font-bold text-xl mt-2">Rp. 12,000</div>
+                <div className="font-bold text-xl mt-2">{price}</div>
             </div>
             <div className="px-6 pt-4 pb-2">
                 {tags.map((tag, index) => (
@@ -106,6 +126,7 @@ export default function CatalogGallery() {
                         item.images[0].item_image
                     }`} // Assuming the first image is used as the main image
                     title={item.item_name}
+                    price={item.item_price}
                     tags={item.categories
                         .filter((category) => category.id !== 1)
                         .slice(0, 3) // Limit to the first 3 categories

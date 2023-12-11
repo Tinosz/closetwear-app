@@ -1,3 +1,5 @@
+
+  import Footer from '../../components/Footer';
 import react, { useEffect, useState } from "react";
 import "./styles/HomeStyles.css";
 import Carousel from "react-multi-carousel";
@@ -5,7 +7,25 @@ import "react-multi-carousel/lib/styles.css";
 import Banner from "../../components/Banner";
 import axiosClient from "../../client/axios-client";
 
+
 export default function Home() {
+    const [items, setItems] = useState([]);
+
+    const getNewlyReleased = () => {
+        axiosClient.get("itemsGetNewlyRelease").then((response) => {
+            console.log(response.data);
+            setItems(response.data);
+        }).catch(() => {
+
+        }).finally(()=> {
+
+        })
+    }
+
+    useEffect(()=> {
+        getNewlyReleased();
+    }, [])
+
     const getItems = () => {};
 
     const responsive = {
@@ -31,23 +51,35 @@ export default function Home() {
         }
     };
 
-    function NewReleased(props) {
-    return(
-        <div className='new-release-card'>
+    const handleClick = async (props) => {
+        try {
+          await axiosClient.post(`/items/${props.id}/increment-click`);
+          window.location.href = `/product/${props.id}`;
+        } catch (error) {
+          console.error("Error incrementing props click count:", error);
+        }
+      };
+    
+
+      function NewReleased(props) {
+        const handleSeeProductClick = () => {
+          handleClick(props);
+        };
+      
+        return (
+          <div className='new-release-card'>
             <div className='new-release-img' style={{ backgroundImage: `url(${props.url})` }} alt="aa" />
             <div className='new-release-bottom-box'>
-                <h2 className='new-release-product'>{props.name}</h2>
-                <p className='new-release-price'>{props.price}</p>
-                <p className='new-release-desc'>{props.desc}</p>
-                <a href={`/products/${props.id}`} className='new-release-btn'>
-                    See Product
-                </a>
-
-
+              <h2 className='new-release-product'>{props.name}</h2>
+              <p className='new-release-price text-black'>{props.price}</p>
+              <button onClick={handleSeeProductClick} className='new-release-btn'>
+                See Product
+              </button>
             </div>
-        </div>
-    )
-    }
+          </div>
+        );
+      }
+      
 
     const newReleasedData = [
     {
@@ -108,15 +140,18 @@ export default function Home() {
     },
     ]
 
-    const newlyReleased = newReleasedData.map(item => (
-    <NewReleased 
-        id={item.id}
-        name={item.name} 
-        url={item.imageUrl} 
-        price={item.price} 
-        desc={item.desc}
-    />
-    ))
+    const newlyReleased = items.map(item => (
+        <NewReleased
+            key={item.id}
+          id={item.id}
+          name={item.item_name}  // Adjust property names based on your API response
+          url={`${import.meta.env.VITE_API_BASE_URL}/storage/${
+            item.images[0].item_image
+        }`}  // Assuming images is an array and selecting the first image
+          price={item.item_price} 
+          desc={item.item_description}
+        />
+      ));
 
     function NewReleases() {
         return(
@@ -196,6 +231,9 @@ export default function Home() {
             <Banner />
             <SectionContent />
             <NewReleases />
+ 
+            <Footer />
+
         </div>
         </>
     );

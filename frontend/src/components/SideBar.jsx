@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom"; // Import Link
-import "./SideBar.css";
+import "./styles/SideBar.css";
 
 export default function SideBar() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -31,8 +31,10 @@ export default function SideBar() {
     };
   }, []);
 
+  
   return (
     <>
+    <div className="sidebar-wrap">
       <button onClick={toggleSidebar} className="rounded-full bg-red-600">
         Open Sidebar
       </button>
@@ -40,9 +42,11 @@ export default function SideBar() {
         ref={sidebarRef}
         className={`fixed top-0 left-0 h-full w-64 bg-black text-white p-4 sidebar${isSidebarOpen ? ' sidebar-open' : ''}`}
       >
-        <div>
+        <div className="link-wrap">
           {/* Tambahkan tautan ke halaman EditCategory */}
-          <Link to="/Admin/EditCategories">Category List</Link>
+          <a href="">
+            <Link to="/Admin/EditCategories">Category List</Link>
+          </a>
           <br />
 
           {/* Tambahkan tautan ke halaman ItemList */}
@@ -52,6 +56,7 @@ export default function SideBar() {
         </div>
 
       </div>
+    </div>
     </>
   );
 }
