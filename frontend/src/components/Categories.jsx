@@ -1,12 +1,10 @@
-import { useEffect, useState, useRef } from "react";
-import axiosClient from "../../client/axios-client";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import CatalogGallery from "../../components/CatalogGallery";
-import Categories from "../../components/Categories";
+import axiosClient from "../client/axios-client";
 
-import "../../components/styles/Catalog.css";
+import "./styles/Catalog.css";
 
-export default function Catalog() {
+export default function Categories() {
     const { id, bannerId } = useParams();
     const [featuredCategories, setFeaturedCategories] = useState([]);
     const [nonFeaturedCategories, setNonFeaturedCategories] = useState([]);
@@ -102,14 +100,13 @@ export default function Catalog() {
             getRelatedBanners();
         }
         getCategories();
-        getItems();
-    }, []);
+        getItems(id);
+    }, [id]);
+
 
     return (
         <>
-            <div className="catalog-wrap">
-                <div className="side-category-wrap">
-                <span className="sm:absolute border p-10 big-screen-category">
+            <span className="sm:absolute border p-10 big-screen-category">
                 <div>
                     {featuredCategories.length > 0 &&
                         featuredCategories.map((category) => (
@@ -175,11 +172,7 @@ export default function Catalog() {
                     </div>
                 </div>
             </span>
-                </div>
-                <div className="img-gallery-wrap">
-                    <CatalogGallery />
-                </div>
-            </div>
         </>
     );
 }
+    

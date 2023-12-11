@@ -37,10 +37,13 @@ const router = createBrowserRouter([
                 element: <Catalog key="CategoryPreview"/>
             },
             {
+                path: '/Catalog/Banner/:bannerId',
+                element: <Catalog key="BannerPreview" />
+            },
+            {
                 path: "/Search",
                 element: <SearchPage />,
             },
-
         ]
     },
     {

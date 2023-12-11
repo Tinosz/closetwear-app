@@ -155,7 +155,7 @@ export default function Home() {
     return (
         <>
             <Banner />
-            <LatestRelease />
+        
             <NewReleases />
         </>
     );
