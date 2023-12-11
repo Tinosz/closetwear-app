@@ -112,17 +112,19 @@ export default function CatalogGallery() {
   const ImageGallery = () => (
     <div className="image-gallery">
       {filteredData.map((item) => (
-        <ImageCard
-          key={item.id}
-          imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${
-            item.images[0].item_image
-          }`}
-          title={item.item_name}
-          tags={item.categories
-            .filter((category) => category.id !== 1)
-            .slice(0, 3)
-            .map((category) => category.category_name)}
-        />
+        <div className="image-card">
+          <ImageCard
+            key={item.id}
+            imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${
+              item.images[0].item_image
+            }`}
+            title={item.item_name}
+            tags={item.categories
+              .filter((category) => category.id !== 1)
+              .slice(0, 3)
+              .map((category) => category.category_name)}
+          />
+        </div>
       ))}
     </div>
   );
@@ -135,13 +137,13 @@ export default function CatalogGallery() {
     <div className="catalog-container">
       <div className="searchbar">
         <SearchBar
-          placeholder="Search by item name"
+          placeholder="Search"
           value={searchWord}
           onInputChange={(value) => setSearchWord(value)}
         />
         {filteredData.length !== 0 && searchWord !== "" && (
           <div className="data-result">
-            {filteredData.slice(0, 15).map((value, index) => {
+          {filteredData.slice(0, 15).map((value, index) => {
               return (
                 <div
                   className="result-item"
