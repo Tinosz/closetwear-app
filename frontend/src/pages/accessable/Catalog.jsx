@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import CatalogGallery from "../../components/CatalogGallery";
 import Categories from "../../components/Categories";
 
-import "../../components/styles/Catalog.css";
+import "./styles/Catalog.css";
 
 export default function Catalog() {
     const { id, bannerId } = useParams();
@@ -107,12 +107,17 @@ export default function Catalog() {
 
     return (
         <>
-            <div className="catalog-wrap">
+            <div className="catalog-wrap">                
                 <div className="side-category-wrap">
-                <span className="sm:absolute border p-10 big-screen-category">
-                <div>
-                    {featuredCategories.length > 0 &&
-                        featuredCategories.map((category) => (
+                    <button onClick={toggleSidebar} className="ml-5 mb-5 rounded-full toggle-category">
+                        Categories
+                    </button>
+                    <hr />
+                    <div className="big-screen-category">
+                        <h1>CATEGORIES</h1>
+
+                        {featuredCategories.length > 0 &&
+                            featuredCategories.map((category) => (
                             <div key={category.id}>
                                 <Link
                                     className="font-bold"
@@ -122,59 +127,52 @@ export default function Catalog() {
                                 </Link>
                             </div>
                         ))}
-                </div>
-                <hr className="my-5" />
-                <div>
-                    {nonFeaturedCategories.length > 0 &&
-                        nonFeaturedCategories
-                            .filter((category) => category.id !== 1)
-                            .map((category) => (
-                                <div key={category.id}>
-                                    <Link to={`/Catalog/` + category.id}>
-                                        {category.category_name}
-                                    </Link>
-                                </div>
-                            ))}
-                </div>
-            </span>
-            <span className="small-screen-category">
-                <button onClick={toggleSidebar} className="ml-5 mb-5 rounded-full toggle-category">
-                    Categories
-                </button>
-                <div
-                    ref={sidebarRef}
-                    className={`sidebar-category fixed top-0 left-0 h-full w-64 bg-black text-white p-4 sidebar${
-                        isSidebarOpen ? " sidebar-open" : ""
-                    }`}
-                >
-                    <div>
-                        {featuredCategories.length > 0 &&
-                            featuredCategories.map((category) => (
-                                <div key={category.id}>
-                                    <Link
-                                        className="font-bold"
-                                        to={`/Catalog/` + category.id}
-                                    >
-                                        {category.category_name}
-                                    </Link>
-                                </div>
-                            ))}
-                    </div>
-                    <hr className="my-5" />
-                    <div>
+                    
                         {nonFeaturedCategories.length > 0 &&
                             nonFeaturedCategories
-                                .filter((category) => category.id !== 1)
-                                .map((category) => (
+                            .filter((category) => category.id !== 1)
+                            .map((category) => (
+                            <div key={category.id}>
+                                <Link to={`/Catalog/` + category.id}>
+                                    {category.category_name}
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    <div
+                        ref={sidebarRef}
+                        className={`small-screen-category sidebar-category fixed top-0 left-0 h-full w-64 bg-black text-white p-4 sidebar${
+                            isSidebarOpen ? " sidebar-open" : ""
+                        }`}
+                    >
+                        <div>
+                            {featuredCategories.length > 0 &&
+                                featuredCategories.map((category) => (
                                     <div key={category.id}>
-                                        <Link to={`/Catalog/` + category.id}>
+                                        <Link
+                                            className="font-bold"
+                                            to={`/Catalog/` + category.id}
+                                        >
                                             {category.category_name}
                                         </Link>
                                     </div>
                                 ))}
+                        </div>
+                        <hr className="my-5" />
+                        <div>
+                            {nonFeaturedCategories.length > 0 &&
+                                nonFeaturedCategories
+                                    .filter((category) => category.id !== 1)
+                                    .map((category) => (
+                                        <div key={category.id}>
+                                            <Link to={`/Catalog/` + category.id}>
+                                                {category.category_name}
+                                            </Link>
+                                        </div>
+                                    ))}
+                        </div>
                     </div>
-                </div>
-            </span>
                 </div>
                 <div className="img-gallery-wrap">
                     <CatalogGallery />
