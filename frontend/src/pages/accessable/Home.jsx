@@ -3,6 +3,8 @@ import "./styles/HomeStyles.css"
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Banner from '../../components/Banner';
+import Footer from '../../components/Footer';
+import LatestRelease from '../../components/LatestRelease';
 
 export default function Home() {
     const responsive = {
@@ -137,6 +139,9 @@ export default function Home() {
         <>
             <Banner />
             <NewReleases />
+            <LatestRelease />
+            
+            <Footer />
         </>
       )
 }
