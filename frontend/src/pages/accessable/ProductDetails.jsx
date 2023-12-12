@@ -151,7 +151,7 @@ const ProductDetails = () => {
   }, []);
 
   const ImageCard = ({ imageSrc, title, description, tags }) => (
-    <div className="rounded overflow-hidden shadow-lg" data-aos="fade-up">
+    <div className="overflow-hidden shadow-lg" data-aos="fade-up">
       <img className="w-full" src={imageSrc} alt={title} />
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{title}</div>

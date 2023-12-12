@@ -20,13 +20,9 @@ export default function ItemList() {
     const { filteredData, handleFilter } = useSearch();
     const [searchWord, setSearchWord] = useState("");
 
-    useEffect(() => {
-        setFilteredItems(filteredData);
-    }, [filteredData]);
 
     const handleEditClick = async (item) => {
         try {
-            await axiosClient.post(`/items/${item.id}/increment-click`);
             window.location.href = `/Admin/EditItem/${item.id}`;
         } catch (error) {
             console.error("Error incrementing item click count:", error);
@@ -45,6 +41,14 @@ export default function ItemList() {
         });
     };
 
+    const toggleItemSelection = (itemId) => {
+        setSelectedItems((prevSelected) =>
+            prevSelected.includes(itemId)
+                ? prevSelected.filter((id) => id !== itemId)
+                : [...prevSelected, itemId]
+        );
+    };
+
     useEffect(() => {
         getItems();
     }, []);
@@ -57,34 +61,54 @@ export default function ItemList() {
         if (!window.confirm("Are you sure you want to delete this item?")) {
             return;
         }
-
-        axiosClient.delete(`/items/${item.id}`).then(() => {
-            getItems();
-        });
-    };
-
-
-    const onMultipleDelete = () => {
-        if (
-            !window.confirm(
-                "Are you sure you want to delete the selected items?"
-            )
-        ) {
-            return;
-        }
-
-        axiosClient
-            .delete("/items/delete-multiple", {
-                data: { itemIds: selectedItems },
-            })
+    
+        axiosClient.delete(`/items/${item.id}`)
             .then(() => {
-                getItems();
-                setSelectedItems([]);
+                // Update the state immediately after successful deletion
+                setItems(prevItems => prevItems.filter(i => i.id !== item.id));
+    
+                // Update filteredItems to reflect the change
+                setFilteredItems(prevFilteredItems => prevFilteredItems.filter(i => i.id !== item.id));
+    
+                // If a search word is present, update filteredData based on the searchWord
+                if (searchWord) {
+                    handleFilter(searchWord);
+                }
+            })
+            .catch((error) => {
+                console.error("Error deleting item:", error);
             });
     };
+    
 
-
-
+    const onMultipleDelete = () => {
+        if (!window.confirm("Are you sure you want to delete the selected items?")) {
+            return;
+        }
+    
+        axiosClient.delete("/items/delete-multiple", {
+            data: { itemIds: selectedItems },
+        })
+        .then(() => {
+            // Update the state immediately after successful deletion
+            setItems(prevItems => prevItems.filter(item => !selectedItems.includes(item.id)));
+    
+            // Update filteredItems to reflect the change
+            setFilteredItems(prevFilteredItems => prevFilteredItems.filter(item => !selectedItems.includes(item.id)));
+    
+            // If a search word is present, update filteredData based on the searchWord
+            if (searchWord) {
+                handleFilter(searchWord);
+            }
+    
+            // Clear selectedItems
+            setSelectedItems([]);
+        })
+        .catch((error) => {
+            console.error("Error deleting multiple items:", error);
+        });
+    };
+    
 
     const parallaxBg = document.querySelector('.parallax-bg');
 
@@ -192,10 +216,10 @@ export default function ItemList() {
                                                 <td className="px-6 py-4 border border-2 border-black">{item.item_price}</td>
                                                 <td className="px-6 py-4 border border-2 border-black">
                                                     <ul>
-                                                        {item.categories.map((category, catIndex) => (
+                                                        {item.categories.filter((category)=> category.id !== 1).map((category, catIndex) => (
                                                             <li key={catIndex}>
                                                                 {category.category_name}
-                                                                {category.featured === 1 && (
+                                                                {category.featured !== 1 && (
                                                                     <FontAwesomeIcon icon={faStar} />
                                                                 )}
                                                             </li>

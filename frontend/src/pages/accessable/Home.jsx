@@ -172,7 +172,7 @@ export default function Home() {
             <Banner />
             <SectionContent />
             <NewReleases />
-            <Footer />
+
 
         </div>
         </>

@@ -94,15 +94,33 @@ export default function CatalogGallery() {
 //   }, []);
 
   const ImageCard = ({ imageSrc, title, description, tags }) => (
-    <div className="image-card">
-      <img className="image" src={imageSrc} alt={title} />
-      <div className="content">
-        <div className="title">{title}</div>
+    // <div className="image-card">
+    //   <img className="image" src={imageSrc} alt={title} />
+    //   <div className="content">
+    //     <div className="title">{title}</div>
+    //     <div className="price">Rp. 12,000</div>
+    //   </div>
+    //   <div className="tags">
+    //     {tags.map((tag, index) => (
+    //       <span key={index} className="tag">
+    //         {tag}
+    //       </span>
+    //     ))}
+    //   </div>
+    // </div>
+    
+    <div className="overflow-hidden shadow-lg">
+      <div className="relative w-full" style={{ paddingBottom: '86.25%' }}>
+        <img className="absolute w-full h-full object-cover" src={imageSrc} alt={title} />
+      </div>
+
+      <div className="px-6 py-4">
+        <div className="font-bold text-xl mb-2">{title}</div>
         <div className="price">Rp. 12,000</div>
       </div>
-      <div className="tags">
+      <div className="px-6 pt-4 pb-2">
         {tags.map((tag, index) => (
-          <span key={index} className="tag">
+          <span key={index} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
             {tag}
           </span>
         ))}
@@ -110,42 +128,42 @@ export default function CatalogGallery() {
     </div>
   );
 
-  const ImageGallery = () => (
-    <div className="image-gallery">
-      {searchWord === '' // Check if searchWord is empty
-        ? items.map((item) => ( // Render all items if searchWord is empty
-            <Link key={item.id} to={`/product/${item.id}`}>
-              <div key={item.id} className="image-card">
-                <ImageCard
-                  key={item.id}
-                  imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.images[0].item_image}`}
-                  title={item.item_name}
-                  tags={item.categories
-                    .filter((category) => category.id !== 1)
-                    .slice(0, 3)
-                    .map((category) => category.category_name)}
-                />
-              </div>
-            </Link>
-          ))
-        : filteredData.map((item) => ( // Render filtered data if searchWord is not empty
-            <Link key={item.id} to={`/product/${item.id}`}>
-              <div key={item.id} className="image-card">
-                <ImageCard
-                  key={item.id}
-                  imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.images[0].item_image}`}
-                  title={item.item_name}
-                  tags={item.categories
-                    .filter((category) => category.id !== 1)
-                    .slice(0, 3)
-                    .map((category) => category.category_name)}
-                />
-              </div>
-            </Link>
-          ))}
-    </div>
-  );
-  
+const ImageGallery = () => (
+  <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+    {searchWord === '' // Check if searchWord is empty
+      ? items.map((item) => ( // Render all items if searchWord is empty
+          <Link key={item.id} to={`/product/${item.id}`}>
+            <div key={item.id} className="">
+              <ImageCard
+                key={item.id}
+                imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.images[0].item_image}`}
+                title={item.item_name}
+                tags={item.categories
+                  .filter((category) => category.id !== 1)
+                  .slice(0, 3)
+                  .map((category) => category.category_name)}
+              />
+            </div>
+          </Link>
+        ))
+      : filteredData.map((item) => ( // Render filtered data if searchWord is not empty
+          <Link key={item.id} to={`/product/${item.id}`}>
+            <div key={item.id} className="image-card">
+              <ImageCard
+                key={item.id}
+                imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.images[0].item_image}`}
+                title={item.item_name}
+                tags={item.categories
+                  .filter((category) => category.id !== 1)
+                  .slice(0, 3)
+                  .map((category) => category.category_name)}
+              />
+            </div>
+          </Link>
+        ))}
+  </div>
+);
+
 
   const handleResultItemClick = (itemName) => {
     setSearchWord(itemName);

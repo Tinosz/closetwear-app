@@ -72,6 +72,8 @@
     transition: background-color 0.3s ease-in-out;
     width: 100%;
     display: block;
+    border-radius: 0;
+    border: 0;
 }
   
 .new-release-btn:hover {
