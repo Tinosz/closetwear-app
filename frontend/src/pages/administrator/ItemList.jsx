@@ -119,7 +119,6 @@ export default function ItemList() {
     return (
         <>
             <div className="list-wrap">
-
                 <div className="parallax-bg"></div>
                 <SearchBar
                     placeholder="Search items.."
@@ -193,21 +192,14 @@ export default function ItemList() {
                                                 <td className="px-6 py-4 border border-2 border-black">{item.item_price}</td>
                                                 <td className="px-6 py-4 border border-2 border-black">
                                                     <ul>
-                                                        {allCategories
-                                                            .filter(
-                                                                (category) =>
-                                                                    category.id !== 1
-                                                            )
-                                                            .map((category, catIndex) => (
-                                                                <li key={catIndex}>
-                                                                    {category.category_name}
-                                                                    {category.featured === 1 && (
-                                                                        <FontAwesomeIcon
-                                                                            icon={faStar}
-                                                                        />
-                                                                    )}
-                                                                </li>
-                                                            ))}
+                                                        {item.categories.map((category, catIndex) => (
+                                                            <li key={catIndex}>
+                                                                {category.category_name}
+                                                                {category.featured === 1 && (
+                                                                    <FontAwesomeIcon icon={faStar} />
+                                                                )}
+                                                            </li>
+                                                        ))}
                                                     </ul>
                                                 </td>
                                                 <td className="px-6 py-4 border border-2 border-black">
@@ -238,7 +230,7 @@ export default function ItemList() {
                                                     <div className="checkbox-wrapper-24">
                                                         <input
                                                             type="checkbox"
-                                                            id={item.id}
+                                                            id={item.item_name}
                                                             className="field__input"
                                                             checked={selectedItems.includes(
                                                                 item.id
@@ -247,7 +239,7 @@ export default function ItemList() {
                                                                 toggleItemSelection(item.id)
                                                             }
                                                         />
-                                                        <label htmlFor={item.id}><span></span></label>
+                                                        <label for={item.id}><span></span></label>
                                                     </div>
                                                 </td>
                                             </tr>
