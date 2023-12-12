@@ -35,18 +35,19 @@ export default function CatalogGallery() {
         });
     };
 
-  const getCategoryItems = (page = 1) => {
-    axiosClient
-      .get(`/items/search-by-category/${id}?page=${page}`)
-      .then((response) => {
-        setItems(response.data.data);
-        setPagination(response.data);
-        applyAOS();
-      })
-      .catch(() => {
-        // Handle error
-      });
-  };
+    const getCategoryItems = (page = 1) => {
+        axiosClient
+          .get(`/items/search-by-category/${id}?page=${page}`)
+          .then((response) => {
+            setItems(response.data.data);
+            setPagination(response.data);
+            applyAOS();
+          })
+          .catch(() => {
+            // Handle error
+          });
+      };
+    
 
     const getRelatedBanners = (page = 1) => {
         axiosClient
@@ -70,7 +71,7 @@ export default function CatalogGallery() {
         } else {
             getItems();
         }
-    }, [id]); // Include 'id' as a dependency here
+    }, [id, bannerId]); // Include 'id' as a dependency here
 
   const onPageChange = (label) => {
     let page;
@@ -88,9 +89,9 @@ export default function CatalogGallery() {
     getItems(page);
   };
 
-  useEffect(() => {
-    AOS.init();
-  }, []);
+//   useEffect(() => {
+//     AOS.init();
+//   }, []);
 
   const ImageCard = ({ imageSrc, title, description, tags }) => (
     <div className="image-card">
@@ -111,25 +112,40 @@ export default function CatalogGallery() {
 
   const ImageGallery = () => (
     <div className="image-gallery">
-      {filteredData.map((item) => (
-        <Link to={`/product/${item.id}`}>
-            <div className="image-card">
-            <ImageCard
-                key={item.id}
-                imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${
-                item.images[0].item_image
-                }`}
-                title={item.item_name}
-                tags={item.categories
-                .filter((category) => category.id !== 1)
-                .slice(0, 3)
-                .map((category) => category.category_name)}
-            />
-            </div>
-        </Link>
-      ))}
+      {searchWord === '' // Check if searchWord is empty
+        ? items.map((item) => ( // Render all items if searchWord is empty
+            <Link key={item.id} to={`/product/${item.id}`}>
+              <div key={item.id} className="image-card">
+                <ImageCard
+                  key={item.id}
+                  imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.images[0].item_image}`}
+                  title={item.item_name}
+                  tags={item.categories
+                    .filter((category) => category.id !== 1)
+                    .slice(0, 3)
+                    .map((category) => category.category_name)}
+                />
+              </div>
+            </Link>
+          ))
+        : filteredData.map((item) => ( // Render filtered data if searchWord is not empty
+            <Link key={item.id} to={`/product/${item.id}`}>
+              <div key={item.id} className="image-card">
+                <ImageCard
+                  key={item.id}
+                  imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.images[0].item_image}`}
+                  title={item.item_name}
+                  tags={item.categories
+                    .filter((category) => category.id !== 1)
+                    .slice(0, 3)
+                    .map((category) => category.category_name)}
+                />
+              </div>
+            </Link>
+          ))}
     </div>
   );
+  
 
   const handleResultItemClick = (itemName) => {
     setSearchWord(itemName);

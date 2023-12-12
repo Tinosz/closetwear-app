@@ -10,7 +10,7 @@ export default function Catalog() {
     const { id, bannerId } = useParams();
     const [featuredCategories, setFeaturedCategories] = useState([]);
     const [nonFeaturedCategories, setNonFeaturedCategories] = useState([]);
-    const [items, setItems] = useState([]);
+
     const [loading, setIsLoading] = useState();
     const [pagination, setPagination] = useState({});
     const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -44,18 +44,6 @@ export default function Catalog() {
 
     
 
-    const getRelatedBanners = () => {
-        axiosClient
-            .get(`/banners/${bannerId}/related-items`)
-            .then((response) => {
-                setItems(reponse.data);
-                console.log(response.data);
-            })
-            .catch(() => {})
-            .finally(() => {
-                //
-            });
-    };
 
     const getCategories = () => {
         axiosClient
@@ -79,33 +67,10 @@ export default function Catalog() {
             });
     };
 
-    const getItems = () => {
-        if (id) {
-            axiosClient
-                .get(`/items/search-by-category/${id}`)
-                .then((response) => {
-                    console.log(response.data);
-                    setItems(response.data);
-                })
-                .catch(() => {})
-                .finally(() => {
-                    // setIsLoading(false);
-                });
-        } else {
-            axiosClient.get(`/items`).then((response) => {
-                console.log(response.data);
-                setItems(response.data.data);
-                setPagination(response.data);
-            });
-        }
-    };
+
 
     useEffect(() => {
-        if (bannerId) {
-            getRelatedBanners();
-        }
         getCategories();
-        getItems();
     }, []);
 
     return (
