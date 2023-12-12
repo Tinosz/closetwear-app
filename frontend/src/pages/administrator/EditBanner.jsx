@@ -380,11 +380,12 @@ export default function EditBanner() {
                         ) : (
                             <p>No Non-Featured Categories Available</p>
                         )}
+                        
+                        <SearchBar placeholder="Search items..." onFilter={handleFilter}/>
                         <h2>Item List:</h2>
                         <div className="">
                             <table className="bl-form-container text-center align-self-center">
                                 <thead>
-                                    <SearchBar placeholder="Search items..." onFilter={handleFilter} />
                                     <tr>
                                         <th>Checkbox</th>
                                         <th>No.</th>

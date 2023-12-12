@@ -28,7 +28,7 @@ function SearchBar({ placeholder, value, onFilter, onInputChange }) {
         className="search-input"
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onFilter(e.target.value) && onInputChange(e.target.value)}
+        onChange={(e) => onInputChange(e.target.value)}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />

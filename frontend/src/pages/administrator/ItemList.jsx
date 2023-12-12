@@ -8,6 +8,7 @@ import SearchBar from "../../components/SearchBar";
 import useSearch from "../../page-groups/useSearch";
 import { useStateContext } from "../../context/ContextProvider";
 
+
 import "./styles/ItemListStyles.css";
 
 export default function ItemList() {
@@ -15,8 +16,13 @@ export default function ItemList() {
     const [items, setItems] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [pagination, setPagination] = useState({});
-    const { filteredData, handleFilter } = useSearch();
     const [filteredItems, setFilteredItems] = useState([]);
+    const { filteredData, handleFilter } = useSearch();
+    const [searchWord, setSearchWord] = useState("");
+
+    useEffect(() => {
+        setFilteredItems(filteredData);
+    }, [filteredData]);
 
     const handleEditClick = async (item) => {
         try {
@@ -32,6 +38,10 @@ export default function ItemList() {
             console.log(response.data);
             setItems(response.data.data);
             setPagination(response.data);
+        }).catch(() => {
+
+        }).then(() => {
+            
         });
     };
 
@@ -73,29 +83,8 @@ export default function ItemList() {
             });
     };
 
-    const toggleItemSelection = (itemId) => {
-        setSelectedItems((prevSelected) =>
-            prevSelected.includes(itemId)
-                ? prevSelected.filter((id) => id !== itemId)
-                : [...prevSelected, itemId]
-        );
-    };
 
-    const onPageChange = (label) => {
-        let page;
-        switch (label) {
-            case "Next &raquo;":
-                page = pagination.current_page + 1;
-                break;
-            case "« Previous":
-                page = pagination.current_page - 1;
-                break;
-            default:
-                page = parseInt(label);
-                break;
-        }
-        getItems(page);
-    };
+
 
     const parallaxBg = document.querySelector('.parallax-bg');
 
@@ -104,10 +93,39 @@ export default function ItemList() {
         parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
     });
 
+  
+
+    
+      const ImageCard = ({ imageSrc, title, description, tags }) => (
+        <div className="image-card">
+          <img className="image" src={imageSrc} alt={title} />
+          <div className="content">
+            <div className="title">{title}</div>
+            <div className="price">Rp. 12,000</div>
+          </div>
+          <div className="tags">
+            {tags.map((tag, index) => (
+              <span key={index} className="tag">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+    
+      const handleResultItemClick = (itemName) => {
+        setSearchWord(itemName);
+      };
     return (
         <>
             <div className="list-wrap">
                 <div className="parallax-bg"></div>
+                <SearchBar
+                    placeholder="Search items.."
+                    onFilter={handleFilter}
+                />
+
+                
                 <div className="list-content-wrap">
                     {notification && <div>{notification}</div>}
 
@@ -133,8 +151,8 @@ export default function ItemList() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {items.length > 0 ? (
-                                    items.map((item, index) => {
+                                {filteredItems.length > 0 ? (
+                                    filteredItems.map((item, index) => {
                                         const featuredCategories = [];
                                         const nonFeaturedCategories = [];
 
@@ -146,7 +164,7 @@ export default function ItemList() {
                                         return (
                                             <tr className="odd:bg-white odd:light:bg-black-900 even:bg-black-50 even:dark:bg-black-800 border-b dark:border-black-700" key={item.id}>
                                                 <td className="px-6 py-4 border border-2 border-black">{index + 1}</td>
-                                                <th scope="row" className="px-6 py-4 border border-2 border-black font-medium text-black-900 whitespace-nowrap dark:text-white">{item.item_name}</th>
+                                                <th scope="row" className="px-6 py-4 border border-2 border-black font-medium text-black-900 whitespace-nowrap dark:text-white" style={{color: 'black'}}>{item.item_name}</th>
                                                 <td className="px-6 py-4 border border-2 border-black">
                                                     {item.images
                                                         .sort(
@@ -174,21 +192,14 @@ export default function ItemList() {
                                                 <td className="px-6 py-4 border border-2 border-black">{item.item_price}</td>
                                                 <td className="px-6 py-4 border border-2 border-black">
                                                     <ul>
-                                                        {allCategories
-                                                            .filter(
-                                                                (category) =>
-                                                                    category.id !== 1
-                                                            )
-                                                            .map((category, catIndex) => (
-                                                                <li key={catIndex}>
-                                                                    {category.category_name}
-                                                                    {category.featured === 1 && (
-                                                                        <FontAwesomeIcon
-                                                                            icon={faStar}
-                                                                        />
-                                                                    )}
-                                                                </li>
-                                                            ))}
+                                                        {item.categories.map((category, catIndex) => (
+                                                            <li key={catIndex}>
+                                                                {category.category_name}
+                                                                {category.featured === 1 && (
+                                                                    <FontAwesomeIcon icon={faStar} />
+                                                                )}
+                                                            </li>
+                                                        ))}
                                                     </ul>
                                                 </td>
                                                 <td className="px-6 py-4 border border-2 border-black">
@@ -219,7 +230,7 @@ export default function ItemList() {
                                                     <div className="checkbox-wrapper-24">
                                                         <input
                                                             type="checkbox"
-                                                            id={item.id}
+                                                            id={item.item_name}
                                                             className="field__input"
                                                             checked={selectedItems.includes(
                                                                 item.id
@@ -228,7 +239,7 @@ export default function ItemList() {
                                                                 toggleItemSelection(item.id)
                                                             }
                                                         />
-                                                        <label htmlFor={item.id}><span></span></label>
+                                                        <label for={item.id}><span></span></label>
                                                     </div>
                                                 </td>
                                             </tr>
