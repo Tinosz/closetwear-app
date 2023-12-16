@@ -12,103 +12,88 @@ import { useStateContext } from "../../context/ContextProvider";
 import "./styles/ItemListStyles.css";
 
 export default function ItemList() {
-    const { notification } = useStateContext();
-    const [items, setItems] = useState([]);
-    const [selectedItems, setSelectedItems] = useState([]);
-    const [pagination, setPagination] = useState({});
-    const [filteredItems, setFilteredItems] = useState([]);
-    const { filteredData, handleFilter } = useSearch();
-    const [searchWord] = useState("");
+  const { notification } = useStateContext();
+  const [items, setItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const { filteredData, handleFilter } = useSearch();
+  const [filteredItems, setFilteredItems] = useState([]);
 
+  const handleEditClick = async (item) => {
+    try {
+      await axiosClient.post(`/items/${item.id}/increment-click`);
+      window.location.href = `/Admin/EditItem/${item.id}`;
+    } catch (error) {
+      console.error("Error incrementing item click count:", error);
+    }
+  };
 
-    const handleEditClick = async (item) => {
-        try {
-            window.location.href = `/Admin/EditItem/${item.id}`;
-        } catch (error) {
-            console.error("Error incrementing item click count:", error);
-        }
-    };
+  const getItems = (page = 1) => {
+    axiosClient.get(`itemsPaginated?page=${page}`).then((response) => {
+      console.log(response.data);
+      setItems(response.data.data);
+      setPagination(response.data);
+    });
+  };
 
-    const getItems = (page = 1) => {
-        axiosClient.get(`itemsPaginated?page=${page}`).then((response) => {
-            console.log(response.data);
-            setItems(response.data.data);
-            setPagination(response.data);
-        }).catch(() => {
+  useEffect(() => {
+    getItems();
+  }, []);
 
-        }).then(() => {
-            
-        });
-    };
+  useEffect(() => {
+    setFilteredItems(filteredData);
+  }, [filteredData]);
 
-    const toggleItemSelection = (itemId) => {
-        setSelectedItems((prevSelected) =>
-            prevSelected.includes(itemId)
-                ? prevSelected.filter((id) => id !== itemId)
-                : [...prevSelected, itemId]
-        );
-    };
+  const onDelete = (item) => {
+    if (!window.confirm("Are you sure you want to delete this item?")) {
+      return;
+    }
 
-    useEffect(() => {
+    axiosClient.delete(`/items/${item.id}`).then(() => {
+      getItems();
+      window.location.reload();
+    });
+  };
+
+  const toggleItemSelection = (itemId) => {
+    setSelectedItems((prevSelected) =>
+      prevSelected.includes(itemId)
+        ? prevSelected.filter((id) => id !== itemId)
+        : [...prevSelected, itemId]
+    );
+  };
+
+  const onMultipleDelete = () => {
+    if (!window.confirm("Are you sure you want to delete the selected items?")) {
+      return;
+    }
+
+    axiosClient
+      .delete("/items/delete-multiple", {
+        data: { itemIds: selectedItems },
+      })
+      .then(() => {
         getItems();
-    }, []);
+        setSelectedItems([]);
+        window.location.reload();
+      });
+  };
 
-    useEffect(() => {
-        setFilteredItems(filteredData);
-    }, [filteredData]);
-
-    const onDelete = (item) => {
-        if (!window.confirm("Are you sure you want to delete this item?")) {
-            return;
-        }
-    
-        axiosClient.delete(`/items/${item.id}`)
-            .then(() => {
-                // Update the state immediately after successful deletion
-                setItems(prevItems => prevItems.filter(i => i.id !== item.id));
-    
-                // Update filteredItems to reflect the change
-                setFilteredItems(prevFilteredItems => prevFilteredItems.filter(i => i.id !== item.id));
-    
-                // If a search word is present, update filteredData based on the searchWord
-                if (searchWord) {
-                    handleFilter(searchWord);
-                }
-            })
-            .catch((error) => {
-                console.error("Error deleting item:", error);
-            });
-    };
-    
-
-    const onMultipleDelete = () => {
-        if (!window.confirm("Are you sure you want to delete the selected items?")) {
-            return;
-        }
-    
-        axiosClient.delete("/items/delete-multiple", {
-            data: { itemIds: selectedItems },
-        })
-        .then(() => {
-            // Update the state immediately after successful deletion
-            setItems(prevItems => prevItems.filter(item => !selectedItems.includes(item.id)));
-    
-            // Update filteredItems to reflect the change
-            setFilteredItems(prevFilteredItems => prevFilteredItems.filter(item => !selectedItems.includes(item.id)));
-    
-            // If a search word is present, update filteredData based on the searchWord
-            if (searchWord) {
-                handleFilter(searchWord);
-            }
-    
-            // Clear selectedItems
-            setSelectedItems([]);
-        })
-        .catch((error) => {
-            console.error("Error deleting multiple items:", error);
-        });
-    };
-    
+  const onPageChange = (label) => {
+    let page;
+    switch (label) {
+      case "Next &raquo;":
+        page = pagination.current_page + 1;
+        break;
+      case "&laquo; Previous":
+        page = pagination.current_page - 1;
+        break;
+      default:
+        page = parseInt(label);
+        break;
+    }
+    getItems(page);
+  };
 
     const parallaxBg = document.querySelector('.parallax-bg');
 
