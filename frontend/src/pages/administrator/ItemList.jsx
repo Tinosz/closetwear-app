@@ -213,21 +213,17 @@ export default function ItemList() {
                                                     </button>
                                                 </td>
                                                 <td className="px-6 py-4 border border-2 border-black">
-                                                    <div className="checkbox-wrapper-24">
-                                                        <input
-                                                            type="checkbox"
-                                                            id={item.item_name}
-                                                            className="field__input"
-                                                            checked={selectedItems.includes(
-                                                                item.id
-                                                            )}
-                                                            onChange={() =>
-                                                                toggleItemSelection(item.id)
-                                                            }
-                                                        />
-                                                        <label for={item.id}><span></span></label>
-                                                    </div>
-                                                </td>
+                                                <div className="checkbox-wrapper-24">
+                                                    <input
+                                                        type="checkbox"
+                                                        id={`checkbox-${item.id}`} 
+                                                        className="field__input"
+                                                        checked={selectedItems.includes(item.id)}
+                                                        onChange={() => toggleItemSelection(item.id)}
+                                                    />
+                                                    <label htmlFor={`checkbox-${item.id}`}><span></span></label> 
+                                                </div>
+                                            </td>
                                             </tr>
                                         );
                                     })
