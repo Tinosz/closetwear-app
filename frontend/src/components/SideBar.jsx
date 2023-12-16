@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom"; // Import Link
-import "./SideBar.css";
+import "./styles/SideBar.css";
+import axiosClient from "../client/axios-client";
+import { useStateContext } from "../context/ContextProvider";
 
 export default function SideBar() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const { token, setToken, setAdmin } = useStateContext();
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -31,8 +34,20 @@ export default function SideBar() {
     };
   }, []);
 
+  const Logout = (e) => {
+    e.preventDefault();
+    if(token) {
+      axiosClient.post("/logout").then(()=> {
+        setAdmin({});
+        setToken(null);
+      })
+    }
+  } 
+
+  
   return (
     <>
+    <div className="sidebar-wrap">
       <button onClick={toggleSidebar} className="rounded-full bg-red-600">
         Open Sidebar
       </button>
@@ -40,9 +55,11 @@ export default function SideBar() {
         ref={sidebarRef}
         className={`fixed top-0 left-0 h-full w-64 bg-black text-white p-4 sidebar${isSidebarOpen ? ' sidebar-open' : ''}`}
       >
-        <div>
+        <div className="link-wrap">
           {/* Tambahkan tautan ke halaman EditCategory */}
-          <Link to="/Admin/EditCategories">Category List</Link>
+          <a href="">
+            <Link to="/Admin/EditCategories">Category List</Link>
+          </a>
           <br />
 
           {/* Tambahkan tautan ke halaman ItemList */}
@@ -50,8 +67,11 @@ export default function SideBar() {
           <br />
           <Link to="/Admin/BannerList">Banner List</Link>
         </div>
-
+        <a className="action-btn text-white" onClick={Logout}>
+          Logout
+        </a>
       </div>
+    </div>
     </>
   );
 }

@@ -37,10 +37,68 @@ class ItemController extends Controller
 
     public function indexPaginated(Request $request)
     {
-        $perPage = $request->input('per_page', 10); // Number of items per page, default is 10        
+        $perPage = $request->input('per_page', 40); // Number of items per page, default is 10        
         $items = Item::with('categories', 'images')->paginate($perPage);
         return $items;
     }
+
+    public function newlyReleasedItems()
+    {
+        $items = Item::with('categories', 'images')
+            ->orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+    
+        return $items;
+    }
+
+
+    
+    public function showItem($id)
+    {
+        try {
+            // Find the main item and eager load the 'categories' and 'images' relationships
+            $item = Item::with('categories', 'images')->findOrFail($id);
+    
+            // Get the category IDs excluding category 1
+            $categoryIds = $item->categories->pluck('id')->reject(function ($categoryId) {
+                return $categoryId == 1;
+            });
+    
+            // Check if there are multiple categories excluding category 1
+            if ($categoryIds->count() > 0) {
+                // Find related items with the same categories and eager load the 'categories' and 'images' relationships
+                $relatedItems = Item::whereHas('categories', function ($query) use ($categoryIds) {
+                    $query->whereIn('category_id', $categoryIds);
+                })->with('categories', 'images')->where('id', '!=', $item->id)->take(20)->get();
+    
+                // Add the related items to the main item
+                $item['RecommendedItems'] = $relatedItems;
+            } else {
+                // If there is only one category, and its ID is 1, search for related items with that category
+                $singleCategoryId = $item->categories->pluck('id')->first();
+    
+                $relatedItems = Item::whereHas('categories', function ($query) use ($singleCategoryId) {
+                    $query->where('category_id', $singleCategoryId);
+                })->with('categories', 'images')->where('id', '!=', $item->id)->take(20)->get();
+    
+                // Add the related items to the main item
+                $item['RecommendedItems'] = $relatedItems;
+            }
+    
+            return response()->json($item); // Return as JSON with RecommendedItems
+        } catch (\Exception $e) {
+            // Handle the exception, for example, return an error response
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * Store a newly created resource in storage.
@@ -151,6 +209,13 @@ class ItemController extends Controller
         return response()->json(['message' => 'item click count incremented successfully']);
     }
 
+    public function incrementItemLinkClick(Item $item)
+    {
+        $item->increment('item_link_click');
+
+        return response()->json(['message' => 'item link click count incremented successfully']);
+    }
+
     public function multipleDelete(Request $request)
     {
         $itemIds = $request->input('itemIds');
@@ -177,13 +242,28 @@ class ItemController extends Controller
 
     
 
-    public function searchByCategory (Request $request, $categoryId)
+    public function searchByCategory(Request $request, $categoryId)
     {
-        $category = Category::findorFail($categoryId);
-        $items = $category->items;
-
+        $perPage = $request->get('per_page', 40); // Number of items per page, default is 10
+    
+        $category = Category::findOrFail($categoryId);
+        $items = $category->items()
+            ->with('categories', 'images') // Eager load relationships
+            ->paginate($perPage);
+    
         return response()->json($items);
     }
+
+    public function recommendedSearch($categoryId = 1){
+
+        $category = Category::find($categoryId) ?? Category::find(1);
+    
+        $items = $category->items()
+            ->with('categories', 'images');
+    
+        return response()->json($items);
+    }
+    
 
 
 }

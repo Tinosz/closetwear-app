@@ -1,9 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Kanit:wght@100;200;300;400;500;600;700;800;900&family=Quicksand:wght@300&display=swap');
+
 * {
     box-sizing: border-box;
-}
+}    
 
-@import url('https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300&display=swap');
 
+/* a:hover {
+.links li a:hover {
+    border-bottom: 3px solid #D71313;
+    transition: 200ms ease-in-out;
+} */
 
 /* 
     HEADER 
@@ -19,7 +25,7 @@
 
 .nav-header {
     position: fixed;
-    font-family: 'quicksand', sans-serif;
+    font-family: 'kanit', sans-serif;
     width: 100%;
     position: relative;
     padding: 0 2rem;
@@ -54,6 +60,14 @@
 .navbar .logo a {
     font-size: 2.5rem;
     font-weight: bold;
+    color: #FFFFFF;
+    background-color: #D71313;
+    padding: 0 10px;
+}
+
+.navbar.active .logo a {
+    color: #FFFFFF;
+    background-color: #0C0C0C;
 }
 
 .navbar .links {
@@ -69,8 +83,7 @@
     text-decoration: none;
     color: #fff;
     font-size: 1.4rem;
-    font-weight: 400;
-    font-weight: bold;
+    font-weight: 300;
 }
 
 .links li a:hover {
@@ -96,8 +109,8 @@
 }
 
 .action-btn {
-    background-color: #D71313;
-    color: #fff;
+    background-color: transparent;
+    color: #0C0C0C;
     padding: 0.2rem 1.4rem;
     border: none;
     outline: none;
@@ -108,14 +121,34 @@
     transition: scale .2 ease;
 }
 
-.action-btn:hover {
-    scale: 1.05;
-    color: #fff;
-}
-
-.action-btn:active {
-    scale: 0.95;
-}
+.logout-button {
+    --c: #D71313; /* the color */
+  
+    box-shadow: 0 0 0 0.1em inset var(--c);
+    --_g: linear-gradient(var(--c) 0 0) no-repeat;
+    background:
+      var(--_g) calc(var(--_p, 0%) - 100%) 0%,
+      var(--_g) calc(200% - var(--_p, 0%)) 0%,
+      var(--_g) calc(var(--_p, 0%) - 100%) 100%,
+      var(--_g) calc(200% - var(--_p, 0%)) 100%;
+    background-size: 50.5% calc(var(--_p, 0%)/2 + 0.5%);
+    transition: background-size 0.4s, background-position 0s 0.4s;
+  }
+  
+  .logout-button:hover {
+    --_p: 100%;
+    color: #0C0C0C;
+    transition: background-position 0.4s, background-size 0s;
+  }
+  
+  .logout-button {
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.1em 0.6em;
+    font-weight: bold;
+    border: none;
+    border-radius: 0;
+  }
 
 /*
     DROPDOWN MENU
@@ -138,14 +171,18 @@
     transform: translateX(0); /* Slide in from the right when 'open' class is added */
   }
 
-.dropdown-menu .logo a {
+  .dropdown-menu .logo a {
     font-size: 2.5rem;
-    padding-top: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 8px 10px;
+    margin: 5px auto;
     font-weight: bold;
+    color: #FFFFFF;
+    background-color:#D71313;
+    text-align: center;
+    display: block; 
+    width: max-content; 
 }
+
 
 .dropdown-menu .logo a:hover {
     border-bottom: 3px solid #D71313;
@@ -154,7 +191,6 @@
 
 .dropdown-menu li {
     font-size: 1.5rem;
-    font-weight: bold;
     padding: 2rem;
     text-transform: uppercase;
     display: flex;

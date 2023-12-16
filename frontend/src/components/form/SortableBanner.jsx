@@ -27,13 +27,6 @@ function SortableBanner({
                   banner.banner_image
               }`;
 
-    const itemName =
-        typeof banner.banner_image === "object"
-            ? banner.banner_image.name
-            : banner.items.length > 0
-            ? banner.items[0].item_name
-            : "No Items Related";
-
     return (
         <tr ref={setNodeRef} style={style}>
             <td
@@ -72,7 +65,7 @@ function SortableBanner({
                             key={item.id}
                             className="flex items-center space-x-2"
                         >
-                            <span className="mr-2">{item.item_name}</span>
+                            <li className="mr-2 ">{item.item_name}</li>
                             {item.images.length > 0 && (
                                 <img
                                     className="w-10"
@@ -85,7 +78,7 @@ function SortableBanner({
                         </li>
                     ))
                 ) : (
-                    <li>No Items Related</li>
+                    <p>---</p>
                 )}
             </td>
 
@@ -103,17 +96,24 @@ function SortableBanner({
                 </ul>
             </td>
             <td>
-                <Link to={`/Admin/EditBanner/${banner.id}`}>Edit</Link>
+                <Link to={`/Admin/EditBanner/${banner.id}`}>
+                    <button className="edit-banner-button">Edit</button>
+                </Link>
             </td>
             <td>
-                <button onClick={() => onDelete(banner)}>Delete</button>
+                <button className="action-button" onClick={() => onDelete(banner)}>Delete</button>
             </td>
             <td>
-                <input
-                    type="checkbox"
-                    checked={selectedBanners.includes(banner.id)}
-                    onChange={() => toggleBannerSelection(banner.id)}
-                />
+                <div className="checkbox-wrapper-24">
+                    <input
+                        type="checkbox"
+                        id={banner.id}
+                        className="field__input"
+                        checked={selectedBanners.includes(banner.id)}
+                        onChange={() => toggleBannerSelection(banner.id)}
+                    />
+                    <label for={banner.id}><span></span></label>
+                </div>
             </td>
         </tr>
     );

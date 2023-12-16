@@ -13,18 +13,57 @@ import "./styles/ProductDetailsStyles.css";
 import shopee from "../page-assets/shopee.png";
 import whatsapp from "../page-assets/whatsapp.png";
 import tokopedia from "../page-assets/tokopedia.png";
+import { Link, useParams } from "react-router-dom";
+import axiosClient from "../../client/axios-client";
+import ProductDetailGallery from "../../components/ProductDetailGallery";
 
 const ProductDetails = () => {
-  const [images, setImages] = useState({
-    img1: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img2: "https://plus.unsplash.com/premium_photo-1664542157778-4dcccb04169e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img3: "https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img4: "https://swiperjs.com/demos/images/nature-4.jpg",
-    img5: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img6: "https://plus.unsplash.com/premium_photo-1664542157778-4dcccb04169e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img7: "https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    img8: "https://swiperjs.com/demos/images/nature-4.jpg",
-  });
+  const [images, setImages] = useState({});
+
+  const [item, setItem] = useState([]);
+  const [recommendedItem, setRecommendedItem] = useState([]);
+  const { id } = useParams({});
+
+  const getItem = () => {
+    axiosClient
+      .get(`items/details/${id}`)
+      .then((response) => {
+        console.log(response.data.RecommendedItems);
+        setItem(response.data);
+        setRecommendedItem(response.data.RecommendedItems);
+  
+        // Sort the images based on item_image_order
+        const sortedImages = response.data.images.sort((a, b) => a.item_image_order - b.item_image_order);
+  
+        // Dynamically set the images state
+        const imagesObject = {};
+        sortedImages.forEach((image, index) => {
+          imagesObject[`img${index + 1}`] = `${import.meta.env.VITE_API_BASE_URL}/storage/${image.item_image}`;
+        });
+        setImages(imagesObject);
+      })
+      .catch(() => {})
+      .finally(() => {
+});
+  };
+  
+
+  useEffect(()=> {
+    getItem();
+  }, [])
+
+
+
+
+  const handleLinkClick = async (link) => {
+    try {
+      await axiosClient.post(`/items/${id}/increment-link-click`);
+
+      window.open(link, '_blank');
+    } catch (error) {
+      console.error("Error incrementing click count:", error);
+    }
+  };
 
   const [activeImg, setActiveImg] = useState(images.img1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -60,6 +99,11 @@ const ProductDetails = () => {
     }, 150);
   };
 
+  useEffect(() => {
+    // Set default image index to 1 after fetching the item data
+    setActiveImg(images.img1);
+  }, [images]);
+  
   useEffect(() => {
     // Adjust visible range based on the active image index
     const keys = Object.keys(images);
@@ -101,72 +145,39 @@ const ProductDetails = () => {
     AOS.init();
   }, []);
 
-  const ImageCard = ({ imageSrc, title, description, tags }) => (
-    <div className="rounded overflow-hidden shadow-lg" data-aos="fade-up">
+  const ImageCard = ({ imageSrc, title, price, tags }) => (
+    <div className="overflow-hidden shadow-lg" data-aos="fade-up">
       <img className="w-full" src={imageSrc} alt={title} />
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{title}</div>
-        <p className="text-gray-700 text-base">{description}</p>
+        <p className="text-gray-700 text-base">Rp.{price}</p>
       </div>
       <div className="px-6 pt-4 pb-2">
-        {tags.map((tag, index) => (
+        {tags.map((tags, index) => (
           <span key={index} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            {tag}
+            {tags}
           </span>
         ))}
       </div>
     </div>
   );
   
-  const ImageGallery = () => (
-    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" >
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Mountain"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#winter']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="River"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#summer']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Forest"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#fall']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Forest"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#fall']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Forest"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#fall']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Forest"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#fall']}
-      />
+  const ImageGallery = ({ recommendedItem }) => (
+    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" >\
+    {recommendedItem.map((item) => (
+      <Link key={item.id} to={`/product/${item.id}`}>
+        <ImageCard key={item.id} title={item.item_name} imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.images[0].item_image}`} tags={item.categories.filter((category) => category.id !== 1).slice(0,3).map((category) => category.category_name)} price={item.item_price}/>
+      </Link>
+    ))}
     </div>
   );
 
-///// RETURN 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
   return (
     <>
       <div className="pd-wrap">
         <div className="product-wrap gap-12">
-          
           <div className="cover-wrap">
             <div className="cover-wrap2 gap-2">
               <button className="np-button prev" onClick={handlePrev}>
@@ -196,33 +207,34 @@ const ProductDetails = () => {
               </div>
             </div>
           </div>
+          {/* <ProductDetailGallery images={item.images} /> */}
 
           <div className="product-desc-wrap">
-            <div className="product-title">Product Name</div>
+            <div className="product-title">{item.item_name}</div>
             <div className="price-size">
               <div className="product-price">
                   <div className="price-cur">Rp</div>
-                  <div className="price-qty">200000</div>
+                  <div className="price-qty">{item.item_price}</div>
               </div>
             </div>
             <hr /><br />
-            <div className="product-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero dignissimos repellat dicta itaque similique at eligendi delectus, repudiandae nemo nesciunt doloremque asperiores molestias possimus maxime illum placeat atque totam voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident magni ea totam explicabo libero fuga fugiat quidem rem magnam, deleniti suscipit nemo est consequatur recusandae et! Eaque asperiores vitae facere. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem, explicabo soluta quasi veniam eius porro ut temporibus? Dicta incidunt, veniam ut impedit ipsam enim, ab nulla hic eligendi rerum natus. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste odio tempore voluptatum dolor facere quae exercitationem, possimus reprehenderit architecto enim numquam modi laborum esse repellendus ratione provident accusamus laudantium ipsam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero dignissimos repellat dicta itaque similique at eligendi delectus, repudiandae nemo nesciunt doloremque asperiores molestias possimus maxime illum placeat atque totam voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident magni ea totam explicabo libero fuga fugiat quidem rem magnam, deleniti suscipit nemo est consequatur recusandae et! Eaque asperiores vitae facere. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem, explicabo soluta quasi veniam eius porro ut temporibus? Dicta incidunt, veniam ut impedit ipsam enim, ab nulla hic eligendi rerum natus. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste odio tempore voluptatum dolor facere quae exercitationem, possimus reprehenderit architecto enim numquam modi laborum esse repellendus ratione provident accusamus laudantium ipsam?</div>
+            <div className="product-desc">{item.item_description}</div>
 
             <ul className="product-link">
             <li>
-              <a href="https://tokopedia.link/LPLsy8xrpFb" className="product-tooltip" target="_blank" rel="noopener noreferrer">
+              <a onClick={() => handleLinkClick(item.tokopedia_link)} className="product-tooltip cursor-pointer" target="_blank" rel="noopener noreferrer">
                 <img src={tokopedia} alt="" className="tokopedia" />
                 <span className="tooltip-text">Tokopedia</span>
               </a>
             </li>
             <li>
-              <a href="https://shopee.co.id/closetwear" className="product-tooltip" target="_blank" rel="noopener noreferrer">
+              <a onClick={() => handleLinkClick(item.shoppee_link)} className="product-tooltip cursor-pointer" target="_blank" rel="noopener noreferrer">
                 <img src={shopee} alt="" className="shopee" />
                 <span className="tooltip-text">Shopee</span>
               </a>
             </li>
             <li>
-              <a href="https://wa.me/yourphonenumber" className="product-tooltip" target="_blank" rel="noopener noreferrer">
+              <a onClick={() => handleLinkClick(item.whatsapp_link)} className="product-tooltip cursor-pointer" target="_blank" rel="noopener noreferrer">
                 <img src={whatsapp} alt="" className="whatsapp" />
                 <span className="tooltip-text">WhatsApp</span>
               </a>
@@ -236,7 +248,7 @@ const ProductDetails = () => {
 
       <div className="recommended-wrap">
         <h1 className="rec-title">Recommendation for You</h1>
-        <ImageGallery />
+        <ImageGallery recommendedItem={recommendedItem}/>
       </div>
     </div>
     </>

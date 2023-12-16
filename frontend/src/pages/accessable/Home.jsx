@@ -1,3 +1,5 @@
+
+  import Footer from '../../components/Footer';
 import react, { useEffect, useState } from "react";
 import "./styles/HomeStyles.css";
 import Carousel from "react-multi-carousel";
@@ -5,7 +7,26 @@ import "react-multi-carousel/lib/styles.css";
 import Banner from "../../components/Banner";
 import axiosClient from "../../client/axios-client";
 
+
+
 export default function Home() {
+    const [items, setItems] = useState([]);
+
+    const getNewlyReleased = () => {
+        axiosClient.get("itemsGetNewlyRelease").then((response) => {
+            console.log(response.data);
+            setItems(response.data);
+        }).catch(() => {
+
+        }).finally(()=> {
+
+        })
+    }
+
+    useEffect(()=> {
+        getNewlyReleased();
+    }, [])
+
     const getItems = () => {};
 
     const responsive = {
@@ -31,92 +52,48 @@ export default function Home() {
         }
     };
 
-    function NewReleased(props) {
-    return(
-        <div className='new-release-card'>
+    const handleClick = async (props) => {
+        try {
+          await axiosClient.post(`/items/${props.id}/increment-click`);
+          window.location.href = `/product/${props.id}`;
+        } catch (error) {
+          console.error("Error incrementing props click count:", error);
+        }
+      };
+    
+
+      function NewReleased(props) {
+        const handleSeeProductClick = () => {
+          handleClick(props);
+        };
+      
+        return (
+          <div className='new-release-card'>
             <div className='new-release-img' style={{ backgroundImage: `url(${props.url})` }} alt="aa" />
             <div className='new-release-bottom-box'>
-                <h2 className='new-release-product'>{props.name}</h2>
-                <p className='new-release-price'>{props.price}</p>
-                <p className='new-release-desc'>{props.desc}</p>
-                <a href={`/products/${props.id}`} className='new-release-btn'>
-                    See Product
-                </a>
-
-
+              <h2 className='new-release-product'>{props.name}</h2>
+              <p className='new-release-price text-black'>Rp. {props.price}</p>
+              <button onClick={handleSeeProductClick} className='new-release-btn'>
+                See Product
+              </button>
             </div>
-        </div>
-    )
-    }
+          </div>
+        );
+      }
+      
 
-    const newReleasedData = [
-    {
-        id: 1,
-        imageUrl: "https://plus.unsplash.com/premium_photo-1675186049409-f9f8f60ebb5e?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Sweater",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 2,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Shoes",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 3,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Socks",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 4,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Hats",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 5,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Bags",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 6,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Shirts",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 7,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Trousers",
-        price: "$30",
-        desc: "Some description"
-    },
-    {
-        id: 8,
-        imageUrl: "https://images.unsplash.com/photo-1701707244542-bc22a6e5a8eb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        name: "Sport Gloves",
-        price: "$30",
-        desc: "Some description"
-    },
-    ]
-
-    const newlyReleased = newReleasedData.map(item => (
-    <NewReleased 
-        id={item.id}
-        name={item.name} 
-        url={item.imageUrl} 
-        price={item.price} 
-        desc={item.desc}
-    />
-    ))
+    const newlyReleased = items.map(item => (
+        <NewReleased
+            key={item.id}
+          id={item.id}
+          name={item.item_name}  
+          url={`${import.meta.env.VITE_API_BASE_URL}/storage/${
+            item.images[0].item_image
+        }`} 
+          price={item.item_price} 
+          desc={item.item_description}
+        />
+      ));
 
     function NewReleases() {
         return(
@@ -125,8 +102,8 @@ export default function Home() {
                     <section id='new-release'>
                         <small className='new-release-title'>New Release!</small>
     
-                        <Carousel className='new-release-wrap' responsive={responsive}>
-                            {newlyReleased}
+                        <Carousel className='new-release-wrap' arrows={true} showDots={true} swipeable={true} draggable={true}  responsive={responsive}>
+                            {newlyReleased} 
                         </Carousel>
                         
                     </section>
@@ -196,6 +173,8 @@ export default function Home() {
             <Banner />
             <SectionContent />
             <NewReleases />
+
+
         </div>
         </>
     );
