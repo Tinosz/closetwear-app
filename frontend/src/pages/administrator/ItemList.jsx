@@ -45,18 +45,26 @@ export default function ItemList() {
     if (!window.confirm("Are you sure you want to delete this item?")) {
       return;
     }
-  
+
     axiosClient.delete(`/items/${item.id}`).then(() => {
       getItems();
       window.location.reload();
     });
   };
-  
+
+  const toggleItemSelection = (itemId) => {
+    setSelectedItems((prevSelected) =>
+      prevSelected.includes(itemId)
+        ? prevSelected.filter((id) => id !== itemId)
+        : [...prevSelected, itemId]
+    );
+  };
+
   const onMultipleDelete = () => {
     if (!window.confirm("Are you sure you want to delete the selected items?")) {
       return;
     }
-  
+
     axiosClient
       .delete("/items/delete-multiple", {
         data: { itemIds: selectedItems },
@@ -67,7 +75,6 @@ export default function ItemList() {
         window.location.reload();
       });
   };
-  
 
   const onPageChange = (label) => {
     let page;
