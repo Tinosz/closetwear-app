@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('item_name')->index();
             $table->integer('item_price');
-            $table->string('item_description');
+            $table->longText('item_description');
             $table->string('tokopedia_link');
             $table->string('shoppee_link');
             $table->string('whatsapp_link');

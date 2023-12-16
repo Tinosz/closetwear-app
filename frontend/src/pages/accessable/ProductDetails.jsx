@@ -13,7 +13,7 @@ import "./styles/ProductDetailsStyles.css";
 import shopee from "../page-assets/shopee.png";
 import whatsapp from "../page-assets/whatsapp.png";
 import tokopedia from "../page-assets/tokopedia.png";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axiosClient from "../../client/axios-client";
 import ProductDetailGallery from "../../components/ProductDetailGallery";
 
@@ -21,14 +21,16 @@ const ProductDetails = () => {
   const [images, setImages] = useState({});
 
   const [item, setItem] = useState([]);
+  const [recommendedItem, setRecommendedItem] = useState([]);
   const { id } = useParams({});
 
   const getItem = () => {
     axiosClient
-      .get(`items/${id}`)
+      .get(`items/details/${id}`)
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.RecommendedItems);
         setItem(response.data);
+        setRecommendedItem(response.data.RecommendedItems);
   
         // Sort the images based on item_image_order
         const sortedImages = response.data.images.sort((a, b) => a.item_image_order - b.item_image_order);
@@ -41,24 +43,17 @@ const ProductDetails = () => {
         setImages(imagesObject);
       })
       .catch(() => {})
-      .finally(() => {    console.log(item.images);
+      .finally(() => {
 });
-  };
-
-  const fetchItemsByCategory = async (categoryId = 1) => {
-    try {
-      const response = await axiosClient.get(`/api/items/by-category/${categoryId}`);
-      setItems(response.data);
-    } catch (error) {
-      console.error('Error fetching items:', error);
-    }
   };
   
 
   useEffect(()=> {
     getItem();
-    fetchItemsByCategory();
   }, [])
+
+
+
 
   const handleLinkClick = async (link) => {
     try {
@@ -150,61 +145,30 @@ const ProductDetails = () => {
     AOS.init();
   }, []);
 
-  const ImageCard = ({ imageSrc, title, description, tags }) => (
+  const ImageCard = ({ imageSrc, title, price, tags }) => (
     <div className="overflow-hidden shadow-lg" data-aos="fade-up">
       <img className="w-full" src={imageSrc} alt={title} />
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{title}</div>
-        <p className="text-gray-700 text-base">{description}</p>
+        <p className="text-gray-700 text-base">Rp.{price}</p>
       </div>
       <div className="px-6 pt-4 pb-2">
-        {tags.map((tag, index) => (
+        {tags.map((tags, index) => (
           <span key={index} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            {tag}
+            {tags}
           </span>
         ))}
       </div>
     </div>
   );
   
-  const ImageGallery = () => (
-    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" >
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Mountain"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#winter']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="River"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#summer']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Forest"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#fall']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Forest"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#fall']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Forest"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#fall']}
-      />
-      <ImageCard
-        imageSrc="https://swiperjs.com/demos/images/nature-4.jpg"
-        title="Forest"
-        description="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, Nonea! Maiores et perferendis eaque, exercitationem praesentium nihil."
-        tags={['#photography', '#travel', '#fall']}
-      />
+  const ImageGallery = ({ recommendedItem }) => (
+    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" >\
+    {recommendedItem.map((item) => (
+      <Link key={item.id} to={`/product/${item.id}`}>
+        <ImageCard key={item.id} title={item.item_name} imageSrc={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.images[0].item_image}`} tags={item.categories.filter((category) => category.id !== 1).slice(0,3).map((category) => category.category_name)} price={item.item_price}/>
+      </Link>
+    ))}
     </div>
   );
 
@@ -284,7 +248,7 @@ const ProductDetails = () => {
 
       <div className="recommended-wrap">
         <h1 className="rec-title">Recommendation for You</h1>
-        <ImageGallery />
+        <ImageGallery recommendedItem={recommendedItem}/>
       </div>
     </div>
     </>

@@ -94,19 +94,21 @@ export default function EditCategory() {
         ) {
             return;
         }
-
+    
         const deletePromises = selectedCategories.map((categoryId) => {
             return axiosClient.delete(`/categories/${categoryId}`);
         });
-
+    
         Promise.all(deletePromises)
             .then(() => {
+                // Clear selectedCategories after successful deletion
+                setSelectedCategories([]);
                 getCategories();
             })
             .catch((err) => {
                 console.log(err);
             });
-    };
+    };x``
 
     const toggleCategorySelection = (categoryId) => {
         setSelectedCategories((prevSelected) => {

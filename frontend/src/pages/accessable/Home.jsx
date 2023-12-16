@@ -8,6 +8,7 @@ import Banner from "../../components/Banner";
 import axiosClient from "../../client/axios-client";
 
 
+
 export default function Home() {
     const [items, setItems] = useState([]);
 
@@ -85,10 +86,10 @@ export default function Home() {
         <NewReleased
             key={item.id}
           id={item.id}
-          name={item.item_name}  // Adjust property names based on your API response
+          name={item.item_name}  
           url={`${import.meta.env.VITE_API_BASE_URL}/storage/${
             item.images[0].item_image
-        }`}  // Assuming images is an array and selecting the first image
+        }`} 
           price={item.item_price} 
           desc={item.item_description}
         />
@@ -101,8 +102,8 @@ export default function Home() {
                     <section id='new-release'>
                         <small className='new-release-title'>New Release!</small>
     
-                        <Carousel className='new-release-wrap' responsive={responsive}>
-                            {newlyReleased}
+                        <Carousel className='new-release-wrap' arrows={true} showDots={true} swipeable={true} draggable={true}  responsive={responsive}>
+                            {newlyReleased} 
                         </Carousel>
                         
                     </section>

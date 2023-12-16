@@ -36,13 +36,13 @@ Route::middleware('auth:sanctum')->group(function() {
 Route::post('/adminLogin', [AuthController::class, 'adminLogin']);
 Route::get('/itemsGetNewlyRelease', [ItemController::class, 'newlyReleasedItems']);
 Route::get('/items', [ItemController::class, 'index']);
-Route::get('/items/{id}', [ItemController::class, 'showItem']);
+Route::get('/items/details/{id}', [ItemController::class, 'showItem']);
 Route::get('/itemsPaginated', [ItemController::class, 'indexPaginated']);
 Route::post('/items/{item}/increment-click', [ItemController::class, 'incrementItemClick']);
 Route::post('/items/{item}/increment-link-click', [ItemController::class, 'incrementItemLinkClick']);
 Route::get('/banners', [BannerController::class, 'index']);
 Route::get('/search', [ItemController::class, 'search']);
 Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/items/search-by-category/{categoryId}', [ItemController::class, 'searchByCategory']);
+Route::get('/items/by-category', [ItemController::class, 'searchByCategory']);
 Route::get('/banners/{bannerId}/related-items', [BannerController::class, 'getRelatedItems']);
 Route::get('/items/by-category/{categoryId?}', [ItemController::class, 'recommendedSearch']);

@@ -93,7 +93,7 @@ export default function CatalogGallery() {
 //     AOS.init();
 //   }, []);
 
-  const ImageCard = ({ imageSrc, title, description, tags }) => (
+  const ImageCard = ({ imageSrc, title, price, tags }) => (
     // <div className="image-card">
     //   <img className="image" src={imageSrc} alt={title} />
     //   <div className="content">
@@ -116,7 +116,7 @@ export default function CatalogGallery() {
 
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{title}</div>
-        <div className="price">Rp. 12,000</div>
+        <div className="price">Rp.{price}</div>
       </div>
       <div className="px-6 pt-4 pb-2">
         {tags.map((tag, index) => (
@@ -142,6 +142,7 @@ const ImageGallery = () => (
                   .filter((category) => category.id !== 1)
                   .slice(0, 3)
                   .map((category) => category.category_name)}
+                price={item.item_price}
               />
             </div>
           </Link>

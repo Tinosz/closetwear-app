@@ -18,7 +18,7 @@ export default function ItemList() {
     const [pagination, setPagination] = useState({});
     const [filteredItems, setFilteredItems] = useState([]);
     const { filteredData, handleFilter } = useSearch();
-    const [searchWord, setSearchWord] = useState("");
+    const [searchWord] = useState("");
 
 
     const handleEditClick = async (item) => {
@@ -117,29 +117,6 @@ export default function ItemList() {
         parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
     });
 
-  
-
-    
-      const ImageCard = ({ imageSrc, title, description, tags }) => (
-        <div className="image-card">
-          <img className="image" src={imageSrc} alt={title} />
-          <div className="content">
-            <div className="title">{title}</div>
-            <div className="price">Rp. 12,000</div>
-          </div>
-          <div className="tags">
-            {tags.map((tag, index) => (
-              <span key={index} className="tag">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      );
-    
-      const handleResultItemClick = (itemName) => {
-        setSearchWord(itemName);
-      };
     return (
         <>
             <div className="list-wrap">
