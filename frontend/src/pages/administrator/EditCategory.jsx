@@ -108,7 +108,7 @@ export default function EditCategory() {
             .catch((err) => {
                 console.log(err);
             });
-    };x``
+    };
 
     const toggleCategorySelection = (categoryId) => {
         setSelectedCategories((prevSelected) => {
