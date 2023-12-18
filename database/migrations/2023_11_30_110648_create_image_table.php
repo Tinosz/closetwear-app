@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id()->onDelete('cascade');
-            $table->foreignID('item_id')->constrained('items');
+            $table->foreignID('item_id')->constrained('items')->onDelete('cascade');
             $table->string('item_image');
             $table->integer('item_image_order');
             $table->timestamps();
-
         });
     }
 

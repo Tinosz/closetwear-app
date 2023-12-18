@@ -13,13 +13,18 @@ import { SortableItem } from "../../components/form/SortableItems";
 
 import "./styles/EditItemStyles.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export default function EditItem() {
     const { id } = useParams();
     const { setNotification } = useStateContext();
     const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
+    const [featuredCategories, setFeaturedCategories] = useState([]);
+    const [nonFeaturedCategories, setNonFeaturedCategories] = useState([]);
     const [errors, setErrors] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [item, setItem] = useState({
         id: null,
         item_name: "",
@@ -36,9 +41,15 @@ export default function EditItem() {
     const onSubmit = (e) => {
         e.preventDefault();
 
+        if (isSubmitting) {
+            return;
+        }
+
+        setIsSubmitting(true);
+
         let newOrder = [];
 
-    // If it's an update, reset the order array
+        // If it's an update, reset the order array
         if (!id) {
             newOrder = Array.from(
                 { length: item.images.length },
@@ -55,7 +66,6 @@ export default function EditItem() {
         item.categories.forEach((category) => {
             formData.append("categories[]", category);
         });
-        
 
         formData.append("tokopedia_link", item.tokopedia_link);
         formData.append("shoppee_link", item.shoppee_link);
@@ -63,14 +73,20 @@ export default function EditItem() {
         formData.append("available_stock", item.available_stock);
 
         for (let i = 0; i < item.images.length; i++) {
-            formData.append(`images[${i}][item_image]`, item.images[i].item_image);
-            
+            formData.append(
+                `images[${i}][item_image]`,
+                item.images[i].item_image
+            );
+
             // If it's an update, reset the order; otherwise, use the new order array
-            formData.append(`images[${i}][item_image_order]`, id ? i + 1 : newOrder[i]);
+            formData.append(
+                `images[${i}][item_image_order]`,
+                id ? i + 1 : newOrder[i]
+            );
         }
 
-        console.log(formData)
-        
+        // console.log(formData)
+
         if (id) {
             formData.append("_method", "PUT");
         }
@@ -91,9 +107,10 @@ export default function EditItem() {
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
+                    setIsSubmitting(false)
                 });
         } else {
-            console.log(formData);
+            // console.log(formData);
             axiosClient
                 .post("/items", formData, {
                     headers: {
@@ -105,11 +122,12 @@ export default function EditItem() {
                     navigate("/Admin/ItemList");
                 })
                 .catch((err) => {
-                    console.log(err);
+                    // console.log(err);
                     const response = err.response;
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
+                    setIsSubmitting(false)
                 });
         }
     };
@@ -121,7 +139,7 @@ export default function EditItem() {
                 { length: acceptedFiles.length },
                 (_, index) => numUploadedImages + index + 1
             );
-    
+
             return {
                 ...prevItem,
                 images: [
@@ -134,12 +152,15 @@ export default function EditItem() {
             };
         });
     }, []);
-    
+
     const handleImageRemove = (indexToRemove) => {
         setItem((prevItem) => {
-            const updatedImages = prevItem.images.filter(
-                (_, index) => index !== indexToRemove
-            );
+            const updatedImages = prevItem.images
+                .filter((_, index) => index !== indexToRemove)
+                .map((image, index) => ({
+                    ...image,
+                    item_image_order: index + 1,
+                }));
     
             return {
                 ...prevItem,
@@ -160,8 +181,18 @@ export default function EditItem() {
         axiosClient
             .get("categories")
             .then((response) => {
-                console.log(response.data);
-                setCategories(response.data);
+                const allCategories = response.data;
+
+                const featured = allCategories.filter(
+                    (category) => category.featured === 1
+                );
+                const nonFeatured = allCategories.filter(
+                    (category) => category.featured === 0
+                );
+
+                setCategories(allCategories);
+                setFeaturedCategories(featured);
+                setNonFeaturedCategories(nonFeatured);
             })
             .catch(() => {})
             .finally(() => {
@@ -171,27 +202,32 @@ export default function EditItem() {
 
     useEffect(() => {
         getCategories();
-      
-        if (id) {
-          axiosClient
-            .get(`/items/${id}`)
-            .then(({ data }) => {
-              const categoryIds = data.categories.map(category => category.id);
-              const sortedImages = data.images.slice().sort((a, b) => a.item_image_order - b.item_image_order);
 
-            setItem(prevItem => ({
-            ...prevItem,
-            ...data,
-            categories: categoryIds,
-            images: sortedImages, // Update the images in sorted order
-            }));
-      
-              console.log(data);
-            })
-            .catch(() => {});
+        if (id) {
+            axiosClient
+                .get(`/items/${id}`)
+                .then(({ data }) => {
+                    const categoryIds = data.categories.map(
+                        (category) => category.id
+                    );
+                    const sortedImages = data.images
+                        .slice()
+                        .sort(
+                            (a, b) => a.item_image_order - b.item_image_order
+                        );
+
+                    setItem((prevItem) => ({
+                        ...prevItem,
+                        ...data,
+                        categories: categoryIds,
+                        images: sortedImages, // Update the images in sorted order
+                    }));
+
+                      console.log(data);
+                })
+                .catch(() => {});
         }
-      }, [id]);
-      
+    }, [id]);
 
     function handleDragEnd(event) {
         const { active, over } = event;
@@ -200,17 +236,17 @@ export default function EditItem() {
                 const activeIndex = prevItem.images.findIndex(
                     (image) => image.item_image_order === active.id
                 );
-    
+
                 const overIndex = prevItem.images.findIndex(
                     (image) => image.item_image_order === over.id
                 );
-    
+
                 const reorderedImages = arrayMove(
                     prevItem.images,
                     activeIndex,
                     overIndex
                 );
-    
+
                 return {
                     ...prevItem,
                     images: reorderedImages,
@@ -218,9 +254,20 @@ export default function EditItem() {
             });
         }
     }
-    
+
+    const parallaxBg = document.querySelector('.parallax-bg');
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
+    });
+
     return (
         <>
+        <div className="parallax-bg"></div>
+        <div className="overlay"></div>
+        <div className="edit-wrap">
+        <div className="edit-item">
             {errors && (
                 <div className="bg-red-500 text-white p-2 mb-4">
                     <ul>
@@ -230,87 +277,190 @@ export default function EditItem() {
                     </ul>
                 </div>
             )}
-            <form onSubmit={onSubmit}>
-                <input
-                    placeholder="Item Name"
-                    onChange={(e) =>
-                        setItem({ ...item, item_name: e.target.value })
-                    }
-                    value={item.item_name}
-                />
-                <input
-                    type="number"
-                    placeholder="Price"
-                    onChange={(e) =>
-                        setItem({ ...item, item_price: e.target.value })
-                    }
-                    value={item.item_price}
-                />
-                <textarea
-                    placeholder="Item Description"
-                    onChange={(e) =>
-                        setItem({ ...item, item_description: e.target.value })
-                    }
-                    value={item.item_description}
-                />
-                {categories.length > 0 ? (
-                    
-                    categories.filter(category => category.id !== 1).map((category) => (
-                        <label key={category.id}>
-                            <input
-                                type="checkbox"
-                                checked={item.categories.includes(category.id)}
-                                onChange={() => {
-                                    setItem((prevItem) => {
-                                        const updatedCategoryId =
-                                            prevItem.categories.includes(
-                                                category.id
-                                            )
-                                                ? prevItem.categories.filter(
-                                                      (id) => id !== category.id
-                                                  )
-                                                : [
-                                                      ...prevItem.categories,
-                                                      category.id,
-                                                  ];
+            <form className="form-wrap" onSubmit={onSubmit}>
+                <div className="field field_v3">
+                    <label for="item-name" className="ha-screen-reader">Item Name</label>
+                    <input
+                        placeholder="Item Name"
+                        id="item-name"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, item_name: e.target.value })
+                        }
+                        value={item.item_name}
+                    />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Item Name</span>
+                    </span>
+                </div>
 
-                                        return {
-                                            ...prevItem,
-                                            categories: updatedCategoryId,
-                                        };
-                                    });
-                                }}
-                            />
-                            {category.category_name}
-                        </label>
-                    ))
-                ) : (
-                    <p>No categories available.</p>
+                <div className="field field_v3">
+                    <label for="item-price" className="ha-screen-reader">Item Price</label>
+                        <input
+                        type="number"
+                        id="item-price"
+                        className="field__input"
+                        placeholder="Price"
+                        onChange={(e) =>
+                            setItem({ ...item, item_price: e.target.value })
+                        }
+                        value={item.item_price}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Item Price</span>
+                    </span>
+                </div>
+
+                <div className="field field_v3">
+                    <label for="item-desc" className="ha-screen-reader">Item Description</label>
+                        <textarea
+                        placeholder="Item Description"
+                        id="item-desc"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, item_description: e.target.value })
+                        }
+                        value={item.item_description}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Item Description</span>
+                    </span>
+                </div>
+                
+                
+                {featuredCategories.length > 0 && (
+                    <div>
+                        <h3>Featured Categories:</h3>
+                        {featuredCategories.map((category) => (
+                            <div className="checkbox-wrapper-24">
+                                <input
+                                    type="checkbox"
+                                    id={category.id}
+                                    checked={item.categories.includes(
+                                        category.id
+                                    )}
+                                    onChange={() => {
+                                        setItem((prevItem) => {
+                                            const updatedCategoryId =
+                                                prevItem.categories.includes(
+                                                    category.id
+                                                )
+                                                    ? prevItem.categories.filter(
+                                                          (id) =>
+                                                              id !== category.id
+                                                      )
+                                                    : [
+                                                          ...prevItem.categories,
+                                                          category.id,
+                                                      ];
+        
+                                            return {
+                                                ...prevItem,
+                                                categories: updatedCategoryId,
+                                            };
+                                        });
+                                    }}
+                                />
+                            <label for={category.id} key={category.id}>
+                                <span></span>{category.category_name} <FontAwesomeIcon icon={faStar} />
+                            </label>
+                            </div>
+                        ))}
+                    </div>
                 )}
 
-                <input
-                    placeholder="Tokopedia Link"
-                    onChange={(e) =>
-                        setItem({ ...item, tokopedia_link: e.target.value })
-                    }
-                    value={item.tokopedia_link}
-                />
-                <input
-                    placeholder="Shoppee Link"
-                    onChange={(e) =>
-                        setItem({ ...item, shoppee_link: e.target.value })
-                    }
-                    value={item.shoppee_link}
-                />
-                <input
-                    placeholder="Whatsapp Link"
-                    onChange={(e) =>
-                        setItem({ ...item, whatsapp_link: e.target.value })
-                    }
-                    value={item.whatsapp_link}
-                />
+                {nonFeaturedCategories.length > 0 && (
+                    <div>
+                        <h3>Non-Featured Categories:</h3>
+                        {nonFeaturedCategories.filter((category) => category.id !== 1).map((category) => (
+                            <div className="checkbox-wrapper-24">
+                                <input
+                                    type="checkbox"
+                                    id={category.id}
+                                    checked={item.categories.includes(
+                                        category.id
+                                    )}
+                                    onChange={() => {
+                                        setItem((prevItem) => {
+                                            const updatedCategoryId =
+                                                prevItem.categories.includes(
+                                                    category.id
+                                                )
+                                                    ? prevItem.categories.filter(
+                                                          (id) =>
+                                                              id !== category.id
+                                                      )
+                                                    : [
+                                                          ...prevItem.categories,
+                                                          category.id,
+                                                      ];
 
-                <div {...getRootProps()}>
+                                            return {
+                                                ...prevItem,
+                                                categories: updatedCategoryId,
+                                            };
+                                        });
+                                    }}
+                                />
+                            <label for={category.id} key={category.id}>
+                                <span></span>{category.category_name}
+                            </label>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                <div className="field field_v3">
+                    <label for="tokopedia" className="ha-screen-reader">Tokopedia  Link </label>
+                        <input
+                        placeholder="Tokopedia Link"
+                        id="tokopedia"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, tokopedia_link: e.target.value })
+                        }
+                        value={item.tokopedia_link}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Tokopedia Link</span>
+                    </span>
+                </div>
+
+                <div className="field field_v3">
+                    <label for="shopee" className="ha-screen-reader">Shopee Link </label>
+                        <input
+                        placeholder="Shoppee Link"
+                        id="shopee"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, shoppee_link: e.target.value })
+                        }
+                        value={item.shoppee_link}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">Shopee Link</span>
+                    </span>
+                </div>
+
+                <div className="field field_v3">
+                    <label for="whatsapp" className="ha-screen-reader">WhatsApp  Link </label>
+                        <input
+                        placeholder="Whatsapp Link"
+                        id="whatsapp"
+                        className="field__input"
+                        onChange={(e) =>
+                            setItem({ ...item, whatsapp_link: e.target.value })
+                        }
+                        value={item.whatsapp_link}
+                        />
+                    <span class="field__label-wrap" aria-hidden="true">
+                        <span class="field__label">WhatsApp Link</span>
+                    </span>
+                </div>
+
+                <div
+                    {...getRootProps()}
+                    className="border-4 h-[250px] w-[500px] rounded-md p-10 m-10 border-red-500 flex items-center justify-center"
+                >
                     <input {...getInputProps()} />
                     {isDragActive ? (
                         <p>Drop your images here ...</p>
@@ -321,66 +471,62 @@ export default function EditItem() {
                         </p>
                     )}
                 </div>
+
+                <div className="drag-img-wrap">
                 <DndContext
-    collisionDetection={closestCenter}
-    onDragEnd={handleDragEnd}
->
-    {item.images.length > 0 && (
-        <div>
-            <h3>Selected Images:</h3>
-            <SortableContext
-                items={item.images.map((image) => image.item_image_order)}
-                strategy={horizontalListSortingStrategy}
-            >
-                {/* Sort the images array by item_image_order */}
-                {item.images
-                    .map((image, index) => (
-                        <SortableItem
-                            key={image.item_image_order}
-                            id={image.item_image_order}
-                            index={index}
-                            handleImageRemove={handleImageRemove}
-                            image={image.item_image}
-                            handle
-                        />
-                    ))}
-            </SortableContext>
-        </div>
-    )}
-</DndContext>
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                >
+                    {item.images.length > 0 && (
+                        <div >
+                            <h3>Selected Images:</h3>
+                            <SortableContext
+                                items={item.images.map(
+                                    (image) => image.item_image_order
+                                )}
+                                
+                                strategy={horizontalListSortingStrategy}
+                            >
+                                {item.images.map((image, index) => (
+                                    <SortableItem
+                                        key={image.id}
+                                        id={image.item_image_order}
+                                        index={index}
+                                        handleImageRemove={handleImageRemove}
+                                        image={image.item_image}
+                                        handle
+                                    />
+                                ))}
+                            </SortableContext>
+                        </div>
+                    )}
+                </DndContext>
+                </div>
 
-
-                <p>Available Stock:</p>
-                <label>
+                <p>Available Stock?</p>
+                <div className="checkbox-wrapper-24">
                     <input
-                        type="radio"
-                        name="available_stock"
-                        value="1"
+                        type="checkbox"
+                        id="available"
                         checked={Number(item.available_stock) === 1}
                         onChange={() =>
-                            setItem({ ...item, available_stock: 1 })
+                            setItem({
+                                ...item,
+                                available_stock:
+                                    item.available_stock === 1 ? 0 : 1,
+                            })
                         }
                     />
-                    Yes
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="available_stock"
-                        value="0"
-                        checked={Number(item.available_stock) === 0}
-                        onChange={() =>
-                            setItem({ ...item, available_stock: 0 })
-                        }
-                    />
-                    No
-                </label>
+                <label for="available"><span></span>Available</label>
+                </div>
                 <div>
-                    <button type="submit" className="bg-blue-300">
-                        Add Item
+                    <button type="submit" className="bg-blue-300" disabled={isSubmitting}>
+                    {id ? "Update Item" : "Add Item"}
                     </button>
                 </div>
             </form>
+        </div>
+        </div>
         </>
     );
 }

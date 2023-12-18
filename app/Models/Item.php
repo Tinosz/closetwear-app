@@ -19,6 +19,7 @@ class Item extends Model
         'available_stock',
         'item_click',
         'item_link_click',
+        'created_at'
     ];
 
     public function categories()
@@ -29,6 +30,11 @@ class Item extends Model
     public function images()
     {
         return $this->hasMany(Image::class, 'item_id');
+    }
+
+    public function banners()
+    {
+        return $this->belongsToMany(Banner::class, 'item_banner', 'item_id', 'banner_id');
     }
 
 }

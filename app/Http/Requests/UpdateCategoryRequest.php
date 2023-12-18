@@ -23,6 +23,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'category_name' => 'required',
+            'featured' => '||',
         ];
     }
 }

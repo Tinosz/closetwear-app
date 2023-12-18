@@ -6,13 +6,58 @@ import AdminLogin from "./pages/administrator/AdminLogin";
 import AccessableLayout from "./page-groups/AccessableLayout";
 import GuestLayout from "./page-groups/GuestLayout";
 import ItemList from "./pages/administrator/ItemList";
+import Home from "./pages/accessable/Home";
+
+import BannerList from "./pages/administrator/BannerList";
+import EditBanner from "./pages/administrator/EditBanner";
+import SearchPage from "./page-groups/SearchPage";
+import Catalog from "./pages/accessable/Catalog";
+import ProductDetail from "./pages/accessable/ProductDetails";
+import AboutBrand from "./pages/accessable/AboutBrand";
+import ProductDetailsCopy from "./pages/accessable/ProductDetailsCopy";
+
+
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <AccessableLayout />,
         children: [
-            
+            {
+                path: '/',
+                element: <Home />
+            },
+            {
+                path: '/Product',
+                element: <ProductDetail />
+            },
+            {
+                path: '/Product/:id',
+                // element: <ProductDetail />
+                element: <ProductDetailsCopy />
+
+            },
+            {
+                path: '/Catalog',
+                element: <Catalog key="AllPreview"/>
+            },
+            {
+                path: '/Catalog/:id',
+                element: <Catalog key="CategoryPreview"/>
+            },
+            {
+                path: '/Catalog/Banner/:bannerId',
+                element: <Catalog key="BannerPreview" />
+            },
+            {
+                path: "/Search",
+                element: <SearchPage />,
+            },
+            {
+                path: "/AboutBrand",
+                element: <AboutBrand/>
+            },
+
         ]
     },
     {
@@ -48,7 +93,20 @@ const router = createBrowserRouter([
             {
                 path: '/Admin/ItemList',
                 element: <ItemList />
+            },
+            {
+                path: 'Admin/BannerList',
+                element: <BannerList />
+            },
+            {
+                path: 'Admin/EditBanner',
+                element:<EditBanner key="userCreate"/>
+            },
+            {
+                path: 'Admin/EditBanner/:id',
+                element: <EditBanner key="userUpdate"/>
             }
+
         ]
     }
 ]);
