@@ -153,26 +153,28 @@ class ItemController extends Controller
         $categoryIds = $request->input('categories');
         $item->categories()->sync($categoryIds);
     
-        if ($request->file('images')){
-            $images = $request->file('images');
-            foreach ($images as $index => $imageData) {
-                $imagePath = $imageData['item_image']->store('images', 'public');
-    
+        $imagesData = $request->input('images');
+
+        foreach ($imagesData as $index => $imageData) {
+            if ($request->hasFile("images.$index.item_image")) {
+                // File input
+                $imagePath = $request->file("images.$index.item_image")->store('images', 'public');
+        
                 Image::create([
                     'item_id' => $item->id,
                     'item_image' => $imagePath,
-                    'item_image_order' => $request->input('images.'.$index.'.item_image_order'),                ]);
-            }
-        } else {
-            $imagesData = $request->input('images');
-            foreach ($imagesData as $index => $imageData) {
+                    'item_image_order' => $imageData['item_image_order'],
+                ]);
+            } else {
+                // Non-file input
                 $imageOrder = $imageData['item_image_order'];
-    
+        
                 Image::where('item_id', $item->id)
                     ->where('item_image', $imageData['item_image'])
                     ->update(['item_image_order' => $imageOrder]);
             }
         }
+        
 
         $deletedImages = array_diff($existingImages, $request->input('images.*.item_image'));
         foreach ($deletedImages as $deletedImage) {

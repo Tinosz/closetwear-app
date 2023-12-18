@@ -78,7 +78,7 @@ function SortableBanner({
                         </li>
                     ))
                 ) : (
-                    <p>---</p>
+                    <p>No Related Items</p>
                 )}
             </td>
 

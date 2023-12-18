@@ -10,7 +10,7 @@ import {
 } from "@dnd-kit/sortable";
 import SortableBanner from "../../components/form/SortableBanner";
 
-import "./styles/BannerListStyles.css"
+import "./styles/BannerListStyles.css";
 
 export default function BannerList() {
     const { notification } = useStateContext();
@@ -112,86 +112,125 @@ export default function BannerList() {
         }
     }
 
-    const parallaxBg = document.querySelector('.parallax-bg');
+    const parallaxBg = document.querySelector(".parallax-bg");
 
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
         const scrollPosition = window.scrollY;
-        parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
+        parallaxBg.style.transform = `translate3d(0, ${
+            scrollPosition * 1
+        }px, 0)`;
     });
-    
+
     return (
         <>
-        <div className="bl-wrap">
-        <div className="parallax-bg"></div>
-        <div className="bl-container">
-            {notification && <div>{notification}</div>}
-            <Link to="/Admin/EditBanner"><a>
-            <button className="edit-banner-button">Add New Banner</button>
-            </a></Link>
-            <div>
-                <button
-                    onClick={onMultipleDelete}
-                    className="action-button"
-                    disabled={selectedBanners.length === 0}
-                    style={{ opacity: selectedBanners.length === 0 ? 0.5 : 1 }}
-                >
-                    Delete Selected
-                </button>{" "}
-                <DndContext
-                    collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
-                >
-                    <div className="">
-                    <table className="bl-form-container text-center" >
-                        <thead>
-                        <tr>
-                                <th style={{ width: '3%' }}>No.</th>
-                                <th style={{ width: '10%' }}>Banner Image</th>
-                                <th style={{ width: '15%' }}>Banner Title</th>
-                                <th style={{ width: '10%' }}>Banner Subtitle</th>
-                                <th style={{ width: '20%' }}>Banner Description</th>
-                                <th style={{ width: '10%' }}>Related Items</th>
-                                <th style={{ width: '15%' }}>Related Categories</th>
-                                <th style={{ width: '5%' }}>Edit</th>
-                                <th style={{ width: '5%' }}>Delete</th>
-                                <th style={{ width: '5%' }}>Select</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <SortableContext
-                                items={banners.map((banner) => banner.id)}
-                                strategy={verticalListSortingStrategy}
-                            >
-                                {banners.length > 0 ? (
-                                    banners.map((banner, index) => (
-                                        <SortableBanner
-                                            key={banner.id}
-                                            id={banner.id}
-                                            index={index}
-                                            banner={banner}
-                                            onDelete={onDelete}
-                                            toggleBannerSelection={
-                                                toggleBannerSelection
+
+            <div className="bl-wrap">
+            <div className="parallax-bg"></div>
+            <div className="overlay"></div>
+                <div className="bl-container">
+                    {notification && (
+                        <div className="z-10 fixed bottom-8 right-8 p-4 bg-green-200 text-green-600 border-2 border-green-500 rounded-md">
+                            {notification}
+                        </div>
+                    )}{" "}
+                    <Link to="/Admin/EditBanner">
+                        <a>
+                            <button className="edit-banner-button">
+                                Add New Banner
+                            </button>
+                        </a>
+                    </Link>
+                    <div>
+                        <button
+                            onClick={onMultipleDelete}
+                            className="action-button"
+                            disabled={selectedBanners.length === 0}
+                            style={{
+                                opacity: selectedBanners.length === 0 ? 0.5 : 1,
+                            }}
+                        >
+                            Delete Selected
+                        </button>{" "}
+                        <DndContext
+                            collisionDetection={closestCenter}
+                            onDragEnd={handleDragEnd}
+                        >
+                            <div className="">
+                                <table className="bl-form-container text-center">
+                                    <thead>
+                                        <tr>
+                                            <th style={{ width: "3%" }}>No.</th>
+                                            <th style={{ width: "10%" }}>
+                                                Banner Image
+                                            </th>
+                                            <th style={{ width: "15%" }}>
+                                                Banner Title
+                                            </th>
+                                            <th style={{ width: "10%" }}>
+                                                Banner Subtitle
+                                            </th>
+                                            <th style={{ width: "20%" }}>
+                                                Banner Description
+                                            </th>
+                                            <th style={{ width: "10%" }}>
+                                                Related Items
+                                            </th>
+                                            <th style={{ width: "15%" }}>
+                                                Related Categories
+                                            </th>
+                                            <th style={{ width: "5%" }}>
+                                                Edit
+                                            </th>
+                                            <th style={{ width: "5%" }}>
+                                                Delete
+                                            </th>
+                                            <th style={{ width: "5%" }}>
+                                                Select
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <SortableContext
+                                            items={banners.map(
+                                                (banner) => banner.id
+                                            )}
+                                            strategy={
+                                                verticalListSortingStrategy
                                             }
-                                            selectedBanners={selectedBanners}
-                                            handle
-                                        />
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="7">
-                                            No Banners currently present
-                                        </td>
-                                    </tr>
-                                )}
-                            </SortableContext>
-                        </tbody>
-                    </table>
+                                        >
+                                            {banners.length > 0 ? (
+                                                banners.map((banner, index) => (
+                                                    <SortableBanner
+                                                        key={banner.id}
+                                                        id={banner.id}
+                                                        index={index}
+                                                        banner={banner}
+                                                        onDelete={onDelete}
+                                                        toggleBannerSelection={
+                                                            toggleBannerSelection
+                                                        }
+                                                        selectedBanners={
+                                                            selectedBanners
+                                                        }
+                                                        handle
+                                                    />
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="7">
+                                                        No Banners currently
+                                                        present
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </SortableContext>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </DndContext>
                     </div>
-                </DndContext>
+                </div>
             </div>
-        </div>
-        </div>
         </>
     );
 }

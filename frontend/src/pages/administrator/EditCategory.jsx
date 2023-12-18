@@ -16,6 +16,8 @@ export default function EditCategory() {
         featured: 0,
     });
     const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
 
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -25,6 +27,12 @@ export default function EditCategory() {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        if (isSubmitting) {
+            return;
+        }
+
+        setIsSubmitting(true);
+
 
         const formData = new FormData();
         formData.append("category_name", category.category_name);
@@ -50,6 +58,7 @@ export default function EditCategory() {
                         category_name: "",
                         featured: 0,
                     }));
+                    setIsSubmitting(false)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -57,6 +66,7 @@ export default function EditCategory() {
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
+                    setIsSubmitting(false)
                 });
         } else {
             axiosClient
@@ -75,6 +85,7 @@ export default function EditCategory() {
                         category_name: "",
                         featured: 0,
                     });
+                    setIsSubmitting(false)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -82,6 +93,7 @@ export default function EditCategory() {
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
+                    setIsSubmitting(false)
                 });
         }
     };
@@ -108,7 +120,7 @@ export default function EditCategory() {
             .catch((err) => {
                 console.log(err);
             });
-    };x``
+    };
 
     const toggleCategorySelection = (categoryId) => {
         setSelectedCategories((prevSelected) => {
@@ -170,11 +182,15 @@ export default function EditCategory() {
         <>
         <div className="category-bg">
         <div className="parallax-bg"></div>
+        <div className="overlay"></div>
         <div className="category-container">
             <div className="content-wrap">
-                {notification && 
-                <div className="notification">{notification}</div>}
-                <form className="form-wrap" onSubmit={onSubmit}>
+            {notification && (
+                        <div className="z-10 fixed bottom-8 right-8 p-4 bg-green-200 text-green-600 border-2 border-green-500 rounded-md">
+                            {notification}
+                        </div>
+                    )}
+                <form className="form-wrap">
                     <div className="mb-5">
                         <p className="loading-text">{isLoading ? "Loading..." : (id ? `Update: ${category.category_name}` : "")}</p>
 
@@ -219,6 +235,7 @@ export default function EditCategory() {
                         <button
                         className="action-button"
                         onClick={onSubmit}
+                        disabled={isSubmitting}
                         >
                         {id ? "Update Category" : "Add Category"}
                         </button>
