@@ -58,7 +58,7 @@
 }
 
 .navbar .logo a {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #FFFFFF;
     background-color: #D71313;
@@ -82,7 +82,7 @@
 .links li a {
     text-decoration: none;
     color: #fff;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 300;
 }
 
@@ -109,13 +109,13 @@
 }
 
 .action-btn {
-    background-color: transparent;
-    color: #0C0C0C;
+    background-color: red;
+    color: #FFFFFF;
     padding: 0.2rem 1.4rem;
     border: none;
     outline: none;
     border-radius: 20px;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
     transition: scale .2 ease;
@@ -139,6 +139,8 @@
     --_p: 100%;
     color: #0C0C0C;
     transition: background-position 0.4s, background-size 0s;
+    background-color: red;
+
   }
   
   .logout-button {

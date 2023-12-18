@@ -97,16 +97,20 @@ export default function CatalogGallery() {
     <div className="image-card">
       <img className="image" src={imageSrc} alt={title} />
       <div className="content">
-        <div className="title">{title}</div>
-        <div className="price">Rp. 12,000</div>
-      </div>
-      <div className="tags">
-        {tags.map((tag, index) => (
+        <div className="title-tag">
+          <div className="title">{title}</div>
+          <div className="tags">
+            {tags.map((tag, index) => (
           <span key={index} className="tag">
             {tag}
           </span>
-        ))}
+            ))}
       </div>
+        </div>
+        
+        <div className="price">Rp. 12,000</div>
+      </div>
+      
     </div>
   );
 
@@ -192,7 +196,6 @@ export default function CatalogGallery() {
                 className={`page-item ${link.active ? "active" : ""}`}
               >
                 <button
-                  className="page-link"
                   onClick={() => onPageChange(link.label)}
                   disabled={link.url === null}
                   style={{
