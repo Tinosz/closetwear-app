@@ -111,7 +111,11 @@ const ProductDetailsCopy = () => {
             {recommendedItem
                 .filter((item) => item.available_stock === "1")
                 .map((item) => (
-                    <Link key={item.id} to={`/product/${item.id}`}>
+                    <Link
+                        key={item.id}
+                        to={`/product/${item.id}`}
+                        onClick={() => handleClick(item)}
+                    >
                         <ImageCard
                             key={item.id}
                             title={item.item_name}
@@ -126,7 +130,7 @@ const ProductDetailsCopy = () => {
                 ))}
         </div>
     );
-
+    
     const handleClick = async (item) => {
         try {
             await axiosClient.post(`/items/${item.id}/increment-click`);
