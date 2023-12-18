@@ -7,9 +7,7 @@
     #EEEDED
     #FFFFFF
 */
-.banner-wrap {
-    font-family: 'proxima-nova', serif;
-}
+
 
 .swiper {
     width: 100%;
@@ -36,9 +34,12 @@
 }
 
 .banner-text-wrap h1{
-    margin-left: 40px;
+    margin-left: 45px;
 }
 
+.container{
+    background-color: red;
+}
 .swiper-slide {
     font-size: 18px;
     color: #fff;

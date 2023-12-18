@@ -80,27 +80,28 @@ export default function Catalog() {
                     <button onClick={toggleSidebar} className="ml-5 mb-5 rounded-full toggle-category">
                         Categories
                     </button>
-                    <hr />
                     <div className="big-screen-category">
                         <h1>CATEGORIES</h1>
 
                         {featuredCategories.length > 0 &&
                             featuredCategories.map((category) => (
-                            <div key={category.id}>
+                            <div key={category.id} className="one_category">
                                 <Link
-                                    className="font-bold"
                                     to={`/Catalog/` + category.id}
                                 >
                                     {category.category_name}
                                 </Link>
                             </div>
                         ))}
+                        <br />
+                        <hr/>
+                        <br />
                     
                         {nonFeaturedCategories.length > 0 &&
                             nonFeaturedCategories
                             .filter((category) => category.id !== 1)
                             .map((category) => (
-                            <div key={category.id}>
+                            <div key={category.id} className="one_category">
                                 <Link to={`/Catalog/` + category.id}>
                                     {category.category_name}
                                 </Link>

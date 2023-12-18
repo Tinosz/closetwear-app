@@ -75,6 +75,7 @@ const ProductDetails = () => {
         setActiveImg(Object.values(images)[currentIndex]);
     };
 
+
     const handlePrev = () => {
         const keys = Object.keys(images);
         const currentIndex = keys.findIndex((key) => images[key] === activeImg);
