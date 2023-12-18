@@ -80,7 +80,6 @@ export default function Catalog() {
                     <button onClick={toggleSidebar} className="ml-5 mb-5 rounded-full toggle-category">
                         Categories
                     </button>
-                    <hr />
                     <div className="big-screen-category">
                         <h1>CATEGORIES</h1>
 
