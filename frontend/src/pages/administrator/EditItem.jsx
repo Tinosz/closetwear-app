@@ -24,6 +24,7 @@ export default function EditItem() {
     const [featuredCategories, setFeaturedCategories] = useState([]);
     const [nonFeaturedCategories, setNonFeaturedCategories] = useState([]);
     const [errors, setErrors] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [item, setItem] = useState({
         id: null,
         item_name: "",
@@ -39,6 +40,12 @@ export default function EditItem() {
 
     const onSubmit = (e) => {
         e.preventDefault();
+
+        if (isSubmitting) {
+            return;
+        }
+
+        setIsSubmitting(true);
 
         let newOrder = [];
 
@@ -85,7 +92,7 @@ export default function EditItem() {
         }
 
         if (id) {
-            // console.log(formData);
+            console.log(formData);
             axiosClient
                 .post(`/items/${item.id}`, formData, {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -100,6 +107,7 @@ export default function EditItem() {
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
+                    setIsSubmitting(false)
                 });
         } else {
             // console.log(formData);
@@ -119,6 +127,7 @@ export default function EditItem() {
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
+                    setIsSubmitting(false)
                 });
         }
     };
@@ -146,16 +155,20 @@ export default function EditItem() {
 
     const handleImageRemove = (indexToRemove) => {
         setItem((prevItem) => {
-            const updatedImages = prevItem.images.filter(
-                (_, index) => index !== indexToRemove
-            );
-
+            const updatedImages = prevItem.images
+                .filter((_, index) => index !== indexToRemove)
+                .map((image, index) => ({
+                    ...image,
+                    item_image_order: index + 1,
+                }));
+    
             return {
                 ...prevItem,
                 images: updatedImages,
             };
         });
     };
+    
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -210,7 +223,7 @@ export default function EditItem() {
                         images: sortedImages, // Update the images in sorted order
                     }));
 
-                    //   console.log(data);
+                      console.log(data);
                 })
                 .catch(() => {});
         }
@@ -251,8 +264,9 @@ export default function EditItem() {
 
     return (
         <>
-        <div className="edit-wrap">
         <div className="parallax-bg"></div>
+        <div className="overlay"></div>
+        <div className="edit-wrap">
         <div className="edit-item">
             {errors && (
                 <div className="bg-red-500 text-white p-2 mb-4">
@@ -506,8 +520,8 @@ export default function EditItem() {
                 <label for="available"><span></span>Available</label>
                 </div>
                 <div>
-                    <button type="submit" className="bg-blue-300">
-                        Add Item
+                    <button type="submit" className="bg-blue-300" disabled={isSubmitting}>
+                    {id ? "Update Item" : "Add Item"}
                     </button>
                 </div>
             </form>

@@ -48,7 +48,7 @@
     padding: 40px 60px;
 }
   
-.parallax-bg {
+.parallax-bg-banner {
     position: absolute;
     left: 0;
     top: 0;
@@ -57,6 +57,7 @@
     -webkit-background-size: cover;
     background-size: cover;
     background-position: center;
+    background-image: url("https://t4.ftcdn.net/jpg/04/21/43/95/360_F_421439576_zzg0kGw1QZ6S6WDAS4qgglRPP4wxddjS.jpg");
 }
   
 

@@ -38,13 +38,13 @@ const BannerSection = ({ items }) => (
             <Link to={`/Catalog/Banner/${item.id}`} className="clickable-banner">
               <div>
                 <img
-                  className="parallax-bg banner-img desktop"
+                  className="parallax-bg-banner banner-img desktop"
                   src={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.banner_image}`}
                   alt={`Slide ${item.id}`}
                   data-swiper-parallax="-23%"
                 />
                 <div
-                  className="parallax-bg banner-img bg-contain mobile"
+                  className="parallax-bg-banner banner-img bg-contain mobile"
                   style={{ backgroundImage: `url(${import.meta.env.VITE_API_BASE_URL}/storage/${item.banner_image})` }}
                   alt={`Slide ${item.id}`}
                   data-swiper-parallax="-23%"
@@ -73,13 +73,13 @@ const BannerSection = ({ items }) => (
           ) : (
             <div>
               <img
-                className="parallax-bg banner-img desktop"
+                className="parallax-bg-banner banner-img desktop"
                 src={`${import.meta.env.VITE_API_BASE_URL}/storage/${item.banner_image}`}
                 alt={`Slide ${item.id}`}
                 data-swiper-parallax="-23%"
               />
               <div
-                className="parallax-bg banner-img bg-contain mobile"
+                className="parallax-bg-banner banner-img bg-contain mobile"
                 style={{ backgroundImage: `url(${import.meta.env.VITE_API_BASE_URL}/storage/${item.banner_image})` }}
                 alt={`Slide ${item.id}`}
                 data-swiper-parallax="-23%"

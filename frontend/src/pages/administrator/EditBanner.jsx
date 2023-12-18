@@ -18,6 +18,7 @@ export default function EditBanner() {
     const [nonFeaturedCategories, setNonFeaturedCategories] = useState([]);
     const { setNotification } = useStateContext();
     const { filteredData, handleFilter } = useSearch();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [banner, setBanner] = useState({
         id: null,
@@ -116,6 +117,12 @@ export default function EditBanner() {
     const onSubmit = (e) => {
         e.preventDefault();
 
+        if (isSubmitting) {
+            return;
+        }
+
+        setIsSubmitting(true);
+
         const formData = new FormData();
         formData.append("id", banner.id);
         formData.append("banner_image", banner.banner_image);
@@ -152,6 +159,7 @@ export default function EditBanner() {
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
+                    setIsSubmitting(false);
                 });
         } else {
             console.log(formData);
@@ -171,6 +179,7 @@ export default function EditBanner() {
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
+                    setIsSubmitting(false);
                 });
         }
     };
@@ -191,17 +200,20 @@ export default function EditBanner() {
         }
     };
 
-    const parallaxBg = document.querySelector('.parallax-bg');
+    const parallaxBg = document.querySelector(".parallax-bg");
 
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
         const scrollPosition = window.scrollY;
-        parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
+        parallaxBg.style.transform = `translate3d(0, ${
+            scrollPosition * 1
+        }px, 0)`;
     });
 
     return (
         <>
+            <div className="parallax-bg"></div>
+            <div className="overlay"></div>
             <div className="editBanner-wrap">
-                <div className="parallax-bg"></div>
                 <div className="editBanner-container">
                     {errors && (
                         <div className="bg-red-500 text-white p-2 mb-4">
@@ -300,7 +312,10 @@ export default function EditBanner() {
 
                         {featuredCategories.length > 0 ? (
                             featuredCategories.map((category) => (
-                                <div className="checkbox-wrapper-24" key={category.id}>
+                                <div
+                                    className="checkbox-wrapper-24"
+                                    key={category.id}
+                                >
                                     <input
                                         type="checkbox"
                                         id={category.id}
@@ -310,20 +325,24 @@ export default function EditBanner() {
                                         )}
                                         onChange={() => {
                                             setBanner((prevBanner) => {
-                                                const updatedCategoryId = prevBanner.categories.includes(
-                                                    category.id
-                                                )
-                                                    ? prevBanner.categories.filter(
-                                                          (id) => id !== category.id
-                                                      )
-                                                    : [
-                                                          ...prevBanner.categories,
-                                                          category.id,
-                                                      ];
+                                                const updatedCategoryId =
+                                                    prevBanner.categories.includes(
+                                                        category.id
+                                                    )
+                                                        ? prevBanner.categories.filter(
+                                                              (id) =>
+                                                                  id !==
+                                                                  category.id
+                                                          )
+                                                        : [
+                                                              ...prevBanner.categories,
+                                                              category.id,
+                                                          ];
 
                                                 return {
                                                     ...prevBanner,
-                                                    categories: updatedCategoryId,
+                                                    categories:
+                                                        updatedCategoryId,
                                                 };
                                             });
                                         }}
@@ -343,7 +362,10 @@ export default function EditBanner() {
                             nonFeaturedCategories
                                 .filter((category) => category.id !== 1)
                                 .map((category) => (
-                                    <div className="checkbox-wrapper-24" key={category.id}>
+                                    <div
+                                        className="checkbox-wrapper-24"
+                                        key={category.id}
+                                    >
                                         <input
                                             type="checkbox"
                                             id={category.id}
@@ -353,20 +375,24 @@ export default function EditBanner() {
                                             )}
                                             onChange={() => {
                                                 setBanner((prevBanner) => {
-                                                    const updatedCategoryId = prevBanner.categories.includes(
-                                                        category.id
-                                                    )
-                                                        ? prevBanner.categories.filter(
-                                                              (id) => id !== category.id
-                                                          )
-                                                        : [
-                                                              ...prevBanner.categories,
-                                                              category.id,
-                                                          ];
+                                                    const updatedCategoryId =
+                                                        prevBanner.categories.includes(
+                                                            category.id
+                                                        )
+                                                            ? prevBanner.categories.filter(
+                                                                  (id) =>
+                                                                      id !==
+                                                                      category.id
+                                                              )
+                                                            : [
+                                                                  ...prevBanner.categories,
+                                                                  category.id,
+                                                              ];
 
                                                     return {
                                                         ...prevBanner,
-                                                        categories: updatedCategoryId,
+                                                        categories:
+                                                            updatedCategoryId,
                                                     };
                                                 });
                                             }}
@@ -380,8 +406,11 @@ export default function EditBanner() {
                         ) : (
                             <p>No Non-Featured Categories Available</p>
                         )}
-                        
-                        <SearchBar placeholder="Search items..." onFilter={handleFilter}/>
+
+                        <SearchBar
+                            placeholder="Search items..."
+                            onFilter={handleFilter}
+                        />
                         <h2>Item List:</h2>
                         <div className="">
                             <table className="bl-form-container text-center align-self-center">
@@ -395,79 +424,114 @@ export default function EditBanner() {
                                 </thead>
                                 <tbody>
                                     {filteredData.length > 0 ? (
-                                        filteredData.map((item, index) => (
-                                            <tr key={item.id}>
-                                                <td>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={banner.items.includes(
-                                                            item.id
-                                                        )}
-                                                        onChange={() => {
-                                                            setBanner((prevBanner) => {
-                                                                const updatedItemIds =
-                                                                    prevBanner.items.includes(
-                                                                        item.id
-                                                                    )
-                                                                        ? prevBanner.items.filter(
-                                                                              (id) =>
-                                                                                  id !==
-                                                                                  item.id
-                                                                          )
-                                                                        : [
-                                                                              ...prevBanner.items,
-                                                                              item.id,
-                                                                          ];
+                                        filteredData
+                                            .filter(
+                                                (item) =>
+                                                    item.available_stock === "1"
+                                            )
+                                            .map((item, index) => (
+                                                <tr key={item.id}>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={banner.items.includes(
+                                                                item.id
+                                                            )}
+                                                            onChange={() => {
+                                                                setBanner(
+                                                                    (
+                                                                        prevBanner
+                                                                    ) => {
+                                                                        const updatedItemIds =
+                                                                            prevBanner.items.includes(
+                                                                                item.id
+                                                                            )
+                                                                                ? prevBanner.items.filter(
+                                                                                      (
+                                                                                          id
+                                                                                      ) =>
+                                                                                          id !==
+                                                                                          item.id
+                                                                                  )
+                                                                                : [
+                                                                                      ...prevBanner.items,
+                                                                                      item.id,
+                                                                                  ];
 
-                                                                return {
-                                                                    ...prevBanner,
-                                                                    items: updatedItemIds,
-                                                                };
-                                                            });
-                                                        }}
-                                                    />
-                                                </td>
-                                                <td>{index + 1}</td>
-                                                <td>{item.item_name}</td>
-                                                <td>
-                                                    {item.images
-                                                        .sort(
-                                                            (a, b) =>
-                                                                a.item_image_order -
-                                                                b.item_image_order
-                                                        )
-                                                        .map((image, imgIndex) => (
-                                                            <span key={imgIndex}>
-                                                                <img
-                                                                    className="w-20"
-                                                                    src={`${
-                                                                        import.meta.env
-                                                                            .VITE_API_BASE_URL
-                                                                    }/storage/${
-                                                                        image.item_image
-                                                                    }`}
-                                                                    alt={`Image ${
-                                                                        imgIndex + 1
-                                                                    }`}
-                                                                />
-                                                            </span>
-                                                        ))}
-                                                </td>
-                                            </tr>
-                                        ))
+                                                                        return {
+                                                                            ...prevBanner,
+                                                                            items: updatedItemIds,
+                                                                        };
+                                                                    }
+                                                                );
+                                                            }}
+                                                        />
+                                                    </td>
+                                                    <td>{index + 1}</td>
+                                                    <td>{item.item_name}</td>
+                                                    <td>
+                                                        {item.images
+                                                            .sort(
+                                                                (a, b) =>
+                                                                    a.item_image_order -
+                                                                    b.item_image_order
+                                                            )
+                                                            .map(
+                                                                (
+                                                                    image,
+                                                                    imgIndex
+                                                                ) => (
+                                                                    <span
+                                                                        key={
+                                                                            imgIndex
+                                                                        }
+                                                                    >
+                                                                        <img
+                                                                            className="w-20"
+                                                                            src={`${
+                                                                                import.meta
+                                                                                    .env
+                                                                                    .VITE_API_BASE_URL
+                                                                            }/storage/${
+                                                                                image.item_image
+                                                                            }`}
+                                                                            alt={`Image ${
+                                                                                imgIndex +
+                                                                                1
+                                                                            }`}
+                                                                        />
+                                                                    </span>
+                                                                )
+                                                            )}
+                                                    </td>
+                                                </tr>
+                                            ))
                                     ) : (
                                         <tr>
-                                            <th style={{ width: '10%' }}>Checkbox</th>
-                                            <th style={{ width: '10%' }}>No.</th>
-                                            <th style={{ width: '30%' }}>Item Name</th>
-                                            <th style={{ width: '50%' }}>Images</th>
+                                            <th style={{ width: "10%" }}>
+                                                Checkbox
+                                            </th>
+                                            <th style={{ width: "10%" }}>
+                                                No.
+                                            </th>
+                                            <th style={{ width: "30%" }}>
+                                                Item Name
+                                            </th>
+                                            <th style={{ width: "50%" }}>
+                                                Images
+                                            </th>
                                         </tr>
                                     )}
                                 </tbody>
                             </table>
                         </div>
                         <div>
-                            <button className="bot-button" style={{ marginTop: '20px' }} type="submit">
+                            <button
+                                className="bot-button"
+                                style={{ marginTop: "20px" }}
+                                type="submit"
+                                disabled={isSubmitting}
+                            >
                                 {id ? "Update Banner" : "Add Banner"}
                             </button>
                         </div>

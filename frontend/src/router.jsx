@@ -14,6 +14,7 @@ import SearchPage from "./page-groups/SearchPage";
 import Catalog from "./pages/accessable/Catalog";
 import ProductDetail from "./pages/accessable/ProductDetails";
 import AboutBrand from "./pages/accessable/AboutBrand";
+import ProductDetailsCopy from "./pages/accessable/ProductDetailsCopy";
 
 
 
@@ -32,7 +33,9 @@ const router = createBrowserRouter([
             },
             {
                 path: '/Product/:id',
-                element: <ProductDetail />
+                // element: <ProductDetail />
+                element: <ProductDetailsCopy />
+
             },
             {
                 path: '/Catalog',

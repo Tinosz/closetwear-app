@@ -9,6 +9,8 @@
     width: 95%;
     margin: 100px auto;
     overflow-x: scroll;
+    z-index: 5;
+    position: relative;
 }
 
 .bl-container::-webkit-scrollbar {
@@ -55,4 +57,5 @@
     font-weight: bold;
     border: none;
     border-radius: 0;
+    background-color: white;
   }

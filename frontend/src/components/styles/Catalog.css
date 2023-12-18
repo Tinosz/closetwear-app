@@ -98,8 +98,10 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.image-card:hover {
-  transform: scale(1.05);
+.image:hover {
+  transform: scale(1.02);
+  opacity: .9;
+  transition: .3s ease-in-out;
 }
 
 .image {
@@ -152,14 +154,14 @@
 }
 
 .page-link {
-  background-color: #007bff;
+  background-color: #D71313;
   color: #fff;
-  border: 1px solid #007bff;
+  border: 1px solid #D71313;
   border-radius: 4px;
   padding: 5px 10px;
   cursor: pointer;
 }
 
 .page-link:hover {
-  background-color: #0056b3;
+  background-color: #881911;
 }

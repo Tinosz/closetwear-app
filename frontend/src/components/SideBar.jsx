@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom"; // Import Link
 import "./styles/SideBar.css";
+import axiosClient from "../client/axios-client";
+import { useStateContext } from "../context/ContextProvider";
 
 export default function SideBar() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const { token, setToken, setAdmin } = useStateContext();
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -31,6 +34,16 @@ export default function SideBar() {
     };
   }, []);
 
+  const Logout = (e) => {
+    e.preventDefault();
+    if(token) {
+      axiosClient.post("/logout").then(()=> {
+        setAdmin({});
+        setToken(null);
+      })
+    }
+  } 
+
   
   return (
     <>
@@ -54,7 +67,9 @@ export default function SideBar() {
           <br />
           <Link to="/Admin/BannerList">Banner List</Link>
         </div>
-
+        <a className="action-btn text-white" onClick={Logout}>
+          Logout
+        </a>
       </div>
     </div>
     </>

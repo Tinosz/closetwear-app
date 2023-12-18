@@ -44,20 +44,61 @@ class ItemController extends Controller
 
     public function newlyReleasedItems()
     {
-        $items = Item::with('categories', 'images')->orderBy('created_at', 'desc')->get();
+        $items = Item::with('categories', 'images')
+            ->orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+    
         return $items;
     }
 
+
+    
     public function showItem($id)
     {
         try {
+            // Find the main item and eager load the 'categories' and 'images' relationships
             $item = Item::with('categories', 'images')->findOrFail($id);
-            return $item;
+    
+            // Get the category IDs excluding category 1
+            $categoryIds = $item->categories->pluck('id')->reject(function ($categoryId) {
+                return $categoryId == 1;
+            });
+    
+            // Check if there are multiple categories excluding category 1
+            if ($categoryIds->count() > 0) {
+                // Find related items with the same categories and eager load the 'categories' and 'images' relationships
+                $relatedItems = Item::whereHas('categories', function ($query) use ($categoryIds) {
+                    $query->whereIn('category_id', $categoryIds);
+                })->with('categories', 'images')->where('id', '!=', $item->id)->take(20)->get();
+    
+                // Add the related items to the main item
+                $item['RecommendedItems'] = $relatedItems;
+            } else {
+                // If there is only one category, and its ID is 1, search for related items with that category
+                $singleCategoryId = $item->categories->pluck('id')->first();
+    
+                $relatedItems = Item::whereHas('categories', function ($query) use ($singleCategoryId) {
+                    $query->where('category_id', $singleCategoryId);
+                })->with('categories', 'images')->where('id', '!=', $item->id)->take(20)->get();
+    
+                // Add the related items to the main item
+                $item['RecommendedItems'] = $relatedItems;
+            }
+    
+            return response()->json($item); // Return as JSON with RecommendedItems
         } catch (\Exception $e) {
             // Handle the exception, for example, return an error response
             return response()->json(['error' => 'Item not found'], 404);
         }
     }
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * Store a newly created resource in storage.
@@ -112,26 +153,28 @@ class ItemController extends Controller
         $categoryIds = $request->input('categories');
         $item->categories()->sync($categoryIds);
     
-        if ($request->file('images')){
-            $images = $request->file('images');
-            foreach ($images as $index => $imageData) {
-                $imagePath = $imageData['item_image']->store('images', 'public');
-    
+        $imagesData = $request->input('images');
+
+        foreach ($imagesData as $index => $imageData) {
+            if ($request->hasFile("images.$index.item_image")) {
+                // File input
+                $imagePath = $request->file("images.$index.item_image")->store('images', 'public');
+        
                 Image::create([
                     'item_id' => $item->id,
                     'item_image' => $imagePath,
-                    'item_image_order' => $request->input('images.'.$index.'.item_image_order'),                ]);
-            }
-        } else {
-            $imagesData = $request->input('images');
-            foreach ($imagesData as $index => $imageData) {
+                    'item_image_order' => $imageData['item_image_order'],
+                ]);
+            } else {
+                // Non-file input
                 $imageOrder = $imageData['item_image_order'];
-    
+        
                 Image::where('item_id', $item->id)
                     ->where('item_image', $imageData['item_image'])
                     ->update(['item_image_order' => $imageOrder]);
             }
         }
+        
 
         $deletedImages = array_diff($existingImages, $request->input('images.*.item_image'));
         foreach ($deletedImages as $deletedImage) {
@@ -215,7 +258,6 @@ class ItemController extends Controller
 
     public function recommendedSearch($categoryId = 1){
 
-        // If $categoryId is not provided or is not found, use category ID 1 as the last resort
         $category = Category::find($categoryId) ?? Category::find(1);
     
         $items = $category->items()

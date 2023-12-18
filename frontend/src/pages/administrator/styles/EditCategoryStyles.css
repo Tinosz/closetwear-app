@@ -34,6 +34,8 @@
   margin: 80px auto;
   padding: 20px;
   align-self: center;
+  z-index: 5;
+  position: relative;
 }
 
 .featured-check {
@@ -101,6 +103,7 @@
   font-weight: bold;
   border: none;
   border-radius: 0;
+  background-color: white;
 }
 
 .edit-button {
