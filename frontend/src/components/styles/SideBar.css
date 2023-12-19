@@ -8,6 +8,25 @@
   z-index: 1000;
 }
 
+.logo-sidebar{
+  font-family: "kanit", sans-serif;
+  font-weight: 600;
+  background-color: red;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.toggle-button{
+  font-size: 2rem;
+  font-weight: bolder;
+}
+
+.toggle-button-button{
+  background-color: rgba(0, 0, 0, 0.5);
+  margin-left: 1.5rem;
+  margin-top: 1rem;
+}
+
 .sidebar {
   position: fixed;
   top: 0;

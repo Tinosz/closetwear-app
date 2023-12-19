@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import axiosClient from "../../client/axios-client";
 import { Link, useParams } from "react-router-dom";
 import CatalogGallery from "../../components/CatalogGallery";
-import Categories from "../../components/Categories";
 
 import "./styles/Catalog.css";
 

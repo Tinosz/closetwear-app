@@ -107,7 +107,7 @@ export default function EditItem() {
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
-                    setIsSubmitting(false)
+                    setIsSubmitting(false);
                 });
         } else {
             // console.log(formData);
@@ -122,12 +122,12 @@ export default function EditItem() {
                     navigate("/Admin/ItemList");
                 })
                 .catch((err) => {
-                    // console.log(err);
+                    console.log(err);
                     const response = err.response;
                     if (response && response.status === 422) {
                         setErrors(response.data.errors);
                     }
-                    setIsSubmitting(false)
+                    setIsSubmitting(false);
                 });
         }
     };
@@ -161,14 +161,13 @@ export default function EditItem() {
                     ...image,
                     item_image_order: index + 1,
                 }));
-    
+
             return {
                 ...prevItem,
                 images: updatedImages,
             };
         });
     };
-    
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -223,7 +222,7 @@ export default function EditItem() {
                         images: sortedImages, // Update the images in sorted order
                     }));
 
-                      console.log(data);
+                    console.log(data);
                 })
                 .catch(() => {});
         }
@@ -255,278 +254,374 @@ export default function EditItem() {
         }
     }
 
-    const parallaxBg = document.querySelector('.parallax-bg');
+    const parallaxBg = document.querySelector(".parallax-bg");
 
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
         const scrollPosition = window.scrollY;
-        parallaxBg.style.transform = `translate3d(0, ${scrollPosition * 1}px, 0)`;
+        parallaxBg.style.transform = `translate3d(0, ${
+            scrollPosition * 1
+        }px, 0)`;
     });
 
     return (
         <>
-        <div className="parallax-bg"></div>
-        <div className="overlay"></div>
-        <div className="edit-wrap">
-        <div className="edit-item">
-            {errors && (
-                <div className="bg-red-500 text-white p-2 mb-4">
-                    <ul>
-                        {Object.values(errors).map((error, index) => (
-                            <li key={index}>{error[0]}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            <form className="form-wrap" onSubmit={onSubmit}>
-                <div className="field field_v3">
-                    <label for="item-name" className="ha-screen-reader">Item Name</label>
-                    <input
-                        placeholder="Item Name"
-                        id="item-name"
-                        className="field__input"
-                        onChange={(e) =>
-                            setItem({ ...item, item_name: e.target.value })
-                        }
-                        value={item.item_name}
-                    />
-                    <span class="field__label-wrap" aria-hidden="true">
-                        <span class="field__label">Item Name</span>
-                    </span>
-                </div>
-
-                <div className="field field_v3">
-                    <label for="item-price" className="ha-screen-reader">Item Price</label>
-                        <input
-                        type="number"
-                        id="item-price"
-                        className="field__input"
-                        placeholder="Price"
-                        onChange={(e) =>
-                            setItem({ ...item, item_price: e.target.value })
-                        }
-                        value={item.item_price}
-                        />
-                    <span class="field__label-wrap" aria-hidden="true">
-                        <span class="field__label">Item Price</span>
-                    </span>
-                </div>
-
-                <div className="field field_v3">
-                    <label for="item-desc" className="ha-screen-reader">Item Description</label>
-                        <textarea
-                        placeholder="Item Description"
-                        id="item-desc"
-                        className="field__input"
-                        onChange={(e) =>
-                            setItem({ ...item, item_description: e.target.value })
-                        }
-                        value={item.item_description}
-                        />
-                    <span class="field__label-wrap" aria-hidden="true">
-                        <span class="field__label">Item Description</span>
-                    </span>
-                </div>
-                
-                
-                {featuredCategories.length > 0 && (
-                    <div>
-                        <h3>Featured Categories:</h3>
-                        {featuredCategories.map((category) => (
-                            <div className="checkbox-wrapper-24">
-                                <input
-                                    type="checkbox"
-                                    id={category.id}
-                                    checked={item.categories.includes(
-                                        category.id
-                                    )}
-                                    onChange={() => {
-                                        setItem((prevItem) => {
-                                            const updatedCategoryId =
-                                                prevItem.categories.includes(
-                                                    category.id
-                                                )
-                                                    ? prevItem.categories.filter(
-                                                          (id) =>
-                                                              id !== category.id
-                                                      )
-                                                    : [
-                                                          ...prevItem.categories,
-                                                          category.id,
-                                                      ];
-        
-                                            return {
-                                                ...prevItem,
-                                                categories: updatedCategoryId,
-                                            };
-                                        });
-                                    }}
-                                />
-                            <label for={category.id} key={category.id}>
-                                <span></span>{category.category_name} <FontAwesomeIcon icon={faStar} />
-                            </label>
+            <div className="parallax-bg"></div>
+            <div className="overlay"></div>
+            <div className="edit-wrap">
+                <div className="edit-item">
+                    <form className="form-wrap" onSubmit={onSubmit}>
+                        {errors && errors.item_name && (
+                            <div className="bg-red-500 text-white p-2 mb-4 text-center">
+                                <ul>{errors.item_name[0]}</ul>
                             </div>
-                        ))}
-                    </div>
-                )}
-
-                {nonFeaturedCategories.length > 0 && (
-                    <div>
-                        <h3>Non-Featured Categories:</h3>
-                        {nonFeaturedCategories.filter((category) => category.id !== 1).map((category) => (
-                            <div className="checkbox-wrapper-24">
-                                <input
-                                    type="checkbox"
-                                    id={category.id}
-                                    checked={item.categories.includes(
-                                        category.id
-                                    )}
-                                    onChange={() => {
-                                        setItem((prevItem) => {
-                                            const updatedCategoryId =
-                                                prevItem.categories.includes(
-                                                    category.id
-                                                )
-                                                    ? prevItem.categories.filter(
-                                                          (id) =>
-                                                              id !== category.id
-                                                      )
-                                                    : [
-                                                          ...prevItem.categories,
-                                                          category.id,
-                                                      ];
-
-                                            return {
-                                                ...prevItem,
-                                                categories: updatedCategoryId,
-                                            };
-                                        });
-                                    }}
-                                />
-                            <label for={category.id} key={category.id}>
-                                <span></span>{category.category_name}
+                        )}
+                        <div className="field field_v3">
+                            <label for="item-name" className="ha-screen-reader">
+                                Item Name
                             </label>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                <div className="field field_v3">
-                    <label for="tokopedia" className="ha-screen-reader">Tokopedia  Link </label>
-                        <input
-                        placeholder="Tokopedia Link"
-                        id="tokopedia"
-                        className="field__input"
-                        onChange={(e) =>
-                            setItem({ ...item, tokopedia_link: e.target.value })
-                        }
-                        value={item.tokopedia_link}
-                        />
-                    <span class="field__label-wrap" aria-hidden="true">
-                        <span class="field__label">Tokopedia Link</span>
-                    </span>
-                </div>
-
-                <div className="field field_v3">
-                    <label for="shopee" className="ha-screen-reader">Shopee Link </label>
-                        <input
-                        placeholder="Shoppee Link"
-                        id="shopee"
-                        className="field__input"
-                        onChange={(e) =>
-                            setItem({ ...item, shoppee_link: e.target.value })
-                        }
-                        value={item.shoppee_link}
-                        />
-                    <span class="field__label-wrap" aria-hidden="true">
-                        <span class="field__label">Shopee Link</span>
-                    </span>
-                </div>
-
-                <div className="field field_v3">
-                    <label for="whatsapp" className="ha-screen-reader">WhatsApp  Link </label>
-                        <input
-                        placeholder="Whatsapp Link"
-                        id="whatsapp"
-                        className="field__input"
-                        onChange={(e) =>
-                            setItem({ ...item, whatsapp_link: e.target.value })
-                        }
-                        value={item.whatsapp_link}
-                        />
-                    <span class="field__label-wrap" aria-hidden="true">
-                        <span class="field__label">WhatsApp Link</span>
-                    </span>
-                </div>
-
-                <div
-                    {...getRootProps()}
-                    className="border-4 h-[250px] w-[500px] rounded-md p-10 m-10 border-red-500 flex items-center justify-center"
-                >
-                    <input {...getInputProps()} />
-                    {isDragActive ? (
-                        <p>Drop your images here ...</p>
-                    ) : (
-                        <p>
-                            Drag and drop some images here, or click to select
-                            files
-                        </p>
-                    )}
-                </div>
-
-                <div className="drag-img-wrap">
-                <DndContext
-                    collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
-                >
-                    {item.images.length > 0 && (
-                        <div >
-                            <h3>Selected Images:</h3>
-                            <SortableContext
-                                items={item.images.map(
-                                    (image) => image.item_image_order
-                                )}
-                                
-                                strategy={horizontalListSortingStrategy}
-                            >
-                                {item.images.map((image, index) => (
-                                    <SortableItem
-                                        key={image.id}
-                                        id={image.item_image_order}
-                                        index={index}
-                                        handleImageRemove={handleImageRemove}
-                                        image={image.item_image}
-                                        handle
-                                    />
-                                ))}
-                            </SortableContext>
+                            <input
+                                placeholder="Item Name"
+                                id="item-name"
+                                className="field__input"
+                                onChange={(e) =>
+                                    setItem({
+                                        ...item,
+                                        item_name: e.target.value,
+                                    })
+                                }
+                                value={item.item_name}
+                            />
+                            <span class="field__label-wrap" aria-hidden="true">
+                                <span class="field__label">Item Name</span>
+                            </span>
                         </div>
-                    )}
-                </DndContext>
-                </div>
+                        {errors && errors.item_price && (
+                            <div className="bg-red-500 text-white p-2 mb-4 text-center">
+                                <ul>{errors.item_price[0]}</ul>
+                            </div>
+                        )}
+                        <div className="field field_v3">
+                            <label
+                                for="item-price"
+                                className="ha-screen-reader"
+                            >
+                                Item Price
+                            </label>
+                            <input
+                                type="number"
+                                id="item-price"
+                                className="field__input"
+                                placeholder="Price"
+                                onChange={(e) =>
+                                    setItem({
+                                        ...item,
+                                        item_price: e.target.value,
+                                    })
+                                }
+                                value={item.item_price}
+                            />
+                            <span class="field__label-wrap" aria-hidden="true">
+                                <span class="field__label">Item Price</span>
+                            </span>
+                        </div>
+                        {errors && errors.item_description && (
+                            <div className="bg-red-500 text-white p-2 mb-4 text-center">
+                                <ul>{errors.item_description[0]}</ul>
+                            </div>
+                        )}
+                        <div className="field field_v3">
+                            <label for="item-desc" className="ha-screen-reader">
+                                Item Description
+                            </label>
+                            <textarea
+                                placeholder="Item Description"
+                                id="item-desc"
+                                className="field__input"
+                                onChange={(e) =>
+                                    setItem({
+                                        ...item,
+                                        item_description: e.target.value,
+                                    })
+                                }
+                                value={item.item_description}
+                            />
+                            <span class="field__label-wrap" aria-hidden="true">
+                                <span class="field__label">
+                                    Item Description
+                                </span>
+                            </span>
+                        </div>
 
-                <p>Available Stock?</p>
-                <div className="checkbox-wrapper-24">
-                    <input
-                        type="checkbox"
-                        id="available"
-                        checked={Number(item.available_stock) === 1}
-                        onChange={() =>
-                            setItem({
-                                ...item,
-                                available_stock:
-                                    item.available_stock === 1 ? 0 : 1,
-                            })
-                        }
-                    />
-                <label for="available"><span></span>Available</label>
+                        {featuredCategories.length > 0 && (
+                            <div>
+                                <h3>Featured Categories:</h3>
+                                {featuredCategories.map((category) => (
+                                    <div className="checkbox-wrapper-24">
+                                        <input
+                                            type="checkbox"
+                                            id={category.id}
+                                            checked={item.categories.includes(
+                                                category.id
+                                            )}
+                                            onChange={() => {
+                                                setItem((prevItem) => {
+                                                    const updatedCategoryId =
+                                                        prevItem.categories.includes(
+                                                            category.id
+                                                        )
+                                                            ? prevItem.categories.filter(
+                                                                  (id) =>
+                                                                      id !==
+                                                                      category.id
+                                                              )
+                                                            : [
+                                                                  ...prevItem.categories,
+                                                                  category.id,
+                                                              ];
+
+                                                    return {
+                                                        ...prevItem,
+                                                        categories:
+                                                            updatedCategoryId,
+                                                    };
+                                                });
+                                            }}
+                                        />
+                                        <label
+                                            for={category.id}
+                                            key={category.id}
+                                        >
+                                            <span></span>
+                                            {category.category_name}{" "}
+                                            <FontAwesomeIcon icon={faStar} />
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {nonFeaturedCategories.length > 0 && (
+                            <div>
+                                <h3>Non-Featured Categories:</h3>
+                                {nonFeaturedCategories
+                                    .filter((category) => category.id !== 1)
+                                    .map((category) => (
+                                        <div className="checkbox-wrapper-24">
+                                            <input
+                                                type="checkbox"
+                                                id={category.id}
+                                                checked={item.categories.includes(
+                                                    category.id
+                                                )}
+                                                onChange={() => {
+                                                    setItem((prevItem) => {
+                                                        const updatedCategoryId =
+                                                            prevItem.categories.includes(
+                                                                category.id
+                                                            )
+                                                                ? prevItem.categories.filter(
+                                                                      (id) =>
+                                                                          id !==
+                                                                          category.id
+                                                                  )
+                                                                : [
+                                                                      ...prevItem.categories,
+                                                                      category.id,
+                                                                  ];
+
+                                                        return {
+                                                            ...prevItem,
+                                                            categories:
+                                                                updatedCategoryId,
+                                                        };
+                                                    });
+                                                }}
+                                            />
+                                            <label
+                                                for={category.id}
+                                                key={category.id}
+                                            >
+                                                <span></span>
+                                                {category.category_name}
+                                            </label>
+                                        </div>
+                                    ))}
+                            </div>
+                        )}
+                        {errors && errors.tokopedia_link && (
+                            <div className="bg-red-500 text-white p-2 mb-4 text-center">
+                                <ul>{errors.tokopedia_link[0]}</ul>
+                            </div>
+                        )}
+                        <div className="field field_v3">
+                            <label for="tokopedia" className="ha-screen-reader">
+                                Tokopedia Link{" "}
+                            </label>
+                            <input
+                                placeholder="Tokopedia Link"
+                                id="tokopedia"
+                                className="field__input"
+                                onChange={(e) =>
+                                    setItem({
+                                        ...item,
+                                        tokopedia_link: e.target.value,
+                                    })
+                                }
+                                value={item.tokopedia_link}
+                            />
+                            <span class="field__label-wrap" aria-hidden="true">
+                                <span class="field__label">Tokopedia Link</span>
+                            </span>
+                        </div>
+                        {errors && errors.shoppee_link && (
+                            <div className="bg-red-500 text-white p-2 mb-4 text-center">
+                                <ul>{errors.shoppee_link[0]}</ul>
+                            </div>
+                        )}
+                        <div className="field field_v3">
+                            <label for="shopee" className="ha-screen-reader">
+                                Shopee Link{" "}
+                            </label>
+                            <input
+                                placeholder="Shoppee Link"
+                                id="shopee"
+                                className="field__input"
+                                onChange={(e) =>
+                                    setItem({
+                                        ...item,
+                                        shoppee_link: e.target.value,
+                                    })
+                                }
+                                value={item.shoppee_link}
+                            />
+                            <span class="field__label-wrap" aria-hidden="true">
+                                <span class="field__label">Shopee Link</span>
+                            </span>
+                        </div>
+                        {errors && errors.whatsapp_link && (
+                            <div className="bg-red-500 text-white p-2 mb-4 text-center">
+                                <ul>{errors.whatsapp_link[0]}</ul>
+                            </div>
+                        )}
+                        <div className="field field_v3">
+                            <label for="whatsapp" className="ha-screen-reader">
+                                WhatsApp Link{" "}
+                            </label>
+                            <input
+                                placeholder="Whatsapp Link"
+                                id="whatsapp"
+                                className="field__input"
+                                onChange={(e) =>
+                                    setItem({
+                                        ...item,
+                                        whatsapp_link: e.target.value,
+                                    })
+                                }
+                                value={item.whatsapp_link}
+                            />
+                            <span class="field__label-wrap" aria-hidden="true">
+                                <span class="field__label">WhatsApp Link</span>
+                            </span>
+                        </div>
+                        {errors && errors.images && (
+                            <div className="bg-red-500 text-white p-2 mb-4 text-center">
+                                <ul>{errors.images}</ul>
+                            </div>
+                        )}
+                        {errors && (
+                            <div className="bg-red-500 text-white p-2 mb-4 text-center">
+                                <ul>
+                                    {Object.entries(errors).map(
+                                        ([key, value]) =>
+                                            key.startsWith("images.") ||
+                                            key === "images" ? (
+                                                // Render only the image-related errors
+                                                <li key={key}>{value}</li>
+                                            ) : null
+                                    )}
+                                </ul>
+                            </div>
+                        )}
+                        <div
+                            {...getRootProps()}
+                            className="border-4 h-[250px] w-[500px] rounded-md p-10 m-10 border-red-500 flex items-center justify-center"
+                        >
+                            <input {...getInputProps()} />
+                            {isDragActive ? (
+                                <p>Drop your images here ...</p>
+                            ) : (
+                                <p>
+                                    Drag and drop some images here, or click to
+                                    select files
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="drag-img-wrap">
+                            <DndContext
+                                collisionDetection={closestCenter}
+                                onDragEnd={handleDragEnd}
+                            >
+                                {item.images.length > 0 && (
+                                    <div>
+                                        <h3>Selected Images:</h3>
+                                        <SortableContext
+                                            items={item.images.map(
+                                                (image) =>
+                                                    image.item_image_order
+                                            )}
+                                            strategy={
+                                                horizontalListSortingStrategy
+                                            }
+                                        >
+                                            {item.images.map((image, index) => (
+                                                <SortableItem
+                                                    key={image.id}
+                                                    id={image.item_image_order}
+                                                    index={index}
+                                                    handleImageRemove={
+                                                        handleImageRemove
+                                                    }
+                                                    image={image.item_image}
+                                                    handle
+                                                />
+                                            ))}
+                                        </SortableContext>
+                                    </div>
+                                )}
+                            </DndContext>
+                        </div>
+
+                        <p>Available Stock?</p>
+                        <div className="checkbox-wrapper-24">
+                            <input
+                                type="checkbox"
+                                id="available"
+                                checked={Number(item.available_stock) === 1}
+                                onChange={() =>
+                                    setItem({
+                                        ...item,
+                                        available_stock:
+                                            item.available_stock === 1 ? 0 : 1,
+                                    })
+                                }
+                            />
+                            <label for="available">
+                                <span></span>Available
+                            </label>
+                        </div>
+                        <div>
+                            <button
+                                type="submit"
+                                className="bg-blue-300"
+                                disabled={isSubmitting}
+                            >
+                                {id ? "Update Item" : "Add Item"}
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <button type="submit" className="bg-blue-300" disabled={isSubmitting}>
-                    {id ? "Update Item" : "Add Item"}
-                    </button>
-                </div>
-            </form>
-        </div>
-        </div>
+            </div>
         </>
     );
 }
