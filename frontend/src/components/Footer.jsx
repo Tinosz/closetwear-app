@@ -1,4 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./styles/FooterStyles.css";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 export default function Footer() {
     return (
         <>
@@ -30,9 +32,9 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <i className="fa fa-envelope"></i>
                         <p>
                             <a href="mailto:support@company.com">
+                        <FontAwesomeIcon icon={faEnvelope} />
                                 ClosetWear@gmail.com
                             </a>
                         </p>
@@ -51,7 +53,7 @@ export default function Footer() {
                         <ul>
                             <li>
                                 <a href="https://www.instagram.com/closetwear.id/?utm_source=ig_web_button_share_sheet&igshid=OGQ5ZDc2ODk2ZA==">
-                                    <i class="fa-brands fa-instagram instagram"></i>
+                                    <i className="fa-brands fa-instagram instagram"></i>
                                 </a>
                             </li>
                             <li>

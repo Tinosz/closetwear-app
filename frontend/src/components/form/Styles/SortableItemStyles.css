@@ -1,0 +1,6 @@
+.item-image-preview{
+    width: 100%;
+    max-width: 10rem;
+    height: 15rem;
+    object-fit: cover;
+}

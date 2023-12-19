@@ -1,5 +1,4 @@
-
-  import Footer from '../../components/Footer';
+import Footer from "../../components/Footer";
 import react, { useEffect, useState } from "react";
 import "./styles/HomeStyles.css";
 import Carousel from "react-multi-carousel";
@@ -7,25 +6,23 @@ import "react-multi-carousel/lib/styles.css";
 import Banner from "../../components/Banner";
 import axiosClient from "../../client/axios-client";
 
-
-
 export default function Home() {
     const [items, setItems] = useState([]);
 
     const getNewlyReleased = () => {
-        axiosClient.get("itemsGetNewlyRelease").then((response) => {
-            console.log(response.data);
-            setItems(response.data);
-        }).catch(() => {
+        axiosClient
+            .get("itemsGetNewlyRelease")
+            .then((response) => {
+                console.log(response.data);
+                setItems(response.data);
+            })
+            .catch(() => {})
+            .finally(() => {});
+    };
 
-        }).finally(()=> {
-
-        })
-    }
-
-    useEffect(()=> {
+    useEffect(() => {
         getNewlyReleased();
-    }, [])
+    }, []);
 
     const getItems = () => {};
 
@@ -46,136 +43,192 @@ export default function Home() {
             slidesToSlide: 2, // optional, default to 1.
         },
         mobile: {
-          breakpoint: { max: 624, min: 0 },
-          items: 1,
-          slidesToSlide: 1 // optional, default to 1.
-        }
+            breakpoint: { max: 624, min: 0 },
+            items: 1,
+            slidesToSlide: 1, // optional, default to 1.
+        },
     };
 
     const handleClick = async (props) => {
         try {
-          await axiosClient.post(`/items/${props.id}/increment-click`);
-          window.location.href = `/product/${props.id}`;
+            await axiosClient.post(`/items/${props.id}/increment-click`);
+            window.location.href = `/product/${props.id}`;
         } catch (error) {
-          console.error("Error incrementing props click count:", error);
+            console.error("Error incrementing props click count:", error);
         }
-      };
-    
+    };
 
-      function NewReleased(props) {
+    function NewReleased(props) {
         const handleSeeProductClick = () => {
-          handleClick(props);
+            handleClick(props);
         };
-      
-        return (
-          <div className='new-release-card'>
-            <div className='new-release-img' style={{ backgroundImage: `url(${props.url})` }} alt="aa" />
-            <div className='new-release-bottom-box'>
-              <h2 className='new-release-product'>{props.name}</h2>
-              <p className='new-release-price text-black'>Rp. {props.price}</p>
-              <button onClick={handleSeeProductClick} className='new-release-btn'>
-                See Product
-              </button>
-            </div>
-          </div>
-        );
-      }
-      
 
-    const newlyReleased = items.map(item => (
-        <NewReleased
-            key={item.id}
-          id={item.id}
-          name={item.item_name}  
-          url={`${import.meta.env.VITE_API_BASE_URL}/storage/${
-            item.images[0].item_image
-        }`} 
-          price={item.item_price} 
-          desc={item.item_description}
-        />
-      ));
+        return (
+            <div className="new-release-card">
+                <div className="new-release-img" alt="aa">
+                    <img src={props.url} />
+                </div>
+                <div className="new-release-bottom-box">
+                    <h2 className="new-release-product">{props.name}</h2>
+                    <p className="new-release-price text-black">
+                        Rp. {props.price}
+                    </p>
+                    <button
+                        onClick={handleSeeProductClick}
+                        className="new-release-btn"
+                    >
+                        See Product
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    const newlyReleased = items
+        .filter((item) => item.available_stock === "1")
+        .map((item) => (
+            <NewReleased
+                key={item.id}
+                id={item.id}
+                name={item.item_name}
+                url={`${import.meta.env.VITE_API_BASE_URL}/storage/${
+                    item.images[0].item_image
+                }`}
+                price={item.item_price}
+                desc={item.item_description}
+            />
+        ));
 
     function NewReleases() {
-        return(
+        return (
             <>
-                <div className='wrap-home'>
-                    <section id='new-release'>
-                        <small className='new-release-title'>New Release!</small>
-    
-                        <Carousel className='new-release-wrap' arrows={true} showDots={true} swipeable={true} draggable={true}  responsive={responsive}>
-                            {newlyReleased} 
+                <div className="wrap-home">
+                    <section id="new-release">
+                        <small className="new-release-title">
+                            New Release!
+                        </small>
+
+                        <Carousel
+                            className="new-release-wrap"
+                            arrows={true}
+                            showDots={true}
+                            swipeable={true}
+                            draggable={true}
+                            responsive={responsive}
+                        >
+                            {newlyReleased}
                         </Carousel>
-                        
                     </section>
-    
                 </div>
             </>
         );
     }
 
     function SectionContent() {
-        return(
-            <section className='home-latest'>
-                <div className='grid-container'>
-                    
-                    <div className='category-wrap desktop'>
-                        <h2>
-                            <a className='category-text' href="">Woman's Sweater</a>
-                        </h2>
-                        <a className='category-link' href="">View</a>
+        return (
+            <section className="home-latest">
+                <div className="grid-container">
+                    <div className="category-wrap desktop">
+                        <h2 className="category-text">Your Go-to Wear</h2>
+                        <p className="category-text-description">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit, sed do eiusmod tempor incididunt ut labore et
+                            dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris nisi ut aliquip
+                            ex ea commodo consequat. Duis aute irure dolor in
+                            reprehenderit in voluptate velit esse cillum dolore
+                            eu fugiat nulla pariatur. Excepteur sint occaecat
+                            cupidatat non proident, sunt in culpa qui officia
+                            deserunt mollit anim id est laborum.
+                        </p>
+                        <a className="category-link" href="/Catalog">
+                            View
+                        </a>
                     </div>
-                    <div className='category-img-wrap'>
-                        <div className='relative'>
-                            <a className="category-img" href=''>
-                                <div className='img-wrap'
-                                style={{backgroundImage: `url(https://www.ledr.com/colours/white.jpg)`}}>
-                                    <img src="https://plus.unsplash.com/premium_photo-1664542157778-4dcccb04169e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+                    <div className="category-img-wrap">
+                        <div className="relative">
+                            <a className="category-img" href="">
+                                <div
+                                    className="img-wrap"
+                                    style={{
+                                        backgroundImage: `url(https://www.ledr.com/colours/white.jpg)`,
+                                    }}
+                                >
+                                    <img
+                                        src="https://plus.unsplash.com/premium_photo-1664542157778-4dcccb04169e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt=""
+                                    />
                                 </div>
                             </a>
-                            <span className='category-layer' style={{ backgroundImage: `url(//hatshop.com/cdn/shop/files/texture_indigo-worth-and-worth.jpg?v=1614347676)` }}></span>
+                            <span
+                                className="category-layer"
+                                style={{
+                                    backgroundImage: `url(//hatshop.com/cdn/shop/files/texture_indigo-worth-and-worth.jpg?v=1614347676)`,
+                                }}
+                            ></span>
                         </div>
                     </div>
-                    <div className='category-wrap-mobile'>
-                        <h2>
-                            <a className='category-text' href="">Woman's Sweater</a>
-                        </h2>
-                        <a className='category-link' href="">View</a>
+                    <div className="category-wrap-mobile">
+                        <h2 className="category-text">Your Go-to Wear</h2>
+                        <p className="category-text-description">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit, sed do eiusmod tempor incididunt ut labore et
+                            dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris nisi ut aliquip
+                            ex ea commodo consequat. Duis aute irure dolor in
+                            reprehenderit in voluptate velit esse cillum dolore
+                            eu fugiat nulla pariatur. Excepteur sint occaecat
+                            cupidatat non proident, sunt in culpa qui officia
+                            deserunt mollit anim id est laborum.
+                        </p>
+                        <a className="category-link" href="/Catalog">
+                            View
+                        </a>
                     </div>
                 </div>
-                
-                <div className='grid-container2'>
-                    <div className='category-img-wrap'>
-                        <div className='relative'>
-                            <a className="category-img" href=''>
-                                <div className='img-wrap'
-                                style={{backgroundImage: `url(https://www.ledr.com/colours/white.jpg)`}}
+
+                <div className="grid-container2">
+                    <div className="category-img-wrap">
+                        <div className="relative">
+                            <a className="category-img" href="">
+                                <div
+                                    className="img-wrap"
+                                    style={{
+                                        backgroundImage: `url(https://www.ledr.com/colours/white.jpg)`,
+                                    }}
                                 >
-                                    <img src="https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+                                    <img
+                                        src="https://images.unsplash.com/photo-1506152983158-b4a74a01c721?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt=""
+                                    />
                                 </div>
-                            <span className='category-layer2' style={{ backgroundImage: `url(//hatshop.com/cdn/shop/files/texture_indigo-worth-and-worth.jpg?v=1614347676)` }}></span>
+                                <span
+                                    className="category-layer2"
+                                    style={{
+                                        backgroundImage: `url(//hatshop.com/cdn/shop/files/texture_indigo-worth-and-worth.jpg?v=1614347676)`,
+                                    }}
+                                ></span>
                             </a>
                         </div>
                     </div>
-                    <div className='category-wrap'>
-                        <h2>
-                            <a className='category-text' href="">Men's Sweater</a>
-                        </h2>
-                        <a className='category-link' href="">View</a>
+                    <div className="category-wrap">
+                        <h2 className="category-text">Learn More About Us!</h2>
+                        <a className="category-link" href="/AboutBrand">
+                            About us
+                        </a>
                     </div>
                 </div>
             </section>
-        )
+        );
     }
 
     return (
         <>
-        <div className='home-wrap'>
-            <Banner />
-            <SectionContent />
-            <NewReleases />
-
-
-        </div>
+            <div className="home-wrap">
+                <Banner />
+                <SectionContent />
+                <NewReleases />
+            </div>
         </>
     );
 }

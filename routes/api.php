@@ -46,3 +46,4 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/items/by-category', [ItemController::class, 'searchByCategory']);
 Route::get('/banners/{bannerId}/related-items', [BannerController::class, 'getRelatedItems']);
 Route::get('/items/by-category/{categoryId?}', [ItemController::class, 'recommendedSearch']);
+Route::get('/items/search-by-category/{categoryId?}', [ItemController::class, 'SearchByCategory']);

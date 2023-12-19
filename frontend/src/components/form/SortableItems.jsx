@@ -4,6 +4,8 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import './Styles/SortableItemStyles.css'
+
 export function SortableItem({ id, index, handleImageRemove, image }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -55,7 +57,7 @@ export function SortableItem({ id, index, handleImageRemove, image }) {
       <img
         src={imageUrl}
         alt={`Preview ${index}`}
-        className="w-40"
+        className="item-image-preview"
         onLoad={() => {
           URL.revokeObjectURL(imageUrl);
         }}

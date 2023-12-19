@@ -13,6 +13,7 @@ body{
     margin-top: 300px;
     justify-content: center;
     margin-right: 50px !important;
+    background-color: white;
 }
 
 
@@ -135,61 +136,3 @@ body{
 }
 
 
-
-
-
-
-/* .text h1{
-    position: absolute;
-    background-color: none;
-    font-size: 35px;
-    color: white;
-    background-color: red;
-    padding: 10px 55px;
-    align-items: center;
-} */
-
-/* .box1 {
-    display: flex;
-    background-color: red;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-}
-
-.text {
-    position: absolute;
-    align-items: center;
-}
-
-.text h1{
-    font-size: 45px;
-    color: white;
-    background-color: red;
-    padding: 10px 35px;
-    text-align: center;
-    letter-spacing: 5px;
-}
-
-.text h4 {
-    font-size: 20px;
-    color: white;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 15px;
-    text-align: center;
-    text-shadow: 2px 2px 4px #333
-}
-
-.box1 img {
-    width: 100%;
-    height: auto;
-} */
-
-/* .box1 span {
-    position: absolute;
-    background-color: blue;
-    width: 100%;
-    z-index: 3;
-    margin-top: 30px;
-} */

@@ -9,6 +9,7 @@
     align-self: center;
     justify-content: center;
     font-family: 'kanit', sans-serif;
+    z-index: 5;
 }
   
 .parallax-bg {

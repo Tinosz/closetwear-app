@@ -14,6 +14,7 @@
     align-self: center;
     justify-content: center;
     font-family: 'kanit', sans-serif;
+    z-index: 5;
 }
 
 .parallax-bg {
@@ -29,9 +30,27 @@
     transform: translateZ(0);
 }
 
-.list-content-wrap {
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Black with 0.7 opacity */
+    backdrop-filter: blur(5px); /* Adjust the blur effect as needed */
+    z-index: 1; /* Ensure the overlay is on top of the parallax background */
+}
+
+
+.category-bg{
+    position: relative;
+}
+
+.list-content-wrap {/* styles/EditCategoryStyles.css or in your Tailwind CSS classes */
+    
     width: 100%;
     margin: 100px auto;
+    margin-top: 0px;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -70,6 +89,7 @@ tr {
 
 .edit-list-button-wrap {
     display: flex;
+    justify-content: center;
 }
 
 .ed-button {
@@ -96,9 +116,10 @@ tr {
     transition: .2s ease-in-out;
 }
 
-.pagination {
+/* .pagination {
     display: flex;
-}
+    justify-content: center;
+} */
 
 .bot-button {
     display: inline-block;
