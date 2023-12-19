@@ -144,7 +144,7 @@ export default function Home() {
                     </div>
                     <div className="category-img-wrap">
                         <div className="relative">
-                            <a className="category-img" href="">
+                            <div className="category-img">
                                 <div
                                     className="img-wrap"
                                     style={{
@@ -156,7 +156,7 @@ export default function Home() {
                                         alt=""
                                     />
                                 </div>
-                            </a>
+                            </div>
                             <span
                                 className="category-layer"
                                 style={{
@@ -184,7 +184,7 @@ export default function Home() {
                 <div className="grid-container2">
                     <div className="category-img-wrap">
                         <div className="relative">
-                            <a className="category-img" href="">
+                            <div className="category-img" href="">
                                 <div
                                     className="img-wrap"
                                     style={{
@@ -202,7 +202,7 @@ export default function Home() {
                                         backgroundImage: `url(//hatshop.com/cdn/shop/files/texture_indigo-worth-and-worth.jpg?v=1614347676)`,
                                     }}
                                 ></span>
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <div className="category-wrap">
