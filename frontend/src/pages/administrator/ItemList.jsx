@@ -60,27 +60,10 @@ export default function ItemList() {
             return;
         }
 
-        axiosClient
-            .delete(`/items/${item.id}`)
-            .then(() => {
-                // Update the state immediately after successful deletion
-                setItems((prevItems) =>
-                    prevItems.filter((i) => i.id !== item.id)
-                );
-
-                // Update filteredItems to reflect the change
-                setFilteredItems((prevFilteredItems) =>
-                    prevFilteredItems.filter((i) => i.id !== item.id)
-                );
-
-                // If a search word is present, update filteredData based on the searchWord
-                if (searchWord) {
-                    handleFilter(searchWord);
-                }
-            })
-            .catch((error) => {
-                console.error("Error deleting item:", error);
-            });
+        axiosClient.delete(`/items/${item.id}`).then(() => {
+            getItems();
+            window.location.reload();
+        });
     };
 
     const onMultipleDelete = () => {
@@ -97,28 +80,9 @@ export default function ItemList() {
                 data: { itemIds: selectedItems },
             })
             .then(() => {
-                // Update the state immediately after successful deletion
-                setItems((prevItems) =>
-                    prevItems.filter((item) => !selectedItems.includes(item.id))
-                );
-
-                // Update filteredItems to reflect the change
-                setFilteredItems((prevFilteredItems) =>
-                    prevFilteredItems.filter(
-                        (item) => !selectedItems.includes(item.id)
-                    )
-                );
-
-                // If a search word is present, update filteredData based on the searchWord
-                if (searchWord) {
-                    handleFilter(searchWord);
-                }
-
-                // Clear selectedItems
+                getItems();
                 setSelectedItems([]);
-            })
-            .catch((error) => {
-                console.error("Error deleting multiple items:", error);
+                window.location.reload();
             });
     };
 
@@ -140,25 +104,24 @@ export default function ItemList() {
                     placeholder="Search items.."
                     onFilter={handleFilter}
                 />
-                                       <div className="edit-list-button">
-                            <button
-                                onClick={onMultipleDelete}
-                                className="bot-button"
-                                disabled={selectedItems.length === 0}
-                                style={{
-                                    opacity:
-                                        selectedItems.length === 0 ? 0.5 : 1,
-                                }}
-                            >
-                                Delete Selected
-                            </button>
-                        </div>
+                <div className="edit-list-button">
+                    <button
+                        onClick={onMultipleDelete}
+                        className="bot-button"
+                        disabled={selectedItems.length === 0}
+                        style={{
+                            opacity: selectedItems.length === 0 ? 0.5 : 1,
+                        }}
+                    >
+                        Delete Selected
+                    </button>
+                </div>
 
-                        <div className="edit-list-button">
-                            <Link to="/Admin/EditItem">
-                                <button className="bot-button">Add Item</button>
-                            </Link>
-                        </div>
+                <div className="edit-list-button">
+                    <Link to="/Admin/EditItem">
+                        <button className="bot-button">Add Item</button>
+                    </Link>
+                </div>
                 <div className="list-content-wrap min-h-screen">
                     {notification && (
                         <div className="z-10 fixed bottom-8 right-8 p-4 bg-green-200 text-green-600 border-2 border-green-500 rounded-md">
@@ -276,7 +239,12 @@ export default function ItemList() {
                                                 <td
                                                     scope="row"
                                                     className="px-6 py-4 border border-2 border-black font-medium text-black-900 dark:text-white w-28"
-                                                    style={{ color: "black",maxWidth:"200px" ,wordWrap: "break-word" }}                                                >
+                                                    style={{
+                                                        color: "black",
+                                                        maxWidth: "200px",
+                                                        wordWrap: "break-word",
+                                                    }}
+                                                >
                                                     {item.item_name}
                                                 </td>
                                                 <td className="px-6 py-4 border border-2 border-black">
@@ -414,7 +382,7 @@ export default function ItemList() {
                                                 </td>
                                                 <td className="px-6 py-4 border border-2 border-black">
                                                     <div className="checkbox-wrapper-24">
-                                                        <input
+                                                    <input
                                                             type="checkbox"
                                                             id={item.item_name}
                                                             className="field__input"
@@ -422,9 +390,7 @@ export default function ItemList() {
                                                                 item.id
                                                             )}
                                                             onChange={() =>
-                                                                toggleItemSelection(
-                                                                    item.id
-                                                                )
+                                                                toggleItemSelection(item.id)
                                                             }
                                                         />
                                                         <label for={item.id}>
@@ -450,8 +416,6 @@ export default function ItemList() {
                     </div>
 
                     <div className="edit-list-button-wrap justify-center">
- 
-
                         <div className="edit-list-np">
                             {pagination.links && (
                                 <ul className="pagination flex justify-center">
