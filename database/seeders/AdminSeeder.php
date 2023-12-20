@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
     {
         DB::table('admins')->insert([
             'username' => 'closetwear',
-            'password' => Hash::make('closetwearappshop'),
+            'password' => Hash::make('closetwearxumn'),
         ]);
     }
 }
