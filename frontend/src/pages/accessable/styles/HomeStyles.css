@@ -46,18 +46,22 @@ body {
     object-fit: cover;
     width: 100%;
     z-index: -1;
-    height: 18rem;
+    height: 16rem;
 }
 
 .new-release-bottom-box {
     margin: auto;
     text-align: center;
+    background-color: white;
+    z-index: 1;
 }
 
 .new-release-product {
     font-size: 1.1rem;
     font-weight: 400;
-    margin: 10px 0 0;
+    margin: 10px;
+    background-color: white;
+    z-index: 1;
 }
 
 .new-release-price {

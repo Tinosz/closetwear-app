@@ -1,72 +1,45 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./styles/FooterStyles.css";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 export default function Footer() {
     return (
         <>
-              <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css'/>
-
+            <link
+                rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            />
 
             <footer className="footer-distributed">
                 <div className="footer-left">
                     <h3>ClosetWear</h3>
 
-                    <p className="footer-links">
-                    </p>
+                    <p className="footer-links"></p>
 
                     <p className="footer-company-name">ClosetWear © 2023</p>
                 </div>
 
                 <div className="footer-center">
-                    <div>
-                        <i className="fa fa-map-marker"></i>
-                        <p>
-                            <span>444 S. Cedros Ave</span> Solana Beach,
-                            California
-                        </p>
-                    </div>
 
                     <div>
-                        <i className="fa fa-phone"></i>
-                        <p>+1.555.555.5555</p>
-                    </div>
-
-                    <div>
-                        <p>
-                            <a href="mailto:support@company.com">
-                        <FontAwesomeIcon icon={faEnvelope} />
-                                ClosetWear@gmail.com
-                            </a>
-                        </p>
+                        <FontAwesomeIcon icon={faPhone} className="mr-1" />
+                        <p>0851-5713-9911</p>
                     </div>
                 </div>
 
                 <div className="footer-right">
                     <p className="footer-company-about">
                         <span>About the company</span>
-                        Lorem ipsum dolor sit amet, consectateur adispicing
-                        elit. Fusce euismod convallis velit, eu auctor lacus
-                        vehicula sit amet.
+                        Every piece in our collection is crafted with care and
+                        passion, bringing you not just fashion, but a touch of
+                        Indonesian artistry. Join us in celebrating the beauty
+                        of simplicity and the comfort of well-made clothing.
+                        Step into ClosetWear - where every garment tells a story
+                        of comfort, simplicity, and affordability. Your style
+                        journey begins here!
                     </p>
 
                     <div className="footer-icons">
-                        <ul>
-                            <li>
-                                <a href="https://www.instagram.com/closetwear.id/?utm_source=ig_web_button_share_sheet&igshid=OGQ5ZDc2ODk2ZA==">
-                                    <i className="fa-brands fa-instagram instagram"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa-brands fa-whatsapp whatsapp"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa-brands fa-twitter twitter"></i>
-                                </a>
-                            </li>
-                        </ul>
+                        <ul></ul>
                     </div>
                 </div>
             </footer>

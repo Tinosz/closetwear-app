@@ -10,6 +10,7 @@ function useSearch() {
     const fetchData = async () => {
       try {
         const response = await axiosClient.get("/search");
+        console.log(response.data.result)
         setOriginalData(response.data.result);
         setFilteredData(response.data.result);
       } catch (error) {

@@ -31,7 +31,7 @@ class UpdateBannerRequest extends FormRequest
         ];
 
         if($this->hasFile('banner_image')){
-            $rules['banner_image'] = 'required|image|mimes:png,jpg, jpeg, svg|max:2048';
+            $rules['banner_image'] = 'required|image|mimes:png,jpg, jpeg, svg|max:5048';
 
         }
 

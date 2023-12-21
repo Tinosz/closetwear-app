@@ -70,7 +70,7 @@ export default function CatalogGallery() {
             getItems();
         }
     }, [id, bannerId]); // Include 'id' as a dependency here
-  
+
     const onPageChange = (label) => {
         let page;
         switch (label) {

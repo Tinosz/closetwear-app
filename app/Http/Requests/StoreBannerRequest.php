@@ -22,7 +22,7 @@ class StoreBannerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'banner_image' => 'required|image|mimes:png,jpg, jpeg, svg|max:2048',
+            'banner_image' => 'required|image|mimes:png,jpg, jpeg, svg|max:5048',
             'items' => 'exists:items,id',
             'categories' => 'exists:categories,id',
             'banner_title' => '||',

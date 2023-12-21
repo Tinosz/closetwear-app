@@ -131,15 +131,12 @@ export default function Home() {
                     <div className="category-wrap desktop">
                         <h2 className="category-text">Your Go-to Wear</h2>
                         <p className="category-text-description">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore
-                            eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia
-                            deserunt mollit anim id est laborum.
+                            Discover a world where style meets ease at
+                            ClosetWear, your go-to online destination for
+                            fashion that's as comfortable as it is chic. Our
+                            curated collection of clothing, including cozy
+                            sweaters and trendy ensembles, embodies the essence
+                            of simplicity and affordability.
                         </p>
                         <a className="category-link" href="/Catalog">
                             View
@@ -147,7 +144,7 @@ export default function Home() {
                     </div>
                     <div className="category-img-wrap">
                         <div className="relative">
-                            <a className="category-img" href="">
+                            <div className="category-img">
                                 <div
                                     className="img-wrap"
                                     style={{
@@ -159,7 +156,7 @@ export default function Home() {
                                         alt=""
                                     />
                                 </div>
-                            </a>
+                            </div>
                             <span
                                 className="category-layer"
                                 style={{
@@ -171,15 +168,12 @@ export default function Home() {
                     <div className="category-wrap-mobile">
                         <h2 className="category-text">Your Go-to Wear</h2>
                         <p className="category-text-description">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore
-                            eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia
-                            deserunt mollit anim id est laborum.
+                            Discover a world where style meets ease at
+                            ClosetWear, your go-to online destination for
+                            fashion that's as comfortable as it is chic. Our
+                            curated collection of clothing, including cozy
+                            sweaters and trendy ensembles, embodies the essence
+                            of simplicity and affordability.
                         </p>
                         <a className="category-link" href="/Catalog">
                             View
@@ -190,7 +184,7 @@ export default function Home() {
                 <div className="grid-container2">
                     <div className="category-img-wrap">
                         <div className="relative">
-                            <a className="category-img" href="">
+                            <div className="category-img" href="">
                                 <div
                                     className="img-wrap"
                                     style={{
@@ -208,7 +202,7 @@ export default function Home() {
                                         backgroundImage: `url(//hatshop.com/cdn/shop/files/texture_indigo-worth-and-worth.jpg?v=1614347676)`,
                                     }}
                                 ></span>
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <div className="category-wrap">
