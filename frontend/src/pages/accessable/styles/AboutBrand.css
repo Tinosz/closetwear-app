@@ -10,7 +10,7 @@ body{
     flex-direction: column; */
     font-family: 'Kanit', Sans-serif;
     font-weight: bold;
-    margin-top: 300px;
+    margin-top: 100px;
     justify-content: center;
     margin-right: 50px !important;
     background-color: white;
@@ -31,63 +31,48 @@ body{
     padding-right: 50px;
     justify-content: space-around;
     align-items: center;
-    margin-top: 350px;
+    margin-top: 200px;
     margin-right: 50px;
 }
 
 .box2 img {
-    width: 250px;
+    width: 650px;
 }
 
 .box3 {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
     margin-top: 100px;
     padding-left: 200px;
     padding-right: 200px;
 }
 
-.box3 img {
-    width: 250px;
+.title-box3{
+    font-size: 36px;
+    margin-bottom: 10px;
 }
 
 .box4 {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-around;
     margin: 100px;
+    padding-right: 100px;
+    /* background-color: red; */
+}
+
+.box-center{
+    display: flex;
+    justify-content: space-around;
+    /* background-color: blue; */
+    width: 700px;
 }
 
 .titlebox4{
     font-size: 35px;
 }
 
-.allSosmed{
-    display: flex;
-    margin: 35px;
-    /* background-color: red; */
-    width: 550px;
-    justify-content: space-around;
-    align-items: center;
-}
 
-.sosmed1 a img{
-    width: 150px;
-}
-
-.sosmed2 a img{
-    width: 110px;
-}
-
-.sosmed3 a img{
-    width: 90px;
-}
-
-.pic img{
-    width: auto;
-    height: 500px;
-}
 
 
 .text h1{
@@ -109,9 +94,10 @@ body{
     text-shadow: 2px 2px 4px rgba(51, 51, 51, 0.4);
 }
 
+
+
 .text2 h1{
-    width: 14rem;
-    font-size: 40px;
+    font-size: 30px;
     font-family: 'Kanit', sans-serif;
     text-align: justify;
     margin-top: 10px;
@@ -136,3 +122,16 @@ body{
 }
 
 
+
+.all-sosmed{
+    display: flex;
+    justify-content: space-around;
+    width: 250px;
+    /* background-color: red; */
+    margin-left: 25px;
+
+}
+
+.all-sosmed img{
+    width: 45px;
+}
