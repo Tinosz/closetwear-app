@@ -475,7 +475,7 @@ export default function EditItem() {
                             >
                                 {item.images.map((image, index) => (
                                     <SortableItem
-                                        key={image.item_image_order}
+                                        key={image.id}
                                         id={image.item_image_order}
                                         index={index}
                                         handleImageRemove={handleImageRemove}

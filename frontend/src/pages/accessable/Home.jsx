@@ -71,7 +71,7 @@ export default function Home() {
             <div className='new-release-img' style={{ backgroundImage: `url(${props.url})` }} alt="aa" />
             <div className='new-release-bottom-box'>
               <h2 className='new-release-product'>{props.name}</h2>
-              <p className='new-release-price text-black'>{props.price}</p>
+              <p className='new-release-price text-black'>Rp. {props.price}</p>
               <button onClick={handleSeeProductClick} className='new-release-btn'>
                 See Product
               </button>
