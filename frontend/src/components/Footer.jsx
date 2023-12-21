@@ -8,19 +8,14 @@ export default function Footer() {
             <footer className="footer-distributed">
                 <div className="footer-left">
                     <h3>ClosetWear</h3>
-
+                    <div className="footer-links-wrap">
                     <p className="footer-links">
-                        <a href="#" className="link-1">
-                            Home
-                        </a>
-
+                        <a href="#" className="link-1">Home</a>
                         <a href="#">About</a>
-
                         <a href="#">Faq</a>
-
                         <a href="#">Contact</a>
                     </p>
-
+                    </div>
                     <p className="footer-company-name">ClosetWear © 2023</p>
                 </div>
 

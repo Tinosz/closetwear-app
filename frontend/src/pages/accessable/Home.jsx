@@ -1,5 +1,4 @@
-
-  import Footer from '../../components/Footer';
+import Footer from '../../components/Footer';
 import react, { useEffect, useState } from "react";
 import "./styles/HomeStyles.css";
 import Carousel from "react-multi-carousel";
@@ -7,6 +6,7 @@ import "react-multi-carousel/lib/styles.css";
 import Banner from "../../components/Banner";
 import axiosClient from "../../client/axios-client";
 
+import "./styles/HomeStyles.css";
 
 export default function Home() {
     const [items, setItems] = useState([]);
@@ -166,11 +166,140 @@ export default function Home() {
         )
     }
 
+    function SwitchingBanner() {
+        return(
+            <div className='lp-wrap'>
+            <div className='lp-section__content'>
+
+            <div className='lp-top-section'>
+                <h2 className='lp-title'>Elevate local products with ClosetWear</h2>
+                <p className='lp-subtitle'></p>
+            </div>
+
+            <div className='lp-bottom-section'>
+            <div className='lp-bottom-wrapper'>
+                <div className='lp-tabbed-buttons'>
+                    
+                    <div className='lp-tabbed-button'>
+                        <div className='wp-block-button'>
+                            <a className='wp-block-link' href="">Oversized</a>
+                        </div>
+                    </div>
+                    
+                    <div className='lp-tabbed-button'>
+                        <div className='wp-block-button'>
+                            <a className='wp-block-link' href="">Newest</a>
+                        </div>
+                    </div>
+                    
+                    <div className='lp-tabbed-button'>
+                        <div className='wp-block-button'>
+                            <a className='wp-block-link' href="">Collections</a>
+                        </div>
+                    </div>
+                    
+                    <div className='lp-tabbed-button'>
+                        <div className='wp-block-button'>
+                            <a className='wp-block-link' href="">Sweatshorts</a>
+                        </div>
+                    </div>
+                    
+                    <div className='lp-tabbed-button'>
+                        <div className='wp-block-button'>
+                            <a className='wp-block-link' href="">Local</a>
+                        </div>
+                    </div>
+                    
+            </div>
+
+                <div className='lp-tabbed-images'>
+                    
+                    <div className='lp-tabbed-image'>
+                        <div className='lp-image-block'>
+                            <div className='lp-block'>
+                                <div className='image-content'>
+                                    <span className='lp-lazy-image'>
+                                        <span className='lp-lazy-image-content'>
+                                            <img src="" alt="" />
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='lp-tabbed-image'>
+                        <div className='lp-image-block'>
+                            <div className='lp-block'>
+                                <div className='image-content'>
+                                    <span className='lp-lazy-image'>
+                                        <span className='lp-lazy-image-content'>
+                                            <img src="" alt="" />
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='lp-tabbed-image'>
+                        <div className='lp-image-block'>
+                            <div className='lp-block'>
+                                <div className='image-content'>
+                                    <span className='lp-lazy-image'>
+                                        <span className='lp-lazy-image-content'>
+                                            <img src="" alt="" />
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='lp-tabbed-image'>
+                        <div className='lp-image-block'>
+                            <div className='lp-block'>
+                                <div className='image-content'>
+                                    <span className='lp-lazy-image'>
+                                        <span className='lp-lazy-image-content'>
+                                            <img src="" alt="" />
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='lp-tabbed-image'>
+                        <div className='lp-image-block'>
+                            <div className='lp-block'>
+                                <div className='image-content'>
+                                    <span className='lp-lazy-image'>
+                                        <span className='lp-lazy-image-content'>
+                                            <img src="" alt="" />
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                </div>
+
+            </div>
+
+            </div>
+        </div>
+        )
+    }
+
     return (
         <>
         <div className='home-wrap'>
             <Banner />
             <SectionContent />
+            <SwitchingBanner />
             <NewReleases />
             <Footer />
 

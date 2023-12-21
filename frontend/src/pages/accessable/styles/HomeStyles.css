@@ -72,6 +72,8 @@
     transition: background-color 0.3s ease-in-out;
     width: 100%;
     display: block;
+    border: 0;
+    border-radius: 0;
 }
   
 .new-release-btn:hover {
@@ -253,3 +255,35 @@
     }
 }
 
+
+
+
+/*
+    SWITCHING BANNER
+*/
+.lp-wrap {
+    position: relative;
+    font-family: 'proxima-nova', serif;
+}
+
+.lp-section__content {
+
+}
+
+.lp-top-section {
+
+}
+
+.lp-title {
+    font-size: 32px;
+}
+
+.lp-subtitle {
+
+}
+
+
+/* BOTTOM SECTION */
+.lp-bottom-section {
+
+}
