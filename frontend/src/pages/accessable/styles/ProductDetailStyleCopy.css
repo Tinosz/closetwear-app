@@ -8,21 +8,25 @@
     margin-right: 13vw;
     margin-top: 6rem;
     margin-bottom: 6rem;
+    padding-bottom: 60px;
+
 }
 .scroll-product-gallery{
     flex-shrink: 0;
 }
 
+
+
 .product-detail-details{
     margin-left: 1rem;
     position: sticky;
-    top: 5.5rem;
+    top: 0px;
     height: 100vh;
 }
 
 .product-detail-header{
     font-family: 'Kanit', sans-serif;
-    font-size: 3.5rem;
+    font-size: 2.5rem;
     font-weight: 500;
 }
 
@@ -65,6 +69,7 @@
         display: flex;
         flex-direction: column;
         margin: 0;
+        padding-bottom: 0px;
     }
     .product-detail-details{
         margin: 3rem;
@@ -82,7 +87,7 @@
         margin-left: 1rem;
         position: sticky;
         top: 5.5rem;
-        height: auto;
+        min-height: 100vh;
     }
     .product-detail-header{
         font-family: 'Kanit', sans-serif;
@@ -102,9 +107,9 @@
         font-family: 'kanit', sans-serif;
         white-space: pre-line;
         font-weight: 200;
-        overflow-y: visible;
-        height: auto;
-
+        overflow: auto;
+        /* height: auto; */
+        /* overflow-y: auto; */
     }
 
     
