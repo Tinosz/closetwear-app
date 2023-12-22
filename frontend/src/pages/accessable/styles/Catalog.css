@@ -109,3 +109,29 @@
     display: grid;
   }
 }
+
+@media (max-width: 480px) {
+  .big-screen-category {
+    display: none;
+  }
+
+  .toggle-category {
+    display: inline-block;
+  }
+
+  .catalog-wrap {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-color: red; */
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .gallery-container{
+    /* background-color: blue; */
+    width: 450px;
+  }
+}
