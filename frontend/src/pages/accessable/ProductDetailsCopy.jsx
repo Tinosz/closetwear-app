@@ -151,43 +151,45 @@ const ProductDetailsCopy = () => {
                 <div className="swiper-product-gallery">
                     <SwiperProductGallery images={images} />
                 </div>
-                <div className="product-detail-details">
-                    <div className="product-detail-information">
-                        <h4 className="product-detail-header">
-                            {item.item_name}
-                        </h4>
-                        <p className="product-detail-item-price">
-                            Rp. {item.item_price}
-                        </p>
-                        <p className="product-detail-item-description">
-                            {item.item_description}
-                        </p>
-                    </div>
-                    <div className="product-detail-shop-images flex">
-                        <a
-                            onClick={() => handleLinkClick(item.tokopedia_link)}
-                            href={item.tokopedia_link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img src={tokopedia} alt="Tokopedia" />
-                        </a>
-                        <a
-                            onClick={() => handleLinkClick(item.shoppee_link)}
-                            href={item.shoppee_link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img src={shopee} alt="Shopee" />
-                        </a>
-                        <a
-                            onClick={() => handleLinkClick(item.whatsapp_link)}
-                            href={item.whatsapp_link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img src={whatsapp} alt="WhatsApp" />
-                        </a>
+                <div>
+                    <div className="product-detail-details">
+                        <div className="product-detail-information">
+                            <h4 className="product-detail-header">
+                                {item.item_name}
+                            </h4>
+                            <p className="product-detail-item-price">
+                                Rp. {item.item_price}
+                            </p>
+                            <p className="product-detail-item-description">
+                                {item.item_description}
+                            </p>
+                        </div>
+                        <div className="product-detail-shop-images flex">
+                            <a
+                                onClick={() => handleLinkClick(item.tokopedia_link)}
+                                href={item.tokopedia_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <img src={tokopedia} alt="Tokopedia" />
+                            </a>
+                            <a
+                                onClick={() => handleLinkClick(item.shoppee_link)}
+                                href={item.shoppee_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <img src={shopee} alt="Shopee" />
+                            </a>
+                            <a
+                                onClick={() => handleLinkClick(item.whatsapp_link)}
+                                href={item.whatsapp_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <img src={whatsapp} alt="WhatsApp" />
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

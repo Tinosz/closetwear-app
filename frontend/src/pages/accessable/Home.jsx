@@ -86,18 +86,27 @@ export default function Home() {
 
     const newlyReleased = items
         .filter((item) => item.available_stock === "1")
-        .map((item) => (
-            <NewReleased
-                key={item.id}
-                id={item.id}
-                name={item.item_name}
-                url={`${import.meta.env.VITE_API_BASE_URL}/storage/${
-                    item.images[0].item_image
-                }`}
-                price={item.item_price}
-                desc={item.item_description}
-            />
-        ));
+        .map((item) => {
+            // Sort the images based on item_image_order
+            const sortedImages = item.images.sort(
+                (a, b) => a.item_image_order - b.item_image_order
+            );
+
+            return (
+                <NewReleased
+                    key={item.id}
+                    id={item.id}
+                    name={item.item_name}
+                    url={`${import.meta.env.VITE_API_BASE_URL}/storage/${
+                        sortedImages.length > 0
+                            ? sortedImages[0].item_image
+                            : ""
+                    }`}
+                    price={item.item_price}
+                    desc={item.item_description}
+                />
+            );
+        });
 
     function NewReleases() {
         return (

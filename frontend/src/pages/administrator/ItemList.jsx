@@ -26,7 +26,7 @@ export default function ItemList() {
 
     const handleEditClick = async (item) => {
         try {
-            await axiosClient.post(`/items/${item.id}/increment-click`);
+            // await axiosClient.post(`/items/${item.id}/increment-click`);
             window.location.href = `/Admin/EditItem/${item.id}`;
         } catch (error) {
             console.error("Error incrementing item click count:", error);
